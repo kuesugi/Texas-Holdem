@@ -1,7 +1,3 @@
-import java.awt.*;
-import java.awt.event.*;
-import javax.imageio.*;
-import java.io.*;
 import javax.swing.*;
 
 public class TexasHoldem{
