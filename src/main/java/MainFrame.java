@@ -3,6 +3,7 @@ import java.awt.event.*;
 import java.io.*;
 import javax.swing.*;
 import javax.imageio.*;
+import java.util.*;
 
 public class MainFrame extends JFrame {
 	
