@@ -10,15 +10,24 @@ public class MainFrame extends JFrame {
 	// TODO: AI names
 	private Image background;
 	private JPanel northAI1 = new JPanel();
+	private int moneyNAI1 = 1000;
 	private JPanel northAI2 = new JPanel();
+	private int moneyNAI2 = 1000;
 	private JPanel northAI3 = new JPanel();
-    private JPanel player = new JPanel();
-    private JPanel pot = new JPanel();
-    private JPanel eastAI1 = new JPanel();
-    private JPanel eastAI2 = new JPanel();
-    private JPanel westAI1 = new JPanel();
-    private JPanel westAI2 = new JPanel();
-    private String[] opponents = {"Leopold Bloom","Stephen Dedalus","Yelverton Barry","Buck Mulligan","Martin Cunningham","Molly Bloom","Josie Breen"};
+  private String[] opponents = {"Leopold Bloom","Stephen Dedalus","Yelverton Barry","Buck Mulligan","Martin Cunningham","Molly Bloom","Josie Breen"};
+	private int moneyNAI3 = 1000;
+    	private JPanel player = new JPanel();
+	private int moneyPlayer = 1000;
+    	private JPanel pot = new JPanel();
+    	private JPanel eastAI1 = new JPanel();
+	private int moneyEAI1 = 1000;
+    	private JPanel eastAI2 = new JPanel();
+	private int moneyEAI2 = 1000;
+    	private JPanel westAI1 = new JPanel();
+	private int moneyWAI1 = 1000;
+    	private JPanel westAI2 = new JPanel();
+	private int moneyWAI2 = 1000;
+
     // the player name
     private String userName = new String();
     // money in the pot
@@ -62,24 +71,39 @@ public class MainFrame extends JFrame {
 		northAI1.setBackground(new Color(43, 151, 0));
 		northAI1.setBorder(BorderFactory.createLineBorder(Color.gray,2));
         northAI1.setBounds(95,30,310,130);
-        getContentPane().add(northAI1);
+        JLabel labelNAI1 = new JLabel();
+        labelNAI1.setText("Balance: " + String.valueOf(moneyNAI1));
+        northAI1.add(labelNAI1);
+        add(northAI1);
         northAI2.setBackground(new Color(43, 151, 0));
 		northAI2.setBorder(BorderFactory.createLineBorder(Color.gray,2));
         northAI2.setBounds(481,30,310,130);
-        getContentPane().add(northAI2);
+        JLabel labelNAI2 = new JLabel();
+        labelNAI2.setText("Balance: " + String.valueOf(moneyNAI2));
+        northAI2.add(labelNAI2);
+        add(northAI2);
         northAI3.setBackground(new Color(43, 151, 0));
 		northAI3.setBorder(BorderFactory.createLineBorder(Color.gray,2));
         northAI3.setBounds(866,30,310,130);
-        getContentPane().add(northAI3);
+        JLabel labelNAI3 = new JLabel();
+        labelNAI3.setText("Balance: " + String.valueOf(moneyNAI3));
+        northAI3.add(labelNAI3);
+        add(northAI3);
 		// WEST
         westAI1.setBackground(new Color(43, 151, 0));
 		westAI1.setBorder(BorderFactory.createLineBorder(Color.gray,2));
         westAI1.setBounds(10,180,310,130);
-        getContentPane().add(westAI1);
+        JLabel labelWAI1 = new JLabel();
+        labelWAI1.setText("Balance: " + String.valueOf(moneyWAI1));
+        westAI1.add(labelWAI1);
+        add(westAI1);
         westAI2.setBackground(new Color(43, 151, 0));
 		westAI2.setBorder(BorderFactory.createLineBorder(Color.gray,2));
         westAI2.setBounds(10,330,310,130);
-        getContentPane().add(westAI2);
+        JLabel labelWAI2 = new JLabel();
+        labelWAI2.setText("Balance: " + String.valueOf(moneyWAI2));
+        westAI2.add(labelWAI2);
+        add(westAI2);
         // CENTER
         pot.setBackground(new Color(4, 95, 0));
 		pot.setBorder(BorderFactory.createLineBorder(Color.gray,3));
@@ -94,16 +118,25 @@ public class MainFrame extends JFrame {
         eastAI1.setBackground(new Color(43, 151, 0));
 		eastAI1.setBorder(BorderFactory.createLineBorder(Color.gray,2));
         eastAI1.setBounds(962,180,310,130);
-        getContentPane().add(eastAI1);
+        JLabel labelEAI1 = new JLabel();
+        labelEAI1.setText("Balance: " + String.valueOf(moneyEAI1));
+        eastAI1.add(labelEAI1);
+        add(eastAI1);
         eastAI2.setBackground(new Color(43, 151, 0));
 		eastAI2.setBorder(BorderFactory.createLineBorder(Color.gray,2));
         eastAI2.setBounds(962,330,310,130);
-        getContentPane().add(eastAI2);
+        JLabel labelEAI2 = new JLabel();
+        labelEAI2.setText("Balance: " + String.valueOf(moneyEAI2));
+        eastAI2.add(labelEAI2);
+        add(eastAI2);
         // SOUTH
         player.setBackground(new Color(43, 151, 0));
 		player.setBorder(BorderFactory.createLineBorder(Color.gray,2));
         player.setBounds(165,506,957,160);
-        getContentPane().add(player);
+        JLabel labelPlayer = new JLabel();
+        labelPlayer.setText("Balance: " + String.valueOf(moneyPlayer));
+        player.add(labelPlayer);
+        add(player);
 		
 	    /*// Card images
 	    Image 2C; Image 2D; Image 2H; Image 2S; Image AC; Image AD; Image AH; Image AS;
