@@ -8,7 +8,7 @@ import java.util.*;
 public class MainFrame extends JFrame {
 	
 	//deck arraylist
-	public List<Card> deck = new ArrayList();
+	private List<Card> deck;
 	
 	// the frame structure
 	
@@ -48,6 +48,11 @@ public class MainFrame extends JFrame {
 		super("Texas Holdem");
 		userName = playerName;
 		initFrame();
+		
+		deck = new ArrayList();
+		//buildDeck();
+		//testShuffle();
+		
         // set the size of the frame
         setSize(1190, 1250);
         // click X to exit
