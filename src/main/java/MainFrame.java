@@ -8,7 +8,7 @@ import java.util.*;
 public class MainFrame extends JFrame {
 	
 	//deck arraylist
-	public ArrayList<Card> deck = new ArrayList<Card>;
+	public List<Card> deck = new ArrayList();
 	
 	// the frame structure
 	
@@ -56,6 +56,22 @@ public class MainFrame extends JFrame {
         setVisible(true);
 	}
 	
+	//tests if shuffle was successfull
+	public static void testShuffle(){
+		for(int i = 0; i < 20; i++){
+			System.out.println("Before Shuffle:");
+			System.out.println(rankToString(deck[i].getRank)+" of "+suitToString(deck[i].getSuit+"s")); 
+		}
+		
+		shuffle();
+		
+		for (int j = 0; j < 20; j++){
+			System.out.println("After Shuffle:");
+			System.out.println(rankToString(deck[i].getRank)+" of "+suitToString(deck[i].getSuit+"s"));
+		}
+	}
+	
+	//shuffles deck
 	public static void shuffle() {
 		Collections.shuffle(deck);
 	}
