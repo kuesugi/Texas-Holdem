@@ -62,7 +62,7 @@ public class MainFrame extends JFrame {
 	}
 	
 	//tests if shuffle was successfull
-	public static void testShuffle(){
+	/*public static void testShuffle(){
 		for(int i = 0; i < 20; i++){
 			System.out.println("Before Shuffle:");
 			System.out.println(rankToString(deck[i].getRank)+" of "+suitToString(deck[i].getSuit+"s")); 
@@ -74,7 +74,7 @@ public class MainFrame extends JFrame {
 			System.out.println("After Shuffle:");
 			System.out.println(rankToString(deck[i].getRank)+" of "+suitToString(deck[i].getSuit+"s"));
 		}
-	}
+	}*/
 	
 	//shuffles deck
 	public static void shuffle() {
