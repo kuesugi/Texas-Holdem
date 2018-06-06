@@ -38,7 +38,7 @@ public class MainMenu extends JFrame implements ActionListener {
         // Must be the last line of this constructor
         setVisible(true);
 	}
-
+	
 	/**
 	 * Create the frame.
 	 */
@@ -81,7 +81,7 @@ public class MainMenu extends JFrame implements ActionListener {
 					.addContainerGap(GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
 				.addGroup(Alignment.LEADING, gl_contentPane.createSequentialGroup()
 					.addGap(65)
-					.addComponent(nameLabel, GroupLayout.PREFERRED_SIZE, 70, GroupLayout.PREFERRED_SIZE)
+					.addComponent(nameLabel, GroupLayout.PREFERRED_SIZE, 130, GroupLayout.PREFERRED_SIZE)
 					.addGap(18)
 					.addComponent(nameField, GroupLayout.PREFERRED_SIZE, 395, GroupLayout.PREFERRED_SIZE)
 					.addContainerGap(126, Short.MAX_VALUE))
@@ -127,5 +127,6 @@ public class MainMenu extends JFrame implements ActionListener {
 		else {
 			new MainFrame(playerName);//starts the game passing the player name parameter
 		}
+		
 	}
 }
