@@ -14,6 +14,7 @@ public class MainFrame extends JFrame {
 	private JPanel northAI2 = new JPanel();
 	private int moneyNAI2 = 1000;
 	private JPanel northAI3 = new JPanel();
+  private String[] opponents = {"Leopold Bloom","Stephen Dedalus","Yelverton Barry","Buck Mulligan","Martin Cunningham","Molly Bloom","Josie Breen"};
 	private int moneyNAI3 = 1000;
     	private JPanel player = new JPanel();
 	private int moneyPlayer = 1000;
@@ -38,8 +39,9 @@ public class MainFrame extends JFrame {
     // dealer
     private JButton[] _dealer = new JButton[1];
 		
-	public MainFrame() {
+	public MainFrame(String playerName) {
 		super("Texas Holdem");
+		userName = playerName;
 		initFrame();
         // set the size of the frame
         setSize(1190, 1250);
@@ -111,7 +113,7 @@ public class MainFrame extends JFrame {
         moneyInPotLable.setFont(new Font("Optima", Font.BOLD, 23));
         moneyInPotLable.setForeground(Color.white);
         pot.add(moneyInPotLable);
-        add(pot);
+        getContentPane().add(pot);
         // EAST
         eastAI1.setBackground(new Color(43, 151, 0));
 		eastAI1.setBorder(BorderFactory.createLineBorder(Color.gray,2));
