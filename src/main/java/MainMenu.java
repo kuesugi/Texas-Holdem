@@ -100,8 +100,6 @@ public class MainMenu extends JFrame implements ActionListener {
 					.addComponent(nameField, GroupLayout.PREFERRED_SIZE, 350, GroupLayout.PREFERRED_SIZE)
 
 					.addContainerGap(126, Short.MAX_VALUE))
-				
-				
 				.addGroup(Alignment.LEADING, gl_contentPane.createSequentialGroup()
 						.addGap(65)
 				
@@ -110,12 +108,6 @@ public class MainMenu extends JFrame implements ActionListener {
 						.addComponent(numField, GroupLayout.PREFERRED_SIZE, 350, GroupLayout.PREFERRED_SIZE)
 
 						.addContainerGap(126, Short.MAX_VALUE))
-				
-				
-				
-				
-				
-				
 				.addGroup(Alignment.LEADING, gl_contentPane.createSequentialGroup()
 					.addGap(245)
 					.addComponent(startWarning, GroupLayout.DEFAULT_SIZE, 438, Short.MAX_VALUE)
