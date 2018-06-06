@@ -5,6 +5,10 @@ import javax.swing.*;
 import javax.imageio.*;
 
 public class MainFrame extends JFrame {
+	
+	//deck arraylist
+	public ArrayList<Card> deck = new ArrayList<Card>;
+	
 	// the frame structure
 	
 	// TODO: AI names
@@ -50,6 +54,22 @@ public class MainFrame extends JFrame {
         // Must be the last line of this constructor
         setVisible(true);
 	}
+	
+	public static void shuffle() {
+		Collections.shuffle(deck);
+	}
+	
+    	//buildDeck populates deck with card objects
+    	public static void buildDeck() {
+		// # of suits
+		for(int i = 0; i < 4; i++) {
+			// # of ranks
+			for(int j = 0; j < 13; j++) {
+				Card c = new Card(j,i);
+				deck.add(c);
+			}
+		}
+   	 }
 	
 	private void initFrame(){
 		// load the background image
