@@ -18,6 +18,7 @@ public class MainFrame extends JFrame {
     private JPanel eastAI2 = new JPanel();
     private JPanel westAI1 = new JPanel();
     private JPanel westAI2 = new JPanel();
+    private String[] opponents = {"Leopold Bloom","Stephen Dedalus","Yelverton Barry","Buck Mulligan","Martin Cunningham","Molly Bloom","Josie Breen"};
     // the player name
     private String userName = new String();
     // money in the pot
@@ -29,8 +30,9 @@ public class MainFrame extends JFrame {
     // dealer
     private JButton[] _dealer = new JButton[1];
 		
-	public MainFrame() {
+	public MainFrame(String playerName) {
 		super("Texas Holdem");
+		userName = playerName;
 		initFrame();
         // set the size of the frame
         setSize(1190, 1250);
@@ -60,24 +62,24 @@ public class MainFrame extends JFrame {
 		northAI1.setBackground(new Color(43, 151, 0));
 		northAI1.setBorder(BorderFactory.createLineBorder(Color.gray,2));
         northAI1.setBounds(95,30,310,130);
-        add(northAI1);
+        getContentPane().add(northAI1);
         northAI2.setBackground(new Color(43, 151, 0));
 		northAI2.setBorder(BorderFactory.createLineBorder(Color.gray,2));
         northAI2.setBounds(481,30,310,130);
-        add(northAI2);
+        getContentPane().add(northAI2);
         northAI3.setBackground(new Color(43, 151, 0));
 		northAI3.setBorder(BorderFactory.createLineBorder(Color.gray,2));
         northAI3.setBounds(866,30,310,130);
-        add(northAI3);
+        getContentPane().add(northAI3);
 		// WEST
         westAI1.setBackground(new Color(43, 151, 0));
 		westAI1.setBorder(BorderFactory.createLineBorder(Color.gray,2));
         westAI1.setBounds(10,180,310,130);
-        add(westAI1);
+        getContentPane().add(westAI1);
         westAI2.setBackground(new Color(43, 151, 0));
 		westAI2.setBorder(BorderFactory.createLineBorder(Color.gray,2));
         westAI2.setBounds(10,330,310,130);
-        add(westAI2);
+        getContentPane().add(westAI2);
         // CENTER
         pot.setBackground(new Color(4, 95, 0));
 		pot.setBorder(BorderFactory.createLineBorder(Color.gray,3));
@@ -87,21 +89,21 @@ public class MainFrame extends JFrame {
         moneyInPotLable.setFont(new Font("Optima", Font.BOLD, 23));
         moneyInPotLable.setForeground(Color.white);
         pot.add(moneyInPotLable);
-        add(pot);
+        getContentPane().add(pot);
         // EAST
         eastAI1.setBackground(new Color(43, 151, 0));
 		eastAI1.setBorder(BorderFactory.createLineBorder(Color.gray,2));
         eastAI1.setBounds(962,180,310,130);
-        add(eastAI1);
+        getContentPane().add(eastAI1);
         eastAI2.setBackground(new Color(43, 151, 0));
 		eastAI2.setBorder(BorderFactory.createLineBorder(Color.gray,2));
         eastAI2.setBounds(962,330,310,130);
-        add(eastAI2);
+        getContentPane().add(eastAI2);
         // SOUTH
         player.setBackground(new Color(43, 151, 0));
 		player.setBorder(BorderFactory.createLineBorder(Color.gray,2));
         player.setBounds(165,506,957,160);
-        add(player);
+        getContentPane().add(player);
 		
 	    /*// Card images
 	    Image 2C; Image 2D; Image 2H; Image 2S; Image AC; Image AD; Image AH; Image AS;
