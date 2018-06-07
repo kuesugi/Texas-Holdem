@@ -63,7 +63,7 @@ public class MainMenu extends JFrame implements ActionListener {
 		numberField.setToolTipText("");
 		numberField.setColumns(10);
 		numberField.setText("");
-		
+
 		JLabel nameLabel = new JLabel("Player Name:");
 		nameLabel.setHorizontalAlignment(SwingConstants.CENTER);
 		nameLabel.setForeground(new Color(255, 255, 255));
@@ -73,7 +73,7 @@ public class MainMenu extends JFrame implements ActionListener {
 		numLabel.setHorizontalAlignment(SwingConstants.CENTER);
 		numLabel.setForeground(new Color(255, 255, 255));
 		numLabel.setFont(new Font("Gill Sans MT Condensed", Font.PLAIN, 15));
-		
+
 		JButton btnStart = new JButton("Start");
 		btnStart.setFont(new Font("Gill Sans MT Ext Condensed Bold", Font.PLAIN, 13));
 		btnStart.addActionListener(this);//Initializes the button listener
@@ -125,6 +125,10 @@ public class MainMenu extends JFrame implements ActionListener {
 							.addComponent(numberField, GroupLayout.PREFERRED_SIZE, GroupLayout.DEFAULT_SIZE, GroupLayout.PREFERRED_SIZE)
 							.addComponent(numLabel))
 					.addGap(28)
+					.addGroup(gl_contentPane.createParallelGroup(Alignment.BASELINE)
+							.addComponent(numField, GroupLayout.PREFERRED_SIZE, GroupLayout.DEFAULT_SIZE, GroupLayout.PREFERRED_SIZE)
+							.addComponent(numPlayers))
+					.addGap(28)
 					.addComponent(btnStart)
 					.addGap(33))
 		);
@@ -136,7 +140,8 @@ public class MainMenu extends JFrame implements ActionListener {
 	 */
 	@Override
 	public void actionPerformed(ActionEvent e) {
-		
+		numPlayers = numField.getText();
+		int numPlayersInt = Integer.parseInt(numPlayers);		
 		playerName = nameField.getText();
 		num = Integer.parseInt(numberField.getText());
 		//if player name is null a warning message will appear on screen
@@ -146,6 +151,7 @@ public class MainMenu extends JFrame implements ActionListener {
 		if(num == 0 || numberField.getText().isEmpty())
 			startWarning.setText("Not a valid number!");
 		
+		//if player name is null a warning message will appear on screen
 		else {
 			new MainFrame(playerName, num);//starts the game passing the player name parameter
 		}
