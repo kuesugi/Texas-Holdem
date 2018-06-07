@@ -20,13 +20,10 @@ import javax.swing.JButton;
 public class MainMenu extends JFrame implements ActionListener {
 
 	private JPanel contentPane;
-	private JTextField textField;
 	private String playerName = null;
-	private String numPlayers = null;
-
+	private int num;
 	private JTextField nameField = new JTextField();
-	private JTextField numField = new JTextField();
-
+	private JTextField numberField = new JTextField();
 	private JLabel startWarning = new JLabel("");//Give a base from which to write any error messages
 
 	/**
@@ -63,20 +60,20 @@ public class MainMenu extends JFrame implements ActionListener {
 		nameField.setColumns(10);
 		nameField.setText("");
 		
-		numField.setToolTipText("");
-		numField.setColumns(10);
-		numField.setText("");
-		
+		numberField.setToolTipText("");
+		numberField.setColumns(10);
+		numberField.setText("");
+
 		JLabel nameLabel = new JLabel("Player Name:");
 		nameLabel.setHorizontalAlignment(SwingConstants.CENTER);
 		nameLabel.setForeground(new Color(255, 255, 255));
 		nameLabel.setFont(new Font("Gill Sans MT Condensed", Font.PLAIN, 15));
 		
-		JLabel numPlayers = new JLabel("Number of Players:");
-		numPlayers.setHorizontalAlignment(SwingConstants.CENTER);
-		numPlayers.setForeground(new Color(255, 255, 255));
-		numPlayers.setFont(new Font("Gill Sans MT Condensed", Font.PLAIN, 15));
-		
+		JLabel numLabel = new JLabel("# of Players:");
+		numLabel.setHorizontalAlignment(SwingConstants.CENTER);
+		numLabel.setForeground(new Color(255, 255, 255));
+		numLabel.setFont(new Font("Gill Sans MT Condensed", Font.PLAIN, 15));
+
 		JButton btnStart = new JButton("Start");
 		btnStart.setFont(new Font("Gill Sans MT Ext Condensed Bold", Font.PLAIN, 13));
 		btnStart.addActionListener(this);//Initializes the button listener
@@ -99,13 +96,11 @@ public class MainMenu extends JFrame implements ActionListener {
 					.addComponent(nameField, GroupLayout.PREFERRED_SIZE, 395, GroupLayout.PREFERRED_SIZE)
 					.addContainerGap(126, Short.MAX_VALUE))
 				.addGroup(Alignment.LEADING, gl_contentPane.createSequentialGroup()
-						.addGap(65)
-				
-						.addComponent(numPlayers, GroupLayout.PREFERRED_SIZE, 150, GroupLayout.PREFERRED_SIZE)
-						.addGap(19)
-						.addComponent(numField, GroupLayout.PREFERRED_SIZE, 350, GroupLayout.PREFERRED_SIZE)
-
-						.addContainerGap(126, Short.MAX_VALUE))
+					.addGap(65)
+					.addComponent(numLabel, GroupLayout.PREFERRED_SIZE, 130, GroupLayout.PREFERRED_SIZE)
+					.addGap(18)
+					.addComponent(numberField, GroupLayout.PREFERRED_SIZE, 395, GroupLayout.PREFERRED_SIZE)
+					.addContainerGap(126, Short.MAX_VALUE))
 				.addGroup(Alignment.LEADING, gl_contentPane.createSequentialGroup()
 					.addGap(245)
 					.addComponent(startWarning, GroupLayout.DEFAULT_SIZE, 438, Short.MAX_VALUE)
@@ -125,6 +120,10 @@ public class MainMenu extends JFrame implements ActionListener {
 					.addGroup(gl_contentPane.createParallelGroup(Alignment.BASELINE)
 						.addComponent(nameField, GroupLayout.PREFERRED_SIZE, GroupLayout.DEFAULT_SIZE, GroupLayout.PREFERRED_SIZE)
 						.addComponent(nameLabel))
+					.addGap(18)
+					.addGroup(gl_contentPane.createParallelGroup(Alignment.BASELINE)
+							.addComponent(numberField, GroupLayout.PREFERRED_SIZE, GroupLayout.DEFAULT_SIZE, GroupLayout.PREFERRED_SIZE)
+							.addComponent(numLabel))
 					.addGap(28)
 					.addGroup(gl_contentPane.createParallelGroup(Alignment.BASELINE)
 							.addComponent(numField, GroupLayout.PREFERRED_SIZE, GroupLayout.DEFAULT_SIZE, GroupLayout.PREFERRED_SIZE)
@@ -144,21 +143,17 @@ public class MainMenu extends JFrame implements ActionListener {
 		numPlayers = numField.getText();
 		int numPlayersInt = Integer.parseInt(numPlayers);		
 		playerName = nameField.getText();
+		num = Integer.parseInt(numberField.getText());
 		//if player name is null a warning message will appear on screen
-		if(playerName == null || nameField.getText().isEmpty()) {
-			
+		if(playerName == null || nameField.getText().isEmpty())
 			startWarning.setText("Player must enter name before starting");
-		}
-		if(!(numPlayersInt>0) || numPlayersInt == 0) {
-			
-			startWarning.setText("Player must enter the number of players");
-		}
+		
+		if(num == 0 || numberField.getText().isEmpty())
+			startWarning.setText("Not a valid number!");
 		
 		//if player name is null a warning message will appear on screen
 		else {
-			new MainFrame(playerName);//starts the game passing the player name parameter
-			new MainFrame(numPlayers);//starts the game passing the player name parameter
-
+			new MainFrame(playerName, num);//starts the game passing the player name parameter
 		}
 		
 	}
