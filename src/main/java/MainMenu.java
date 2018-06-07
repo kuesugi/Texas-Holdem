@@ -20,9 +20,10 @@ import javax.swing.JButton;
 public class MainMenu extends JFrame implements ActionListener {
 
 	private JPanel contentPane;
-	private JTextField textField;
 	private String playerName = null;
+	private int num;
 	private JTextField nameField = new JTextField();
+	private JTextField numberField = new JTextField();
 	private JLabel startWarning = new JLabel("");//Give a base from which to write any error messages
 
 	/**
@@ -59,10 +60,19 @@ public class MainMenu extends JFrame implements ActionListener {
 		nameField.setColumns(10);
 		nameField.setText("");
 		
+		numberField.setToolTipText("");
+		numberField.setColumns(10);
+		numberField.setText("");
+		
 		JLabel nameLabel = new JLabel("Player Name:");
 		nameLabel.setHorizontalAlignment(SwingConstants.CENTER);
 		nameLabel.setForeground(new Color(255, 255, 255));
 		nameLabel.setFont(new Font("Gill Sans MT Condensed", Font.PLAIN, 15));
+		
+		JLabel numLabel = new JLabel("# of Players:");
+		numLabel.setHorizontalAlignment(SwingConstants.CENTER);
+		numLabel.setForeground(new Color(255, 255, 255));
+		numLabel.setFont(new Font("Gill Sans MT Condensed", Font.PLAIN, 15));
 		
 		JButton btnStart = new JButton("Start");
 		btnStart.setFont(new Font("Gill Sans MT Ext Condensed Bold", Font.PLAIN, 13));
@@ -86,6 +96,12 @@ public class MainMenu extends JFrame implements ActionListener {
 					.addComponent(nameField, GroupLayout.PREFERRED_SIZE, 395, GroupLayout.PREFERRED_SIZE)
 					.addContainerGap(126, Short.MAX_VALUE))
 				.addGroup(Alignment.LEADING, gl_contentPane.createSequentialGroup()
+					.addGap(65)
+					.addComponent(numLabel, GroupLayout.PREFERRED_SIZE, 130, GroupLayout.PREFERRED_SIZE)
+					.addGap(18)
+					.addComponent(numberField, GroupLayout.PREFERRED_SIZE, 395, GroupLayout.PREFERRED_SIZE)
+					.addContainerGap(126, Short.MAX_VALUE))
+				.addGroup(Alignment.LEADING, gl_contentPane.createSequentialGroup()
 					.addGap(245)
 					.addComponent(startWarning, GroupLayout.DEFAULT_SIZE, 438, Short.MAX_VALUE)
 					.addGap(245))
@@ -104,6 +120,10 @@ public class MainMenu extends JFrame implements ActionListener {
 					.addGroup(gl_contentPane.createParallelGroup(Alignment.BASELINE)
 						.addComponent(nameField, GroupLayout.PREFERRED_SIZE, GroupLayout.DEFAULT_SIZE, GroupLayout.PREFERRED_SIZE)
 						.addComponent(nameLabel))
+					.addGap(18)
+					.addGroup(gl_contentPane.createParallelGroup(Alignment.BASELINE)
+							.addComponent(numberField, GroupLayout.PREFERRED_SIZE, GroupLayout.DEFAULT_SIZE, GroupLayout.PREFERRED_SIZE)
+							.addComponent(numLabel))
 					.addGap(28)
 					.addComponent(btnStart)
 					.addGap(33))
@@ -118,14 +138,16 @@ public class MainMenu extends JFrame implements ActionListener {
 	public void actionPerformed(ActionEvent e) {
 		
 		playerName = nameField.getText();
+		num = Integer.parseInt(numberField.getText());
 		//if player name is null a warning message will appear on screen
-		if(playerName == null || nameField.getText().isEmpty()) {
-			
+		if(playerName == null || nameField.getText().isEmpty())
 			startWarning.setText("Player must enter name before starting");
-		}
+		
+		if(num == 0 || numberField.getText().isEmpty())
+			startWarning.setText("Not a valid number!");
 		
 		else {
-			new MainFrame(playerName);//starts the game passing the player name parameter
+			new MainFrame(playerName, num);//starts the game passing the player name parameter
 		}
 		
 	}

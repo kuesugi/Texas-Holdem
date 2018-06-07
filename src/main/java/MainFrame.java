@@ -1,5 +1,6 @@
 import java.awt.*;
 import java.awt.event.*;
+import java.awt.List;
 import java.io.*;
 import java.lang.reflect.Array;
 import java.util.*;
@@ -9,12 +10,18 @@ import javax.swing.*;
 import javax.swing.border.EmptyBorder;
 import javax.imageio.*;
 
+@SuppressWarnings("unchecked")
+
 public class MainFrame extends JFrame {
 	// the frame structure
 	private Image background;
 	private Image stackImage;
 	private Image chips;
-	private int numOfAI = 7;
+	private Image back;
+	// Card images
+    private Image C2; 
+	private int numOfAI;
+	private int cardCount = 51;
 	private JPanel northAI1 = new JPanel();
 		private int moneyNAI1 = 1000;
 	private JPanel northAI2 = new JPanel();
@@ -51,14 +58,20 @@ public class MainFrame extends JFrame {
     private int blueChip = 0;
     // AIs array
     private ArrayList<Player> players;
+    private static ArrayList<Card> deck;
     
-	public MainFrame(String playerName) {
+    
+	public MainFrame(String playerName, int num) {
 		super("Texas Hold'em");
 		userName = playerName;
+		numOfAI = num;
 		players = new ArrayList<>();
-		for(int j = 0; j<numOfAI; j++) {
+		deck = new ArrayList();
+		for(int j = 0; j < numOfAI; j++) {
 		    players.add(new Player(true, opponents[j], 1000));
 		}
+		buildDeck();
+		shuffle();
 		initFrame();
         // set the size of the frame
         setSize(1190, 1250);
@@ -67,7 +80,24 @@ public class MainFrame extends JFrame {
         // Must be the last line of this constructor
         setVisible(true);
 	}
-	
+
+	public static void shuffle() {
+        Collections.shuffle(deck);
+    }
+    
+    //buildDeck populates deck with card objects
+    public static void buildDeck() {
+        // # of suits
+        for(int i = 1; i < 5; i++) {
+            // # of ranks
+            for(int j = 1; j < 14; j++) {
+                Card c = new Card(j,i);
+                c.setCardIndex(i,j);
+                deck.add(c);
+            }
+        }
+     }
+    
 	private void initFrame(){
 		setBounds(100, 100, 450, 300);
 		JPanel contentPane = new JPanel();
@@ -80,6 +110,59 @@ public class MainFrame extends JFrame {
 			background = ImageIO.read(getClass().getResource("/background.jpg"));
 			stackImage = ImageIO.read(getClass().getResource("/stacks.png"));
 			chips = ImageIO.read(getClass().getResource("/pokerchips.png"));
+			back = ImageIO.read(getClass().getResource("/back.png"));
+			Image clubs2 = ImageIO.read(getClass().getResource("/clubs2.png"));
+			Image clubs3 = ImageIO.read(getClass().getResource("/clubs3.png"));
+			Image clubs4 = ImageIO.read(getClass().getResource("/clubs4.png"));
+			Image clubs5 = ImageIO.read(getClass().getResource("/clubs5.png"));
+			Image clubs6 = ImageIO.read(getClass().getResource("/clubs6.png"));
+			Image clubs7 = ImageIO.read(getClass().getResource("/clubs7.png"));
+			Image clubs8 = ImageIO.read(getClass().getResource("/clubs8.png"));
+			Image clubs9 = ImageIO.read(getClass().getResource("/clubs9.png"));
+			Image clubs10 = ImageIO.read(getClass().getResource("/clubs10.png"));
+			Image clubs11 = ImageIO.read(getClass().getResource("/clubs11.png"));
+			Image clubs12 = ImageIO.read(getClass().getResource("/clubs12.png"));
+			Image clubs13 = ImageIO.read(getClass().getResource("/clubs13.png"));
+			Image clubs1 = ImageIO.read(getClass().getResource("/clubs1.png"));
+			Image diamonds2 = ImageIO.read(getClass().getResource("/diamonds2.png"));
+			Image diamonds3 = ImageIO.read(getClass().getResource("/diamonds3.png"));
+			Image diamonds4 = ImageIO.read(getClass().getResource("/diamonds4.png"));
+			Image diamonds5 = ImageIO.read(getClass().getResource("/diamonds5.png"));
+			Image diamonds6 = ImageIO.read(getClass().getResource("/diamonds6.png"));
+			Image diamonds7 = ImageIO.read(getClass().getResource("/diamonds7.png"));
+			Image diamonds8 = ImageIO.read(getClass().getResource("/diamonds8.png"));
+			Image diamonds9 = ImageIO.read(getClass().getResource("/diamonds9.png"));
+			Image diamonds10 = ImageIO.read(getClass().getResource("/diamonds10.png"));
+			Image diamonds11 = ImageIO.read(getClass().getResource("/diamonds11.png"));
+			Image diamonds12 = ImageIO.read(getClass().getResource("/diamonds12.png"));
+			Image diamonds13 = ImageIO.read(getClass().getResource("/diamonds13.png"));
+			Image diamonds1 = ImageIO.read(getClass().getResource("/diamonds1.png"));
+			Image spades2 = ImageIO.read(getClass().getResource("/spades2.png"));
+			Image spades3 = ImageIO.read(getClass().getResource("/spades3.png"));
+			Image spades4 = ImageIO.read(getClass().getResource("/spades4.png"));
+			Image spades5 = ImageIO.read(getClass().getResource("/spades5.png"));
+			Image spades6 = ImageIO.read(getClass().getResource("/spades6.png"));
+			Image spades7 = ImageIO.read(getClass().getResource("/spades7.png"));
+			Image spades8 = ImageIO.read(getClass().getResource("/spades8.png"));
+			Image spades9 = ImageIO.read(getClass().getResource("/spades9.png"));
+			Image spades10 = ImageIO.read(getClass().getResource("/spades10.png"));
+			Image spades11 = ImageIO.read(getClass().getResource("/spades11.png"));
+			Image spades12 = ImageIO.read(getClass().getResource("/spades12.png"));
+			Image spades13 = ImageIO.read(getClass().getResource("/spades13.png"));
+			Image spades1 = ImageIO.read(getClass().getResource("/spades1.png"));
+			Image hearts2 = ImageIO.read(getClass().getResource("/hearts2.png"));
+			Image hearts3 = ImageIO.read(getClass().getResource("/hearts3.png"));
+			Image hearts4 = ImageIO.read(getClass().getResource("/hearts4.png"));
+			Image hearts5 = ImageIO.read(getClass().getResource("/hearts5.png"));
+			Image hearts6 = ImageIO.read(getClass().getResource("/hearts6.png"));
+			Image hearts7 = ImageIO.read(getClass().getResource("/hearts7.png"));
+			Image hearts8 = ImageIO.read(getClass().getResource("/hearts8.png"));
+			Image hearts9 = ImageIO.read(getClass().getResource("/hearts9.png"));
+			Image hearts10 = ImageIO.read(getClass().getResource("/hearts10.png"));
+			Image hearts11 = ImageIO.read(getClass().getResource("/hearts11.png"));
+			Image hearts12 = ImageIO.read(getClass().getResource("/hearts12.png"));
+			Image hearts13 = ImageIO.read(getClass().getResource("/hearts13.png"));
+			Image hearts1 = ImageIO.read(getClass().getResource("/hearts1.png"));
 		}
 		catch (IOException ioex){
 		    System.exit(1);
@@ -115,15 +198,6 @@ public class MainFrame extends JFrame {
         player.setBounds(165,506,957,160);
         initAI(player, -1);
         add(player);
-		
-	    /*// Card images
-	    Image 2C; Image 2D; Image 2H; Image 2S; Image AC; Image AD; Image AH; Image AS;
-	    Image 3C; Image 3D; Image 3H; Image 3S; Image JC; Image JD; Image JH; Image JS;
-	    Image 4C; Image 4D; Image 4H; Image 4S; Image QC; Image QD; Image QH; Image QS;
-	    Image 5C; Image 5D; Image 5H; Image 5S; Image KC; Image KD; Image KH; Image KS;
-	    Image 6C; Image 6D; Image 6H; Image 6S; Image J1; Image J2; Image back;
-	    Image 7C; Image 7D; Image 7H; Image 7S; Image 8C; Image 8D; Image 8H; Image 8S;
-	    Image 9C; Image 9D; Image 9H; Image 9S; Image 10C; Image 10D; Image 10H; Image 10S;*/
 	}
 	
 	private void setPokerChips() {
@@ -155,15 +229,56 @@ public class MainFrame extends JFrame {
 	}
 	
 	private void initAI(JPanel panel, int num) {
+		ImageIcon tempIcon = new ImageIcon(back);
+        Image tempImg = tempIcon.getImage();
+        Image tempImg2 = tempImg.getScaledInstance(65,80,java.awt.Image.SCALE_SMOOTH); 
+        tempIcon = new ImageIcon(tempImg2);
 		String name;
 		int money;
-		if (num == -1) {
-			name = userName;
-			money = user.getMoney();
-		}
-		else {
+		Image cardImg;
+		JLabel card1Display = new JLabel();
+		JLabel card2Display = new JLabel();
+		Card c1 = deck.get(cardCount--);
+		Card c2 = deck.get(cardCount--);
+		
+		if (num != -1){
 			name = players.get(num).getName();
 			money = players.get(num).getMoney();
+			players.get(num).setCard1(c1);
+			players.get(num).setCard2(c2);
+			card1Display.setIcon(tempIcon);
+			card2Display.setIcon(tempIcon);
+			panel.add(card1Display);
+			panel.add(card2Display);
+		}
+		else{
+			Card userC1 = new Card(c1.getRank(), c1.getSuit());
+			Card userC2 = new Card(c2.getRank(), c2.getSuit());
+			name = userName;
+			money = user.getMoney();
+			user.setCard1(userC1);
+			user.setCard2(userC2);
+			try{
+				cardImg = ImageIO.read(getClass().getResource(c1.getIndex()+".png"));
+				tempIcon = new ImageIcon(cardImg);
+	        	tempImg = tempIcon.getImage();
+	        	tempImg2 = tempImg.getScaledInstance(65,80,java.awt.Image.SCALE_SMOOTH); 
+	        	tempIcon = new ImageIcon(tempImg2);
+	        	card1Display.setIcon(tempIcon);
+
+	        	cardImg = ImageIO.read(getClass().getResource(c2.getIndex()+".png"));
+				tempIcon = new ImageIcon(cardImg);
+	        	tempImg = tempIcon.getImage();
+	        	tempImg2 = tempImg.getScaledInstance(65,80,java.awt.Image.SCALE_SMOOTH); 
+	        	tempIcon = new ImageIcon(tempImg2);
+	        	card2Display.setIcon(tempIcon);
+
+	        	panel.add(card1Display);
+	        	panel.add(card2Display);
+			}
+			catch (IOException ioex){
+			}
+			
 		}
 		JLabel nameL = new JLabel(name);
 		JLabel label = new JLabel();
