@@ -181,6 +181,14 @@ public class MainFrame extends JFrame {
         pot.setBackground(new Color(4, 95, 0));
 		pot.setBorder(BorderFactory.createLineBorder(Color.white,3));
         pot.setBounds(326,180,630,320);
+
+        // space holding the five cards
+        JPanel fiveCards = new JPanel();
+        fiveCards.setBackground(new Color(4, 95, 0));
+        fiveCards.setBorder(BorderFactory.createLineBorder(Color.white,2));
+        fiveCards.setBounds(336,220,430,270);
+        add(fiveCards);
+        
         JLabel moneyInPotLable = new JLabel();
         moneyInPotLable.setText("Money in the pot: " + String.valueOf(moneyInPot));
         moneyInPotLable.setFont(new Font("Optima", Font.BOLD, 23));
