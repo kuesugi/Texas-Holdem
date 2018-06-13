@@ -206,6 +206,8 @@ public class MainFrame extends JFrame {
         player.setBounds(165,506,957,160);
         initAI(player, -1);
         add(player);
+		
+	///////////////////////////////////////////////////////////start game play here
 	}
 	
 	private void setPokerChips() {
