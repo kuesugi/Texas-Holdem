@@ -23,34 +23,20 @@ public class MainFrame extends JFrame {
 	private int numOfAI;
 	private int cardCount = 51;
 	private JPanel northAI1 = new JPanel();
-		private int moneyNAI1 = 1000;
 	private JPanel northAI2 = new JPanel();
-		private int moneyNAI2 = 1000;
 	private JPanel northAI3 = new JPanel();
 	private String[] opponents = {"Leopold Bloom","Stephen Dedalus","Yelverton Barry","Buck Mulligan","Martin Cunningham","Molly Bloom","Josie Breen"};
-		private int moneyNAI3 = 1000;
     private JPanel player = new JPanel();
-		private int moneyPlayer = 1000;
     private JPanel pot = new JPanel();
     private JPanel eastAI1 = new JPanel();
-		private int moneyEAI1 = 1000;
     private JPanel eastAI2 = new JPanel();
-		private int moneyEAI2 = 1000;
     private JPanel westAI1 = new JPanel();
-		private int moneyWAI1 = 1000;
     private JPanel westAI2 = new JPanel();
-		private int moneyWAI2 = 1000;
     // the player name
     private String userName = new String();
     private Player user = new Player(false, userName, 1000);
     // money in the pot
     private int moneyInPot = 0;
-    // new game button
-    private JButton[] _newGame = new JButton[1];
-    // exit button
-    private JButton[] _exit = new JButton[1];
-    // dealer
-    private JButton[] _dealer = new JButton[1];
     // poker chips
     private int blackChip = 0;
     private int whiteChip = 0;
