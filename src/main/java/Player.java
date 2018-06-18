@@ -4,8 +4,6 @@ public class Player {
 	private boolean isAi = false;
 	private String name = "";
 	private int money = 0;
-	private Card card1 = null;
-	private Card card2 = null;
 	private Hand playerHand;
 	
 	public Player(boolean ai, String playerName, int playerMoney) {
