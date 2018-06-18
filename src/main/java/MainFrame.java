@@ -5,6 +5,7 @@ import java.io.*;
 import java.lang.reflect.Array;
 import java.util.*;
 import java.util.jar.Attributes.Name;
+import java.text.SimpleDateFormat;
 
 import javax.swing.*;
 import javax.swing.border.EmptyBorder;
@@ -12,14 +13,13 @@ import javax.imageio.*;
 
 @SuppressWarnings("unchecked")
 
-public class MainFrame extends JFrame {
+public class MainFrame extends JFrame implements ActionListener{
 	// the frame structure
 	private Image background;
 	private Image stackImage;
 	private Image chips;
 	private Image back;
 	// Card images
-    private Image C2; 
 	private int numOfAI;
 	private int cardCount = 51;
 	private JPanel northAI1 = new JPanel();
@@ -32,6 +32,13 @@ public class MainFrame extends JFrame {
     private JPanel eastAI2 = new JPanel();
     private JPanel westAI1 = new JPanel();
     private JPanel westAI2 = new JPanel();
+    private JPanel fiveCards = new JPanel();
+    private Hand centerHand = new Hand();
+    // TODO
+    private JButton betButton = new JButton("Bet");
+    private JButton foldButton = new JButton("Fold");
+    
+    private JTextField betAmt = new JTextField();
     // the player name
     private String userName = new String();
     private Player user = new Player(false, userName, 1000);
@@ -45,6 +52,10 @@ public class MainFrame extends JFrame {
     // AIs array
     private ArrayList<Player> players;
     private static ArrayList<Card> deck;
+    // initialize the log file
+    PrintWriter logWriter = null;
+    // 1 if the game ends
+    int endOfGame = 0;
     
     
 	public MainFrame(String playerName, int num) {
@@ -58,6 +69,9 @@ public class MainFrame extends JFrame {
 		}
 		buildDeck();
 		shuffle();
+		try {
+			initLog(playerName, num);
+		} catch (Exception e) {}
 		initFrame();
         // set the size of the frame
         setSize(1190, 1250);
@@ -82,8 +96,18 @@ public class MainFrame extends JFrame {
                 deck.add(c);
             }
         }
-     }
-    
+    }
+
+    private void initLog(String name, int num) throws FileNotFoundException{
+    	logWriter = new PrintWriter("log.txt");
+    	String time = new SimpleDateFormat("dd MMMM yyyy  -  HH : mm").format(Calendar.getInstance().getTime());
+    	logWriter.println("       * * * Game Log * * *\n" + "- Game started " + time);
+    	logWriter.print("- Username: "+ name + "\n- Players: " + num + "\n  ");
+    	for (int i = 0; i < num-1; i++)
+    		logWriter.print(opponents[i]+", ");
+    	logWriter.println(opponents[num-1] + "\n\n-");
+    }
+
 	private void initFrame(){
 		setBounds(100, 100, 450, 300);
 		JPanel contentPane = new JPanel();
@@ -169,7 +193,7 @@ public class MainFrame extends JFrame {
         pot.setBounds(326,180,630,320);
 
         // space holding the five cards
-        JPanel fiveCards = new JPanel();
+        
         fiveCards.setBackground(new Color(4, 95, 0));
         fiveCards.setBorder(BorderFactory.createLineBorder(Color.white,2));
         fiveCards.setBounds(336,220,430,270);
@@ -190,10 +214,123 @@ public class MainFrame extends JFrame {
         player.setBackground(new Color(43, 151, 0));
 		player.setBorder(BorderFactory.createLineBorder(Color.white,2));
         player.setBounds(165,506,957,160);
+
         initAI(player, -1);
         add(player);
-		
-	///////////////////////////////////////////////////////////start game play here
+        player.add(betButton);
+        betButton.addActionListener(this);
+        player.add(foldButton);
+        gameStart();
+	}
+
+	@Override
+	public void actionPerformed(ActionEvent e) {
+		// flop
+		if(centerHand.isEmpty()){
+			centerHand.addCard(deck.get(cardCount--));
+			centerHand.addCard(deck.get(cardCount--));
+			centerHand.addCard(deck.get(cardCount--));
+		}
+		else{
+			centerHand.addCard(deck.get(cardCount--));
+		}
+
+		if(centerHand.getSize() == 3)
+			displayCenterCards(centerHand, 1);
+		else if(centerHand.getSize() == 4)
+			displayCenterCards(centerHand, 2);
+		else
+			displayCenterCards(centerHand, 3);
+	}
+
+	private void displayCenterCards(Hand centerHand, int round){
+		ImageIcon tempIcon;
+        Image tempImg;
+        Image tempImg2;
+        Image cardImg;
+
+		JLabel card1Display = new JLabel();
+		JLabel card2Display = new JLabel();
+		JLabel card3Display = new JLabel();
+		JLabel card4Display = new JLabel();
+		JLabel card5Display = new JLabel();
+
+		try{
+			if(round == 1){
+				Card c1 = centerHand.getCard(0);
+				Card c2 = centerHand.getCard(1);
+				Card c3 = centerHand.getCard(2);
+
+				cardImg = ImageIO.read(getClass().getResource(c1.getIndex()+".png"));
+				tempIcon = new ImageIcon(cardImg);
+	        	tempImg = tempIcon.getImage();
+	        	tempImg2 = tempImg.getScaledInstance(65,80,java.awt.Image.SCALE_SMOOTH); 
+	        	tempIcon = new ImageIcon(tempImg2);
+	        	card1Display.setIcon(tempIcon);
+
+	        	cardImg = ImageIO.read(getClass().getResource(c2.getIndex()+".png"));
+				tempIcon = new ImageIcon(cardImg);
+	        	tempImg = tempIcon.getImage();
+	        	tempImg2 = tempImg.getScaledInstance(65,80,java.awt.Image.SCALE_SMOOTH); 
+	        	tempIcon = new ImageIcon(tempImg2);
+	        	card2Display.setIcon(tempIcon);
+
+	        	cardImg = ImageIO.read(getClass().getResource(c3.getIndex()+".png"));
+				tempIcon = new ImageIcon(cardImg);
+	        	tempImg = tempIcon.getImage();
+	        	tempImg2 = tempImg.getScaledInstance(65,80,java.awt.Image.SCALE_SMOOTH); 
+	        	tempIcon = new ImageIcon(tempImg2);
+	        	card3Display.setIcon(tempIcon);
+	        	
+	        	player.add(card1Display);
+        		player.add(card2Display);
+        		player.add(card3Display);
+			}
+			else if (round == 2){
+				Card c4 = centerHand.getCard(3);
+	        	cardImg = ImageIO.read(getClass().getResource(c4.getIndex()+".png"));
+				tempIcon = new ImageIcon(cardImg);
+	        	tempImg = tempIcon.getImage();
+	        	tempImg2 = tempImg.getScaledInstance(65,80,java.awt.Image.SCALE_SMOOTH); 
+	        	tempIcon = new ImageIcon(tempImg2);
+	        	card4Display.setIcon(tempIcon);
+	        	fiveCards.add(card4Display);
+	        }
+	        else{
+				Card c5 = centerHand.getCard(4);
+	        	cardImg = ImageIO.read(getClass().getResource(c5.getIndex()+".png"));
+				tempIcon = new ImageIcon(cardImg);
+	        	tempImg = tempIcon.getImage();
+	        	tempImg2 = tempImg.getScaledInstance(65,80,java.awt.Image.SCALE_SMOOTH); 
+	        	tempIcon = new ImageIcon(tempImg2);
+	        	card5Display.setIcon(tempIcon);
+	        	fiveCards.add(card5Display);
+	        }
+	        add(player);
+		}
+		catch (IOException ioex){
+		}
+	}
+
+	private void gameStart(){
+		int winnerIndex = -1;
+		centerHand = new Hand();
+
+		//preflop
+
+		//flop: the three cards
+
+
+
+		//turn
+
+		//river
+		if(winnerIndex == -1)
+			logWriter.println("The winner is you!");
+		else{
+
+		}
+		endOfGame = 1;
 	}
 	
 	private void setPokerChips() {
@@ -246,6 +383,7 @@ public class MainFrame extends JFrame {
 			card2Display.setIcon(tempIcon);
 			panel.add(card1Display);
 			panel.add(card2Display);
+			log(name, 0, c1, c2);
 		}
 		else{
 			Card userC1 = new Card(c1.getRank(), c1.getSuit());
@@ -254,6 +392,7 @@ public class MainFrame extends JFrame {
 			money = user.getMoney();
 			user.setCard1(userC1);
 			user.setCard2(userC2);
+			log(name, 0, c1, c2);
 			try{
 				cardImg = ImageIO.read(getClass().getResource(c1.getIndex()+".png"));
 				tempIcon = new ImageIcon(cardImg);
@@ -274,7 +413,6 @@ public class MainFrame extends JFrame {
 			}
 			catch (IOException ioex){
 			}
-			
 		}
 		JLabel nameL = new JLabel(name);
 		JLabel label = new JLabel();
@@ -334,5 +472,21 @@ public class MainFrame extends JFrame {
     		initAI(eastAI2, 6);
     		add(eastAI2);
     	}
+    	endOfGame = 1;
+	}
+	private void log(String name, int event, Card c1, Card c2) {
+		if(event == -1) {
+			logWriter.println("Hands 1:\n"+"Cards Dealt:");
+		}
+		// event: cards dealt
+		if(event == 0) {
+			logWriter.print(name + ": ");
+			logWriter.print(c1.suitToString(c1.getSuit()) +" " + c1.getRank() + ", ");
+			logWriter.println(c2.suitToString(c2.getSuit()) + " " + c2.getRank());
+		}
+		// event: draw cards
+		// event: 
+		if(endOfGame == 1)
+			logWriter.close();
 	}
 }

@@ -5,6 +5,7 @@ public class Player {
 	private String name = "";
 	private int money = 0;
 	private Hand playerHand;
+	private boolean ifFold = false;
 	
 	public Player(boolean ai, String playerName, int playerMoney) {
 		isAi = ai;
@@ -21,6 +22,10 @@ public class Player {
 		return money;
 	}
 	
+	public boolean getFold() {
+		return ifFold;
+	}
+
 	public boolean isPlayerAi() {
 		return isAi;
 	}
@@ -39,5 +44,17 @@ public class Player {
 
 	public void setCard2(Card card){
 		playerHand.addCard(card, 1);
+	}
+
+	public void setFold(){
+		ifFold = true;
+	}
+
+	public void call(){
+		
+	}
+
+	public void bet(){
+		
 	}
 }
