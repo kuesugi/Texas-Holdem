@@ -5,7 +5,10 @@ public class Hand {
 	private ArrayList<Card> hand;
 	private int score;
 
-	
+	public Hand() {
+		
+		hand = new ArrayList<>();
+	}
 	public Hand(Card card1, Card card2) {
 
 		hand = new ArrayList<>();
@@ -17,6 +20,16 @@ public class Hand {
 	public void addCard(Card newCard) {
 
 		hand.add(newCard);
+	}
+	
+	public void addCard(Card newCard, int number) {
+		
+		hand.add(number, newCard);
+	}
+	
+	public Card getCard(int card) {
+		
+		return hand.get(card);
 	}
 	//Main method for checking and returning scores
 	public int checkScore() {
@@ -93,7 +106,7 @@ public class Hand {
 		
 	}
 
-	public int checkRoyalFlush() {
+	private int checkRoyalFlush() {
 
 		int suit = 0;
 		for (int i = 0; i < hand.size(); i++) {
@@ -134,7 +147,7 @@ public class Hand {
 
 	}
 
-	public int checkStraightFlush() {
+	private int checkStraightFlush() {
 
 		int suit = 0;
 		int rank = 0;
@@ -176,7 +189,7 @@ public class Hand {
 		return 0;
 	}
 
-	public int checkFourOfAKind() {
+	private int checkFourOfAKind() {
 
 		int rank = 0;
 
@@ -207,7 +220,7 @@ public class Hand {
 		return 0;
 	}
 
-	public int checkThreeOfAKind() {
+	private int checkThreeOfAKind() {
 
 		int rank = 0;
 
@@ -237,7 +250,7 @@ public class Hand {
 		return 0;
 	}
 
-	public int checkPair(int bRank) {
+	private int checkPair(int bRank) {
 
 		//we add in checking for a bad rank for looking
 		//at full houses and two pairs, to make sure we don't repeat
@@ -274,7 +287,7 @@ public class Hand {
 		return 0;
 	}
 
-	public int checkHighCard() {
+	private int checkHighCard() {
 
 		int rank = hand.get(0).getRank();
 
@@ -297,7 +310,7 @@ public class Hand {
 		}
 	}
 
-	public int checkFullHouse() {
+	private int checkFullHouse() {
 
 		int threeKind = checkThreeOfAKind();
 		int pair = 0;
@@ -329,7 +342,7 @@ public class Hand {
 		}
 	}
 	
-	public int checkFlush() {
+	private int checkFlush() {
 
 		int suit = 0;
 		int rank = 0;
@@ -377,7 +390,7 @@ public class Hand {
 		return 0;
 	}
 	
-	public int checkStraight() {
+	private int checkStraight() {
 
 		int rank = 0;
 
@@ -422,7 +435,7 @@ public class Hand {
 		return 0;
 	}
 	
-	int checkTwoPair() {
+	private int checkTwoPair() {
 		
 		int pair1 = checkPair(0);
 		int pair2 = 0;
