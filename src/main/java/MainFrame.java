@@ -10,6 +10,10 @@ import javax.swing.*;
 import javax.swing.border.EmptyBorder;
 import javax.imageio.*;
 
+import java.awt.*;
+import javax.swing.*;
+import javax.swing.border.*;
+
 @SuppressWarnings("unchecked")
 
 public class MainFrame extends JFrame {
@@ -194,7 +198,84 @@ public class MainFrame extends JFrame {
         add(player);
 		
 	///////////////////////////////////////////////////////////start game play here
+        showActionFrame();
+       
 	}
+	private void showActionFrame() {
+		 SwingUtilities.invokeLater(new Runnable() {
+	            public void run() {
+	                JPanel p = new JPanel(new GridLayout(2,2,4,4));
+	                p.setBackground(Color.black);
+	                p.setBorder(new EmptyBorder(4,4,4,4));
+
+	                JButton fold = new JButton();
+	                fold.add(getLabel(
+	                    "Fold", SwingConstants.CENTER), BorderLayout.CENTER);
+	                p.add(fold);
+
+	                JButton check = new JButton();
+	                check.add(getLabel(
+	                    "Check", SwingConstants.CENTER), BorderLayout.CENTER);
+	                p.add(check);
+	                
+	                JButton bet = new JButton();
+	                bet.add(getLabel(
+	                    "Bet", SwingConstants.CENTER), BorderLayout.CENTER);
+	                p.add(bet);
+
+	                // from @0verbose
+	                JPanel amount = new JPanel();
+	                amount.setLayout(new BoxLayout(amount, BoxLayout.X_AXIS ));
+
+	                amount.add(Box.createHorizontalGlue());
+	                amount.add(getLabel("$100"));
+	                amount.add(Box.createHorizontalGlue());
+	                p.add(amount);
+
+	                JFrame f = new JFrame("Action");
+	                f.setPreferredSize(new Dimension(220, 78));
+	                
+	                // add the listener to the fold button to handle the "pressed" event
+	                fold.addActionListener(new ActionListener()
+	                {
+	                  public void actionPerformed(ActionEvent e)
+	                  {
+	                	// hide the frame
+	                    f.setVisible(false);
+	                  }
+	                });
+	                
+	                // add the listener to the check button to handle the "pressed" event
+	                check.addActionListener(new ActionListener()
+	                {
+	                  public void actionPerformed(ActionEvent e)
+	                  {
+	                	// hide the frame
+	                    f.setVisible(false);
+	                  }
+	                });
+	                
+	                // add the listener to the bet button to handle the "pressed" event
+	                bet.addActionListener(new ActionListener()
+	                {
+	                  public void actionPerformed(ActionEvent e)
+	                  {
+	                    // hide the frame
+	                    f.setVisible(false);
+	                  }
+	                });
+	                
+	                f.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+	                f.setContentPane(p);
+	                f.pack();
+	                f.pack();
+	                f.setLocationRelativeTo(null);
+	                f.setVisible(true);
+	                
+	            }
+	        });
+	}
+
 	
 	private void setPokerChips() {
 		// poker chips in the pot
@@ -335,4 +416,13 @@ public class MainFrame extends JFrame {
     		add(eastAI2);
     	}
 	}
+	
+    public static JLabel getLabel(String text) {
+        return getLabel(text, SwingConstants.CENTER);
+    }
+
+    public static JLabel getLabel(String text, int alignment) {
+        JLabel l = new JLabel(text, alignment);
+        return l;
+    }
 }

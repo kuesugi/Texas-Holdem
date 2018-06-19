@@ -40,4 +40,16 @@ public class Player {
 	public void setCard2(Card card){
 		playerHand.addCard(card, 1);
 	}
+	
+	private boolean hasFolded() {
+		return false;
+	}
+	
+	private boolean hasChecked() {
+		return false;
+	}
+	
+	private boolean hasBet() {
+		return false;
+	}
 }
