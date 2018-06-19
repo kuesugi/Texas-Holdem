@@ -4,6 +4,7 @@ public class Player {
 	private boolean isAi = false;
 	private String name = "";
 	private int money = 0;
+	private int stack = 1000;
 	private Hand playerHand;
 	private boolean ifFold = false;
 	
@@ -20,6 +21,10 @@ public class Player {
 	
 	public int getMoney() {
 		return money;
+	}
+	
+	public int getStack() {
+		return stack;
 	}
 	
 	public boolean getFold() {

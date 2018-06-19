@@ -14,14 +14,14 @@ import javax.imageio.*;
 @SuppressWarnings("unchecked")
 
 public class MainFrame extends JFrame implements ActionListener{
-	// the frame structure
+	// to convert and display images
 	private Image background;
 	private Image stackImage;
 	private Image chips;
 	private Image back;
-	// Card images
 	private int numOfAI;
 	private int cardCount = 51;
+	// the frame structures
 	private JPanel northAI1 = new JPanel();
 	private JPanel northAI2 = new JPanel();
 	private JPanel northAI3 = new JPanel();
@@ -37,7 +37,6 @@ public class MainFrame extends JFrame implements ActionListener{
     // TODO
     private JButton betButton = new JButton("Bet");
     private JButton foldButton = new JButton("Fold");
-    
     private JTextField betAmt = new JTextField();
     // the player name
     private String userName = new String();
@@ -45,19 +44,18 @@ public class MainFrame extends JFrame implements ActionListener{
     // money in the pot
     private int moneyInPot = 0;
     // poker chips
-    private int blackChip = 0;
-    private int whiteChip = 0;
-    private int redChip = 0;
-    private int blueChip = 0;
+    private int blackChip, whiteChip, redChip, blueChip;
     // AIs array
     private ArrayList<Player> players;
     private static ArrayList<Card> deck;
     // initialize the log file
     PrintWriter logWriter = null;
-    // 1 if the game ends
-    int endOfGame = 0;
+    int gameRound = 0;
+    boolean allFold = false;
     
-    
+    /**
+	 * Constructor
+	 */
 	public MainFrame(String playerName, int num) {
 		super("Texas Hold'em");
 		userName = playerName;
@@ -81,12 +79,17 @@ public class MainFrame extends JFrame implements ActionListener{
         setVisible(true);
 	}
 
-	public static void shuffle() {
+	/**
+	 * Shuffle the deck
+	 */
+	private static void shuffle() {
         Collections.shuffle(deck);
     }
     
-    //buildDeck populates deck with card objects
-    public static void buildDeck() {
+	/**
+	 * Populates deck with card objects
+	 */
+    private static void buildDeck() {
         // # of suits
         for(int i = 1; i < 5; i++) {
             // # of ranks
@@ -98,16 +101,24 @@ public class MainFrame extends JFrame implements ActionListener{
         }
     }
 
+    /**
+	 * Initialize the logWriter and log
+	 * the basic info about the game
+	 */
     private void initLog(String name, int num) throws FileNotFoundException{
     	logWriter = new PrintWriter("log.txt");
-    	String time = new SimpleDateFormat("dd MMMM yyyy  -  HH : mm").format(Calendar.getInstance().getTime());
-    	logWriter.println("       * * * Game Log * * *\n" + "- Game started " + time);
+    	String startTime = new SimpleDateFormat("dd MMMM yyyy  -  HH : mm").format(Calendar.getInstance().getTime());
+    	logWriter.println("       * * * Game Log * * *\n" + "- Game started " + startTime);
     	logWriter.print("- Username: "+ name + "\n- Players: " + num + "\n  ");
     	for (int i = 0; i < num-1; i++)
     		logWriter.print(opponents[i]+", ");
-    	logWriter.println(opponents[num-1] + "\n\n-");
+    	logWriter.println(opponents[num-1] + "\n\nHand 1:\nCards Dealt:");
+    	// cards dealt are recorded when initialize (AI)players
     }
 
+    /**
+	 * Construct the main frame
+	 */
 	private void initFrame(){
 		setBounds(100, 100, 450, 300);
 		JPanel contentPane = new JPanel();
@@ -191,9 +202,7 @@ public class MainFrame extends JFrame implements ActionListener{
         pot.setBackground(new Color(4, 95, 0));
 		pot.setBorder(BorderFactory.createLineBorder(Color.white,3));
         pot.setBounds(326,180,630,320);
-
-        // space holding the five cards
-        
+        // space holding the five cards        
         fiveCards.setBackground(new Color(4, 95, 0));
         fiveCards.setBorder(BorderFactory.createLineBorder(Color.white,2));
         fiveCards.setBounds(336,220,430,270);
@@ -214,36 +223,69 @@ public class MainFrame extends JFrame implements ActionListener{
         player.setBackground(new Color(43, 151, 0));
 		player.setBorder(BorderFactory.createLineBorder(Color.white,2));
         player.setBounds(165,506,957,160);
-
-        initAI(player, -1);
+        centerHand.addCard(deck.get(cardCount--));
+		centerHand.addCard(deck.get(cardCount--));
+		centerHand.addCard(deck.get(cardCount--));
+        initAI(player,-1,0);
         add(player);
         player.add(betButton);
         betButton.addActionListener(this);
         player.add(foldButton);
+        foldButton.addActionListener(null);
         gameStart();
 	}
-
+	
+	/**
+	 * Display center hands when click "Bet"
+	 */
 	@Override
 	public void actionPerformed(ActionEvent e) {
-		// flop
-		if(centerHand.isEmpty()){
-			centerHand.addCard(deck.get(cardCount--));
-			centerHand.addCard(deck.get(cardCount--));
-			centerHand.addCard(deck.get(cardCount--));
-		}
-		else{
-			centerHand.addCard(deck.get(cardCount--));
-		}
-
-		if(centerHand.getSize() == 3)
+		if(gameRound == 0) {
 			displayCenterCards(centerHand, 1);
-		else if(centerHand.getSize() == 4)
+			centerHand.addCard(deck.get(cardCount--));
+			gameRound++;
+		}
+		else if(gameRound == 1) {
 			displayCenterCards(centerHand, 2);
-		else
+			centerHand.addCard(deck.get(cardCount--));
+			gameRound++;
+		}
+		else if(gameRound == 2) {
 			displayCenterCards(centerHand, 3);
+			gameRound++;
+		}
+		else if (gameRound == 3){
+			System.out.println("AAA");
+			// display AIs' cards
+			if(!allFold) {
+				if(numOfAI == 1)	initAI(northAI1, 1, 1);
+				else if(numOfAI == 2) { initAI(northAI1,0,1); initAI(northAI2,1,1);}
+				else if(numOfAI == 3) { initAI(northAI1,0,1); initAI(northAI2,1,1); 
+					initAI(northAI3,2,1);}
+				else if(numOfAI == 4) { initAI(northAI1,0,1); initAI(northAI2,1,1); 
+					initAI(northAI3,2,1); initAI(westAI1,3,1);}
+				else if(numOfAI == 5) { initAI(northAI1,0,1); initAI(northAI2,1,1);
+					initAI(northAI3,2,1); initAI(westAI1,3,1); initAI(westAI2,4,1);}
+				else if(numOfAI == 6) { initAI(northAI1,0,1); initAI(northAI2,1,1); 
+					initAI(northAI3,2,1); initAI(westAI1,3,1); initAI(westAI2,4,1); 
+					initAI(eastAI1,5,1);}
+				else { initAI(northAI1,0,1); initAI(northAI2,1,1); initAI(northAI3,2,1);
+					initAI(westAI1,3,1); initAI(westAI2,4,1); initAI(eastAI1,5,1);
+					initAI(eastAI2,6,1);}
+			}
+			// log the end time of the game and close the file writing
+			String endTime = new SimpleDateFormat("dd MMMM yyyy  -  HH : mm").format(Calendar.getInstance().getTime());
+	    	logWriter.println("- Game ends " + endTime);
+	    	logWriter.close();
+		}
+		else return;
 	}
 
+	/**
+	 * Display the center hand cards
+	 */
 	private void displayCenterCards(Hand centerHand, int round){
+		if(round == -1) return;
 		ImageIcon tempIcon;
         Image tempImg;
         Image tempImg2;
@@ -282,9 +324,10 @@ public class MainFrame extends JFrame implements ActionListener{
 	        	tempIcon = new ImageIcon(tempImg2);
 	        	card3Display.setIcon(tempIcon);
 	        	
-	        	player.add(card1Display);
-        		player.add(card2Display);
-        		player.add(card3Display);
+	        	fiveCards.add(card1Display);
+        		fiveCards.add(card2Display);
+        		fiveCards.add(card3Display);
+        		fiveCards.revalidate();
 			}
 			else if (round == 2){
 				Card c4 = centerHand.getCard(3);
@@ -295,6 +338,7 @@ public class MainFrame extends JFrame implements ActionListener{
 	        	tempIcon = new ImageIcon(tempImg2);
 	        	card4Display.setIcon(tempIcon);
 	        	fiveCards.add(card4Display);
+	        	fiveCards.revalidate();
 	        }
 	        else{
 				Card c5 = centerHand.getCard(4);
@@ -305,34 +349,47 @@ public class MainFrame extends JFrame implements ActionListener{
 	        	tempIcon = new ImageIcon(tempImg2);
 	        	card5Display.setIcon(tempIcon);
 	        	fiveCards.add(card5Display);
+	        	fiveCards.revalidate();
 	        }
-	        add(player);
+			pot.revalidate();
 		}
 		catch (IOException ioex){
 		}
 	}
 
+	/**
+	 * Start a game and go into three transitions
+	 */
 	private void gameStart(){
 		int winnerIndex = -1;
-		centerHand = new Hand();
-
+		//centerHand = new Hand();
 		//preflop
-
+		
+			// cards dealt are recorded when initialize players
 		//flop: the three cards
-
-
+		logWriter.println("Hand 2:\n");
 
 		//turn
-
+		logWriter.println("Hand 3:\n");
 		//river
-		if(winnerIndex == -1)
-			logWriter.println("The winner is you!");
-		else{
-
+		logWriter.println("Hand 4:\n");
+		if(winnerIndex == -1) {
+			logWriter.print("You win with " + user.getCard1().suitToString(user.getCard1().getSuit()) +" "+
+					user.getCard1().getRank() + ", " + user.getCard2().suitToString(user.getCard2().getSuit()) +
+					" " + user.getCard2().getRank() + ", "  ); //+ ????????
+			logWriter.println("You win $" + user.getMoney()); 
 		}
-		endOfGame = 1;
+		else{
+			logWriter.println("The winner is " + players.get(winnerIndex) + ".");
+			logWriter.print(players.get(winnerIndex) + "wins $" + players.get(winnerIndex).getMoney());
+		}
+		
+		
 	}
 	
+	/**
+	 * Add the poker chips images
+	 */
 	private void setPokerChips() {
 		// poker chips in the pot
 		ImageIcon tempIcon = new ImageIcon(chips);
@@ -361,7 +418,34 @@ public class MainFrame extends JFrame implements ActionListener{
         add(stacks);
 	}
 	
-	private void initAI(JPanel panel, int num) {
+	private void displayAICards(int i, JPanel panel, JLabel c1Dis, JLabel c2Dis) {
+		Card c1 = players.get(i).getCard1();
+		Card c2 = players.get(i).getCard2();
+		try {
+        	Image cardImg = ImageIO.read(getClass().getResource(c1.getIndex()+".png"));
+			ImageIcon tempIcon = new ImageIcon(cardImg);
+        	Image tempImg = tempIcon.getImage();
+        	Image tempImg2 = tempImg.getScaledInstance(65,80,java.awt.Image.SCALE_SMOOTH); 
+        	tempIcon = new ImageIcon(tempImg2);
+        	c1Dis.setIcon(tempIcon);
+        	panel.add(c1Dis);
+        	
+        	cardImg = ImageIO.read(getClass().getResource(c2.getIndex()+".png"));
+			tempIcon = new ImageIcon(cardImg);
+        	tempImg = tempIcon.getImage();
+        	tempImg2 = tempImg.getScaledInstance(65,80,java.awt.Image.SCALE_SMOOTH); 
+        	tempIcon = new ImageIcon(tempImg2);
+        	c2Dis.setIcon(tempIcon);
+        	panel.add(c2Dis);
+    	}
+    	catch (IOException ioex){
+		}
+	}
+	
+	/**
+	 * Initialize a player
+	 */
+	private void initAI(JPanel panel, int num, int display) {
 		ImageIcon tempIcon = new ImageIcon(back);
         Image tempImg = tempIcon.getImage();
         Image tempImg2 = tempImg.getScaledInstance(65,80,java.awt.Image.SCALE_SMOOTH); 
@@ -371,21 +455,36 @@ public class MainFrame extends JFrame implements ActionListener{
 		Image cardImg;
 		JLabel card1Display = new JLabel();
 		JLabel card2Display = new JLabel();
-		Card c1 = deck.get(cardCount--);
-		Card c2 = deck.get(cardCount--);
-		
+		Card c1 = null; Card c2 = null;
 		if (num != -1){
-			name = players.get(num).getName();
-			money = players.get(num).getMoney();
-			players.get(num).setCard1(c1);
-			players.get(num).setCard2(c2);
 			card1Display.setIcon(tempIcon);
 			card2Display.setIcon(tempIcon);
 			panel.add(card1Display);
 			panel.add(card2Display);
+			if(display == 1) {
+				panel.removeAll();	panel.revalidate();
+				panel.repaint();
+				displayAICards(num, panel, card1Display, card2Display);
+				name = players.get(num).getName();
+				money = players.get(num).getMoney();
+				JLabel nameL = new JLabel(name);
+				JLabel label = new JLabel();
+				label.setText("Balance: " + 1000);
+				label.setForeground(Color.white);
+				panel.add(label); panel.add(nameL);
+				return;
+			}
+			c1 = deck.get(cardCount--);
+			c2 = deck.get(cardCount--);
+			name = players.get(num).getName();
+			money = players.get(num).getMoney();
+			players.get(num).setCard1(c1);
+			players.get(num).setCard2(c2);
 			log(name, 0, c1, c2);
 		}
 		else{
+			c1 = deck.get(cardCount--);
+			c2 = deck.get(cardCount--);
 			Card userC1 = new Card(c1.getRank(), c1.getSuit());
 			Card userC2 = new Card(c2.getRank(), c2.getSuit());
 			name = userName;
@@ -416,67 +515,79 @@ public class MainFrame extends JFrame implements ActionListener{
 		}
 		JLabel nameL = new JLabel(name);
 		JLabel label = new JLabel();
-		label.setText("Balance: " + String.valueOf(money));
+		label.setText("Balance:" + 1000);
 		label.setForeground(Color.white);
 		panel.add(label);
 		panel.add(nameL);
 	}
 	
+	/**
+	 * Set the north AI players
+	 */
 	private void setNorth() {
 		northAI1.setBackground(new Color(43, 151, 0));
 		northAI1.setBorder(BorderFactory.createLineBorder(Color.white,2));
 		northAI1.setBounds(95,30,310,130);
-		initAI(northAI1,0);
+		initAI(northAI1,0,0);
 		add(northAI1);
 		if(numOfAI == 2 || numOfAI == 3 || numOfAI > 3) {
 			northAI2.setBackground(new Color(43, 151, 0));
 			northAI2.setBorder(BorderFactory.createLineBorder(Color.white,2));
 			northAI2.setBounds(481,30,310,130);
-			initAI(northAI2,1);
+			initAI(northAI2,1,0);
 			add(northAI2);
 		}
 		if (numOfAI == 3 || numOfAI > 3){
 			northAI3.setBackground(new Color(43, 151, 0));
 			northAI3.setBorder(BorderFactory.createLineBorder(Color.white,2));
 			northAI3.setBounds(866,30,310,130);
-			initAI(northAI3,2);
+			initAI(northAI3,2,0);
 			add(northAI3);
 		}
 	}
 	
+	/**
+	 * Set the west AI players
+	 */
 	private void setWest() {
 		westAI1.setBackground(new Color(43, 151, 0));
 		westAI1.setBorder(BorderFactory.createLineBorder(Color.white,2));
 		westAI1.setBounds(10,180,310,130);
-		initAI(westAI1, 3);
+		initAI(westAI1,3,0);
 		add(westAI1);
 		if(numOfAI == 5 || numOfAI > 5) {
 			westAI2.setBackground(new Color(43, 151, 0));
 			westAI2.setBorder(BorderFactory.createLineBorder(Color.white,2));
 			westAI2.setBounds(10,330,310,130);
-			initAI(westAI2, 4);
+			initAI(westAI2,4,0);
 			add(westAI2);
 		}
 	}
 	
+	/**
+	 * Set the east AI players
+	 */
 	private void setEast() {
     	eastAI1.setBackground(new Color(43, 151, 0));
     	eastAI1.setBorder(BorderFactory.createLineBorder(Color.white,2));
     	eastAI1.setBounds(962,180,310,130);
-    	initAI(eastAI1, 5);
+    	initAI(eastAI1,5,0);
     	add(eastAI1);
     	if(numOfAI == 7) {
     		eastAI2.setBackground(new Color(43, 151, 0));
     		eastAI2.setBorder(BorderFactory.createLineBorder(Color.white,2));
     		eastAI2.setBounds(962,330,310,130);
-    		initAI(eastAI2, 6);
+    		initAI(eastAI2,6,0);
     		add(eastAI2);
     	}
-    	endOfGame = 1;
 	}
+	
+	/**
+	 * Log the event in a text file
+	 */
 	private void log(String name, int event, Card c1, Card c2) {
 		if(event == -1) {
-			logWriter.println("Hands 1:\n"+"Cards Dealt:");
+			
 		}
 		// event: cards dealt
 		if(event == 0) {
@@ -484,9 +595,28 @@ public class MainFrame extends JFrame implements ActionListener{
 			logWriter.print(c1.suitToString(c1.getSuit()) +" " + c1.getRank() + ", ");
 			logWriter.println(c2.suitToString(c2.getSuit()) + " " + c2.getRank());
 		}
-		// event: draw cards
-		// event: 
-		if(endOfGame == 1)
-			logWriter.close();
+		// event: calls
+		if(event == 1) {
+			logWriter.println(name + " calls");
+		}
+		// event: folds
+		if(event == 2) {
+			logWriter.println(name + " folds");
+		}
+		// pass c1 as the flop/river/turn card, c2 as null
+		if(event == 3) {
+			Card center1 = centerHand.getCard(0);
+			Card center2 = centerHand.getCard(1);
+			Card center3 = centerHand.getCard(2);
+			logWriter.print("Flop: " + center1.suitToString(c1.getSuit()) +" " + center1.getRank() + ", ");
+			logWriter.print(center2.suitToString(center2.getSuit()) +" " + center2.getRank() + ", ");
+			logWriter.println(center3.suitToString(center3.getSuit()) +" " + center3.getRank());
+		}
+		if(event == 4) {
+			logWriter.println("River: " + c1.suitToString(c1.getSuit()) +" " + c1.getRank());
+		}
+		if(event == 5) {
+			logWriter.println("Turn: " + c1.suitToString(c1.getSuit()) +" " + c1.getRank());
+		}
 	}
 }
