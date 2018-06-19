@@ -54,6 +54,10 @@ public class Player {
 	public void setFold(){
 		ifFold = true;
 	}
+	
+	public void setStack(int newStack){
+		stack = newStack;
+	}
 
 	public void call(){
 		

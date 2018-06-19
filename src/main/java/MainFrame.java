@@ -13,9 +13,8 @@ import javax.imageio.*;
 
 @SuppressWarnings("unchecked")
 
-public class MainFrame extends JFrame implements ActionListener{
+public class MainFrame extends JFrame{
 	// to convert and display images
-	private Image background;
 	private Image stackImage;
 	private Image chips;
 	private Image back;
@@ -34,8 +33,9 @@ public class MainFrame extends JFrame implements ActionListener{
     private JPanel westAI2 = new JPanel();
     private JPanel fiveCards = new JPanel();
     private Hand centerHand = new Hand();
-    // TODO
+    // TODO: add some 10, 50, 100, reset buttons
     private JButton betButton = new JButton("Bet");
+    private JButton callButton = new JButton("Call");
     private JButton foldButton = new JButton("Fold");
     private JTextField betAmt = new JTextField();
     // the player name
@@ -52,6 +52,7 @@ public class MainFrame extends JFrame implements ActionListener{
     PrintWriter logWriter = null;
     int gameRound = 0;
     boolean allFold = false;
+    int betVal = 0;
     
     /**
 	 * Constructor
@@ -128,7 +129,6 @@ public class MainFrame extends JFrame implements ActionListener{
 		// load the background image
 		getContentPane().setLayout(null);
 		try {
-			background = ImageIO.read(getClass().getResource("/background.jpg"));
 			stackImage = ImageIO.read(getClass().getResource("/stacks.png"));
 			chips = ImageIO.read(getClass().getResource("/pokerchips.png"));
 			back = ImageIO.read(getClass().getResource("/back.png"));
@@ -229,58 +229,11 @@ public class MainFrame extends JFrame implements ActionListener{
         initAI(player,-1,0);
         add(player);
         player.add(betButton);
-        betButton.addActionListener(this);
+        player.add(callButton);
         player.add(foldButton);
-        foldButton.addActionListener(null);
         gameStart();
 	}
 	
-	/**
-	 * Display center hands when click "Bet"
-	 */
-	@Override
-	public void actionPerformed(ActionEvent e) {
-		if(gameRound == 0) {
-			displayCenterCards(centerHand, 1);
-			centerHand.addCard(deck.get(cardCount--));
-			gameRound++;
-		}
-		else if(gameRound == 1) {
-			displayCenterCards(centerHand, 2);
-			centerHand.addCard(deck.get(cardCount--));
-			gameRound++;
-		}
-		else if(gameRound == 2) {
-			displayCenterCards(centerHand, 3);
-			gameRound++;
-		}
-		else if (gameRound == 3){
-			System.out.println("AAA");
-			// display AIs' cards
-			if(!allFold) {
-				if(numOfAI == 1)	initAI(northAI1, 1, 1);
-				else if(numOfAI == 2) { initAI(northAI1,0,1); initAI(northAI2,1,1);}
-				else if(numOfAI == 3) { initAI(northAI1,0,1); initAI(northAI2,1,1); 
-					initAI(northAI3,2,1);}
-				else if(numOfAI == 4) { initAI(northAI1,0,1); initAI(northAI2,1,1); 
-					initAI(northAI3,2,1); initAI(westAI1,3,1);}
-				else if(numOfAI == 5) { initAI(northAI1,0,1); initAI(northAI2,1,1);
-					initAI(northAI3,2,1); initAI(westAI1,3,1); initAI(westAI2,4,1);}
-				else if(numOfAI == 6) { initAI(northAI1,0,1); initAI(northAI2,1,1); 
-					initAI(northAI3,2,1); initAI(westAI1,3,1); initAI(westAI2,4,1); 
-					initAI(eastAI1,5,1);}
-				else { initAI(northAI1,0,1); initAI(northAI2,1,1); initAI(northAI3,2,1);
-					initAI(westAI1,3,1); initAI(westAI2,4,1); initAI(eastAI1,5,1);
-					initAI(eastAI2,6,1);}
-			}
-			// log the end time of the game and close the file writing
-			String endTime = new SimpleDateFormat("dd MMMM yyyy  -  HH : mm").format(Calendar.getInstance().getTime());
-	    	logWriter.println("- Game ends " + endTime);
-	    	logWriter.close();
-		}
-		else return;
-	}
-
 	/**
 	 * Display the center hand cards
 	 */
@@ -357,18 +310,95 @@ public class MainFrame extends JFrame implements ActionListener{
 		}
 	}
 
+	
+	/**
+	 * Handle transitions and buttons
+	 */
+	private void transition() {
+		if(gameRound == 0) { // flop round
+			displayCenterCards(centerHand, 1);
+			centerHand.addCard(deck.get(cardCount--));
+			gameRound++;
+		}
+		else if(gameRound == 1) {
+			displayCenterCards(centerHand, 2);
+			centerHand.addCard(deck.get(cardCount--));
+			gameRound++;
+		}
+		else if(gameRound == 2) {
+			displayCenterCards(centerHand, 3);
+			gameRound++;
+		}
+		else if (gameRound == 3){
+			// TODO: move money to the winner's stack
+			// display AIs' cards
+			if(!allFold) {
+				if(numOfAI == 1)	initAI(northAI1, 1, 1);
+				else if(numOfAI == 2) { initAI(northAI1,0,1); initAI(northAI2,1,1);}
+				else if(numOfAI == 3) { initAI(northAI1,0,1); initAI(northAI2,1,1); 
+					initAI(northAI3,2,1);}
+				else if(numOfAI == 4) { initAI(northAI1,0,1); initAI(northAI2,1,1); 
+					initAI(northAI3,2,1); initAI(westAI1,3,1);}
+				else if(numOfAI == 5) { initAI(northAI1,0,1); initAI(northAI2,1,1);
+					initAI(northAI3,2,1); initAI(westAI1,3,1); initAI(westAI2,4,1);}
+				else if(numOfAI == 6) { initAI(northAI1,0,1); initAI(northAI2,1,1); 
+					initAI(northAI3,2,1); initAI(westAI1,3,1); initAI(westAI2,4,1); 
+					initAI(eastAI1,5,1);}
+				else { initAI(northAI1,0,1); initAI(northAI2,1,1); initAI(northAI3,2,1);
+					initAI(westAI1,3,1); initAI(westAI2,4,1); initAI(eastAI1,5,1);
+					initAI(eastAI2,6,1);}
+			}
+			// log the end time of the game and close the file writing
+			String endTime = new SimpleDateFormat("dd MMMM yyyy  -  HH : mm").format(Calendar.getInstance().getTime());
+	    	logWriter.println("- Game ends " + endTime);
+	    	logWriter.close();
+	    	JPanel result = new JPanel();
+		}
+		else return;
+	}
+	
 	/**
 	 * Start a game and go into three transitions
 	 */
 	private void gameStart(){
+		boolean ifUserFold = false;
+		// BUTTONS:
+		betButton.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+				if(betVal <= user.getStack()) {
+					user.setStack(user.getStack()-betVal);
+					moneyInPot += betVal;
+					betVal = 0;
+					allFold = true; 
+					// NOTE: fold button is disabled here because all AIs fold after the user bets
+					foldButton.setEnabled(false);
+					
+					transition();
+				}
+			}
+		});
+		foldButton.addActionListener(new ActionListener()
+        {
+          public void actionPerformed(ActionEvent e)
+          {
+        	player.removeAll();
+        	JLabel label = new JLabel();
+			label.setText("Balance: " + 1000);
+			label.setForeground(Color.white);
+			add(label);
+        	player.repaint(); player.revalidate();
+          }
+        });
+		
 		int winnerIndex = -1;
 		//centerHand = new Hand();
-		//preflop
-		
-			// cards dealt are recorded when initialize players
+		while (gameRound <= 3 && ifUserFold) {
+			
+		}
+		// cards dealt are recorded when initialize players
 		//flop: the three cards
 		logWriter.println("Hand 2:\n");
-
+		
 		//turn
 		logWriter.println("Hand 3:\n");
 		//river
