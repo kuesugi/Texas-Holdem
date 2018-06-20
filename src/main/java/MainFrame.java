@@ -28,8 +28,7 @@ public class MainFrame extends JFrame{
     private JPanel p = new JPanel(new GridLayout(2,3,2,2));
     private JPanel p2 = new JPanel(new GridLayout(2,4,2,2));
     private JPanel p3 = new JPanel();
-	private JPanel player = new JPanel();
-
+    private JPanel player = new JPanel();
     private JPanel pot = new JPanel();
     private JPanel eastAI1 = new JPanel();
     private JPanel eastAI2 = new JPanel();
@@ -37,28 +36,32 @@ public class MainFrame extends JFrame{
     private JPanel westAI2 = new JPanel();
     private JPanel fiveCards = new JPanel();
     private Hand centerHand = new Hand();
-    // TODO: add some 10, 50, 100, clear buttons
-    private JButton betButton = new JButton("Bet");
+   
+   	//USER OPTION BUTTONS
+    private int betAmount = 0;
+   	private JButton betButton = new JButton("Bet");
     private JButton bet10Button = new JButton ("$10");
     private JButton bet50Button = new JButton ("$50");
     private JButton bet100Button = new JButton ("$100");
     private JButton clearButton = new JButton ("CLEAR");
-
     private JButton callButton = new JButton("Call");
     private JButton foldButton = new JButton("Fold");
-    private int balance = 1000;
-    private int betAmount = 0;
     private JTextField betAmt = new JTextField("$"+betAmount);
+    
     // the player name
     private String userName = new String();
     private Player user = new Player(false, userName, 1000);
+   
     // money in the pot
     private int moneyInPot = 0;
+  
     // poker chips
     private int blackChip, whiteChip, redChip, blueChip;
+   
     // AIs array
     private ArrayList<Player> players;
     private static ArrayList<Card> deck;
+    
     // initialize the log file
     PrintWriter logWriter = null;
     int gameRound = 0;
@@ -238,12 +241,10 @@ public class MainFrame extends JFrame{
 		centerHand.addCard(deck.get(cardCount--));
         initAI(player,-1,0);
         add(player);
-
-        
-		betButton.setEnabled(false);
+        betButton.setEnabled(false);
 	
         
-        
+        //FORMATTING FOR USER OPTIONS
         p.setBackground(new Color(43, 151, 0));
         p2.setBackground(new Color(43, 151, 0));
         p3.setBackground(new Color(43, 151, 0));
@@ -270,9 +271,9 @@ public class MainFrame extends JFrame{
         p2.setVisible(true);
         p3.setVisible(true);
 
+
+        //START GAME
         gameStart();
-        
-        
 	}
 	
 	/**
@@ -402,32 +403,25 @@ public class MainFrame extends JFrame{
 	 * Start a game and go into three transitions
 	 */
 	private void gameStart(){
-		boolean ifUserFold = false;
 		// BUTTONS:
-		bet10Button.addActionListener(new ActionListener()
-        {
-          public void actionPerformed(ActionEvent e)
-          {
-        	if (balance >= betAmount+10) {
-        	betAmount+=10;
-            betAmt.setText("$"+betAmount);
-			betButton.setEnabled(true);
-        	}
-        	else
+		bet10Button.addActionListener(new ActionListener() {
+          public void actionPerformed(ActionEvent e) {
+        	if (user.getStack() >= betAmount+10) {
+	        	betAmount+=10;
+	            betAmt.setText("$"+betAmount);
+				betButton.setEnabled(true);
+        	} else
         		bet10Button.setEnabled(false);
           }
         });
         
-        bet50Button.addActionListener(new ActionListener()
-        {
-          public void actionPerformed(ActionEvent e)
-          {
-          	if (balance >= betAmount+50) {
-        	betAmount+=50;
-            betAmt.setText("$"+betAmount);
-			betButton.setEnabled(true);
-          	}
-        	else
+        bet50Button.addActionListener(new ActionListener() {
+          public void actionPerformed(ActionEvent e) {
+          	if (user.getStack() >= betAmount+50) {
+	        	betAmount+=50;
+	            betAmt.setText("$"+betAmount);
+				betButton.setEnabled(true);
+          	} else
         		bet50Button.setEnabled(false);
           }
         });
@@ -437,7 +431,7 @@ public class MainFrame extends JFrame{
           public void actionPerformed(ActionEvent e)
           {
         	// hide the frame
-        	if (balance >= betAmount+100) {
+        	if (user.getStack() >= betAmount+100) {
         	betAmount+=100;
             betAmt.setText("$"+betAmount);
 			betButton.setEnabled(true);
@@ -447,10 +441,8 @@ public class MainFrame extends JFrame{
           }
         });
 		
-        clearButton.addActionListener(new ActionListener()
-        {
-          public void actionPerformed(ActionEvent e)
-          {
+        clearButton.addActionListener(new ActionListener() {
+          public void actionPerformed(ActionEvent e) {
         	// hide the frame
         	betAmount=0;
             betAmt.setText("$"+betAmount);
@@ -458,12 +450,12 @@ public class MainFrame extends JFrame{
         	bet10Button.setEnabled(true);
         	bet50Button.setEnabled(true);
         	bet100Button.setEnabled(true);
-
           }
+
         });
+
 		betButton.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
-
 				if(betAmount <= user.getStack()) {
 					user.setStack(user.getStack()-betAmount);
 					moneyInPot += betAmount;
@@ -474,30 +466,41 @@ public class MainFrame extends JFrame{
 					
 					transition();
 				}
-				
 			}
 		});
+
 		foldButton.addActionListener(new ActionListener()
         {
           public void actionPerformed(ActionEvent e)
           {
         	player.removeAll();
         	JLabel label = new JLabel();
-			label.setText("Balance: " + balance);
+			label.setText("Balance: " + 1000);
 			label.setForeground(Color.white);
 			add(label);
         	player.repaint(); player.revalidate();
+
+        	transition();
+          }
+        });
+
+        callButton.addActionListener(new ActionListener()
+        {
+          public void actionPerformed(ActionEvent e)
+          {
+     		transition();
           }
         });
 		
 		int winnerIndex = -1;
 		//centerHand = new Hand();
-		while (gameRound <= 3 && ifUserFold) {
-			if (betAmount < 0 || betAmount == 0)
-				betButton.setEnabled(false);
-			else
-				betButton.setEnabled(true);
+		
+		//if the player folds early this loop
+		//allows the game to continue playing
+		while (gameRound <= 3) {
+			transition();
 		}
+
 		// cards dealt are recorded when initialize players
 		//flop: the three cards
 		logWriter.println("Hand 2:\n");
@@ -602,7 +605,7 @@ public class MainFrame extends JFrame{
 				money = players.get(num).getMoney();
 				JLabel nameL = new JLabel(name);
 				JLabel label = new JLabel();
-				label.setText("Balance: " + balance);
+				label.setText("Balance: " + 1000);
 				label.setForeground(Color.white);
 				panel.add(label); panel.add(nameL);
 				return;
@@ -648,7 +651,7 @@ public class MainFrame extends JFrame{
 		}
 		JLabel nameL = new JLabel(name);
 		JLabel label = new JLabel();
-		label.setText("Balance:" + balance);
+		label.setText("Balance:" + 1000);
 		label.setForeground(Color.white);
 		panel.add(label);
 		panel.add(nameL);
