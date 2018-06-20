@@ -4,6 +4,7 @@ import java.awt.List;
 import java.io.*;
 import java.lang.reflect.Array;
 import java.util.*;
+import java.util.concurrent.TimeUnit;
 import java.util.jar.Attributes.Name;
 import java.text.SimpleDateFormat;
 
@@ -40,6 +41,7 @@ public class MainFrame extends JFrame{
     private JPanel fiveCards = new JPanel();
     private Hand centerHand = new Hand();
     private JLabel moneyInPotLable = new JLabel();
+    private JLabel roundLabel = new JLabel();
    
    	//USER OPTION BUTTONS
     private int betAmount = 0;
@@ -58,7 +60,7 @@ public class MainFrame extends JFrame{
    
     // money in the pot
     private int moneyInPot = 0;
-  
+
     // poker chips
     private int blackChip, whiteChip, redChip, blueChip;
    
@@ -144,8 +146,8 @@ public class MainFrame extends JFrame{
 		contentPane.setBackground(new Color(9, 120, 0));
 		contentPane.setBorder(new EmptyBorder(5, 5, 5, 5));
 		setContentPane(contentPane);
-		// load the background image
 		getContentPane().setLayout(null);
+		
 		try {
 			stackImage = ImageIO.read(getClass().getResource("/stacks.png"));
 			chips = ImageIO.read(getClass().getResource("/pokerchips.png"));
@@ -207,6 +209,7 @@ public class MainFrame extends JFrame{
 		    System.exit(1);
 		}
 		
+		// NORTH AND WEST
 		setExtendedState(JFrame.MAXIMIZED_BOTH);
 		if(numOfAI <=3) 
 			setNorth();
@@ -214,8 +217,9 @@ public class MainFrame extends JFrame{
 			setNorth();
 			setWest();
 		}
+		
         // CENTER
-        // Stack chips
+        // stack chips
         setPokerChips();
         pot.setBackground(new Color(4, 95, 0));
 		pot.setBorder(BorderFactory.createLineBorder(Color.white,3));
@@ -225,17 +229,20 @@ public class MainFrame extends JFrame{
         fiveCards.setBorder(BorderFactory.createLineBorder(Color.white,2));
         fiveCards.setBounds(336,220,430,270);
         add(fiveCards);
-        
         moneyInPotLable.setText("Money in the pot: " + String.valueOf(moneyInPot));
         moneyInPotLable.setFont(new Font("Optima", Font.BOLD, 23));
         moneyInPotLable.setForeground(Color.white);
         pot.add(moneyInPotLable);
         getContentPane().add(pot);
+        // 
+        
+        // NORTH, WEST, AND EAST
         if(numOfAI > 5) {
         	setNorth();
         	setWest();
         	setEast();
         }
+        
         // SOUTH
         player.setBackground(new Color(43, 151, 0));
 		player.setBorder(BorderFactory.createLineBorder(Color.white,2));
@@ -247,12 +254,10 @@ public class MainFrame extends JFrame{
         add(player);
         betButton.setEnabled(false);
 	
-        
-        //FORMATTING FOR USER OPTIONS
+        // FORMATTING FOR USER OPTIONS (in SOUTH)
         p.setBackground(new Color(43, 151, 0));
         p2.setBackground(new Color(43, 151, 0));
         p3.setBackground(new Color(43, 151, 0));
-
 
         p.add(betButton);
         p.add(callButton);
@@ -260,7 +265,6 @@ public class MainFrame extends JFrame{
         p2.add(bet50Button);
         p2.add(bet100Button);
         p2.add(clearButton);
-        
         
         player.add(p);
         p.add(p2);
@@ -275,8 +279,7 @@ public class MainFrame extends JFrame{
         p2.setVisible(true);
         p3.setVisible(true);
 
-
-        //START GAME
+        // START GAME!
         gameStart();
 	}
 	
@@ -356,25 +359,50 @@ public class MainFrame extends JFrame{
 		}
 	}
 
+	/**
+	 * Show the round number 
+	 */
+	private void showRound() {
+		roundLabel.setText(String.valueOf(gameRound));
+		pot.add(roundLabel);
+		pot.revalidate();
+	}
 	
 	/**
 	 * Handle transitions and buttons
+	 * @throws InterruptedException 
 	 */
-	private void transition() {
-		if(gameRound == 0) { // flop round
+	private void transition(boolean ifAuto) throws InterruptedException {
+		// currently in preflop; to enter the flop round
+		if(gameRound == 0) {
 			displayCenterCards(centerHand, 1);
 			centerHand.addCard(deck.get(cardCount--));
 			gameRound++;
+			TimeUnit.SECONDS.sleep(1);
+			showRound();
+			if(ifAuto)
+				transition(true);
 		}
+		// to enter the turn round
 		else if(gameRound == 1) {
 			displayCenterCards(centerHand, 2);
 			centerHand.addCard(deck.get(cardCount--));
 			gameRound++;
+			TimeUnit.SECONDS.sleep(1);
+			showRound();
+			if(ifAuto)
+				transition(true);
 		}
+		// to enter the river round
 		else if(gameRound == 2) {
 			displayCenterCards(centerHand, 3);
 			gameRound++;
+			TimeUnit.SECONDS.sleep(1);
+			showRound();
+			if(ifAuto)
+				transition(true);
 		}
+		// to get the result
 		else if (gameRound == 3){
 			// TODO: move money to the winner's stack
 			// display AIs' cards
@@ -409,53 +437,51 @@ public class MainFrame extends JFrame{
 	private void gameStart(){
 		// BUTTONS:
 		bet10Button.addActionListener(new ActionListener() {
-          public void actionPerformed(ActionEvent e) {
-        	if (user.getStack() >= betAmount+10) {
-	        	betAmount+=10;
-	            betAmt.setText("$"+betAmount);
-				betButton.setEnabled(true);
-        	} else
-        		bet10Button.setEnabled(false);
-          }
+			public void actionPerformed(ActionEvent e) {
+				if (user.getStack() >= betAmount+10) {
+					betAmount+=10;
+					betAmt.setText("$"+betAmount);
+					betButton.setEnabled(true);
+				} else
+					bet10Button.setEnabled(false);
+			}
         });
         
         bet50Button.addActionListener(new ActionListener() {
-          public void actionPerformed(ActionEvent e) {
-          	if (user.getStack() >= betAmount+50) {
-	        	betAmount+=50;
-	            betAmt.setText("$"+betAmount);
-				betButton.setEnabled(true);
-          	} else
-        		bet50Button.setEnabled(false);
-          }
+        	public void actionPerformed(ActionEvent e) {
+        		if (user.getStack() >= betAmount+50) {
+        			betAmount+=50;
+        			betAmt.setText("$"+betAmount);
+        			betButton.setEnabled(true);
+        		} else
+        			bet50Button.setEnabled(false);
+        	}
         });
         
-        bet100Button.addActionListener(new ActionListener()
-        {
-          public void actionPerformed(ActionEvent e)
-          {
-        	// hide the frame
-        	if (user.getStack() >= betAmount+100) {
-        	betAmount+=100;
-            betAmt.setText("$"+betAmount);
-			betButton.setEnabled(true);
+        bet100Button.addActionListener(new ActionListener() {
+        	public void actionPerformed(ActionEvent e)
+        	{
+        		// hide the frame
+        		if (user.getStack() >= betAmount+100) {
+        			betAmount+=100;
+        			betAmt.setText("$"+betAmount);
+        			betButton.setEnabled(true);
+        		}
+        		else
+        			bet100Button.setEnabled(false);
         	}
-        	else
-        		bet100Button.setEnabled(false);
-          }
         });
 		
         clearButton.addActionListener(new ActionListener() {
-          public void actionPerformed(ActionEvent e) {
-        	// hide the frame
-        	betAmount=0;
-            betAmt.setText("$"+betAmount);
-			betButton.setEnabled(false);
-        	bet10Button.setEnabled(true);
-        	bet50Button.setEnabled(true);
-        	bet100Button.setEnabled(true);
-          }
-
+        	public void actionPerformed(ActionEvent e) {
+        		// hide the frame
+        		betAmount=0;
+        		betAmt.setText("$"+betAmount);
+        		betButton.setEnabled(false);
+        		bet10Button.setEnabled(true);
+        		bet50Button.setEnabled(true);
+        		bet100Button.setEnabled(true);
+        	}
         });
 
 		betButton.addActionListener(new ActionListener() {
@@ -463,42 +489,50 @@ public class MainFrame extends JFrame{
 				if(betAmount <= user.getStack()) {
 					user.setStack(user.getStack()-betAmount);
 					moneyInPot += betAmount;
-					betAmount = 0;
-					allFold = true;
+					betAmount = 0;	// reset the bet amount
+					allFold = true; // all the AI folds
 					moneyInPotLable.setText("Money in the pot: " + moneyInPot);
 			        moneyInPotLable.setFont(new Font("Optima", Font.BOLD, 23));
 			        moneyInPotLable.setForeground(Color.white);
 			        pot.add(moneyInPotLable);
 			        pot.revalidate();
-					// NOTE: fold button is disabled here because all AIs fold after the user bets
-					foldButton.setEnabled(false);
+					/*
+			         * NOTE: fold button is disabled here because all AIs fold after the user bets
+					 */
+			        foldButton.setEnabled(false);
+			        // bet button is disabled before the next round
 					betButton.setEnabled(false);
-					transition();
+					try {
+						transition(false);
+					} catch (InterruptedException e1) {}
 				}
 			}
 		});
 
-		foldButton.addActionListener(new ActionListener()
-        {
-          public void actionPerformed(ActionEvent e)
-          {
-        	player.removeAll();
-        	JLabel label = new JLabel();
-			label.setText("Balance: " + 1000);
-			label.setForeground(Color.white);
-			add(label);
-        	player.repaint(); player.revalidate();
-
-        	transition();
-          }
+		foldButton.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e)
+			{
+	        	player.removeAll();
+	        	// if the user folds, remove all the components
+	        	// except the balance/stack
+	        	JLabel label = new JLabel();
+				label.setText("Balance: " + 1000);
+				label.setForeground(Color.white);
+				add(label);
+	        	player.revalidate();
+	        	try {
+					transition(true);
+				} catch (InterruptedException e1) {}
+			}
         });
 
-        callButton.addActionListener(new ActionListener()
-        {
-          public void actionPerformed(ActionEvent e)
-          {
-     		transition();
-          }
+        callButton.addActionListener(new ActionListener() {
+        	public void actionPerformed(ActionEvent e)
+        	{
+        		try {
+					transition(false);
+				} catch (InterruptedException e1) {}
+        	}
         });
 		
 		int winnerIndex = -1;
@@ -507,10 +541,10 @@ public class MainFrame extends JFrame{
 		//if the player folds early this loop
 		//allows the game to continue playing
 		while (gameRound <= 3 && ifUserFold) {
-					if (betAmount < 0 || betAmount == 0)
-							betButton.setEnabled(false);
-						else
-							betButton.setEnabled(true);
+			if (betAmount < 0 || betAmount == 0)
+				betButton.setEnabled(false);
+			else
+				betButton.setEnabled(true);
 		}
 
 		// cards dealt are recorded when initialize players
