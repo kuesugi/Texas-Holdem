@@ -39,16 +39,17 @@ public class Hand {
 	}
 	
 	public Card getCard(int card) {
-		
+
 		return hand.get(card);
 	}
 
 	private void combineHands(Hand centerHand) {
-		int i = 0;
-		while(centerHand.getCard(i) != null){
+		for(int i = 0; i<centerHand.getSize(); i++) {
 			hand.add(centerHand.getCard(i));
-			i++;
 		}
+		/*for(int i = 0; i<hand.size(); i++) {
+			System.out.println(hand.get(i).suitToString(hand.get(i).getSuit()) + " "+hand.get(i).rankToString(hand.get(i).getRank()));
+		}*/
 	}
 
 	//Main method for checking and returning scores

@@ -42,6 +42,7 @@ public class MainFrame extends JFrame{
     private Hand centerHand = new Hand();
     private JLabel moneyInPotLable = new JLabel();
     private JLabel roundLabel = new JLabel();
+    private JLabel userStack = new JLabel();
    
    	//USER OPTION BUTTONS
     private int betAmount = 0;
@@ -133,7 +134,7 @@ public class MainFrame extends JFrame{
     	logWriter.print("- Username: "+ name + "\n- Players: " + num + "\n  ");
     	for (int i = 0; i < num-1; i++)
     		logWriter.print(opponents[i]+", ");
-    	logWriter.println(opponents[num-1] + "\n\nHand 1:\nCards Dealt:");
+    	logWriter.println(opponents[num-1] + "\n\nPreflop:\nCards Dealt:");
     	// cards dealt are recorded when initialize (AI)players
     }
 
@@ -364,6 +365,9 @@ public class MainFrame extends JFrame{
 	 */
 	private void showRound() {
 		roundLabel.setText(String.valueOf(gameRound));
+		roundLabel.setBackground(new Color(43, 151, 0));
+		northAI1.setBorder(BorderFactory.createLineBorder(Color.white,2));
+		northAI1.setBounds(95,30,310,130);
 		pot.add(roundLabel);
 		pot.revalidate();
 	}
@@ -375,38 +379,84 @@ public class MainFrame extends JFrame{
 	private void transition(boolean ifAuto) throws InterruptedException {
 		// currently in preflop; to enter the flop round
 		if(gameRound == 0) {
+			logWriter.println("\nFlop:");	
 			displayCenterCards(centerHand, 1);
 			centerHand.addCard(deck.get(cardCount--));
 			gameRound++;
-			TimeUnit.SECONDS.sleep(1);
+			TimeUnit.MILLISECONDS.sleep(560);
+			if(user.getFold()) {
+				for(int i = 0; i<players.size(); i++) {
+					logWriter.println(players.get(i).getName() + " calls");
+				}
+			}
 			showRound();
 			if(ifAuto)
 				transition(true);
 		}
 		// to enter the turn round
 		else if(gameRound == 1) {
+			logWriter.println("\nTurn:");
 			displayCenterCards(centerHand, 2);
 			centerHand.addCard(deck.get(cardCount--));
 			gameRound++;
-			TimeUnit.SECONDS.sleep(1);
+			TimeUnit.MILLISECONDS.sleep(560);
+			if(user.getFold()) {
+				for(int i = 0; i<players.size(); i++) {
+					logWriter.println(players.get(i).getName() + " calls");
+				}
+			}
 			showRound();
 			if(ifAuto)
 				transition(true);
 		}
 		// to enter the river round
 		else if(gameRound == 2) {
+			logWriter.println("\nRiver:");
 			displayCenterCards(centerHand, 3);
 			gameRound++;
-			TimeUnit.SECONDS.sleep(1);
+			TimeUnit.MILLISECONDS.sleep(560);
+			if(user.getFold()) {
+				for(int i = 0; i<players.size(); i++) {
+					logWriter.println(players.get(i).getName() + " calls");
+				}
+			}
 			showRound();
 			if(ifAuto)
 				transition(true);
 		}
 		// to get the result
 		else if (gameRound == 3){
-			// TODO: move money to the winner's stack
-			// display AIs' cards
+			if(user.getFold()) {
+				for(int i = 0; i<players.size(); i++) {
+					logWriter.println(players.get(i).getName() + " calls");
+				}
+			}
+			logWriter.println("\nFinal:");
+			// disable all the buttons for the user
+			betButton.setEnabled(false);
+			foldButton.setEnabled(false);
+			callButton.setEnabled(false);
+			bet10Button.setEnabled(false);
+			bet50Button.setEnabled(false);
+			bet100Button.setEnabled(false);
+			clearButton.setEnabled(false);
+			// display the cards
 			if(!allFold) {
+				int winnerIndex = -1;
+				// check the user and AIs' score
+				int maxScore = user.getHand().checkScore(centerHand, user.getFold());
+				//System.out.println(maxScore);
+				int aiHighestScore = 0;
+				int oldAIScore = 0;
+				for(int i = 0; i < players.size(); i++) {
+					oldAIScore = aiHighestScore;
+					aiHighestScore = players.get(i).getHand().checkScore(centerHand, allFold);
+					if (aiHighestScore > oldAIScore) {
+						maxScore = aiHighestScore;
+						winnerIndex = i;
+					}
+				}
+				// display AI cards
 				if(numOfAI == 1)	initAI(northAI1, 1, 1);
 				else if(numOfAI == 2) { initAI(northAI1,0,1); initAI(northAI2,1,1);}
 				else if(numOfAI == 3) { initAI(northAI1,0,1); initAI(northAI2,1,1); 
@@ -421,12 +471,47 @@ public class MainFrame extends JFrame{
 				else { initAI(northAI1,0,1); initAI(northAI2,1,1); initAI(northAI3,2,1);
 					initAI(westAI1,3,1); initAI(westAI2,4,1); initAI(eastAI1,5,1);
 					initAI(eastAI2,6,1);}
+				// 
+				if(winnerIndex == -1) {
+					Card userC1 = user.getCard1(); 
+					Card userC2 = user.getCard2();
+					logWriter.print("\nYou win with " + userC1.suitToString(userC1.getSuit()) +" "+
+							userC1.rankToString(userC1.getRank()).toLowerCase() + " and " +
+							userC2.suitToString(userC2.getSuit()) + " " +
+							userC2.rankToString(userC2.getRank()).toLowerCase());
+					logWriter.println("You win $" + moneyInPot);
+				}
+				else{
+					Card aiC1 = players.get(winnerIndex).getCard1();
+					Card aiC2 = players.get(winnerIndex).getCard2();
+					logWriter.println("The winner is " + players.get(winnerIndex).getName() + " with " +
+							aiC1.suitToString(aiC1.getSuit()) +" "+
+							aiC1.rankToString(aiC1.getRank()).toLowerCase() + " and " +
+							aiC2.suitToString(aiC2.getSuit()) + " " +
+							aiC2.rankToString(aiC2.getRank()).toLowerCase());
+					logWriter.print(players.get(winnerIndex).getName() + " wins $" + moneyInPot);
+				}
+			}
+			else {
+				Card userC1 = user.getCard1(); 
+				Card userC2 = user.getCard2();
+				logWriter.print("\nYou win with " + userC1.suitToString(userC1.getSuit()) +" "+
+						userC1.rankToString(userC1.getRank()).toLowerCase() + " and " +
+						userC2.suitToString(userC2.getSuit()) + " " +
+						userC2.rankToString(userC2.getRank()).toLowerCase());
+				logWriter.println("\nYou win $" + moneyInPot);
 			}
 			// log the end time of the game and close the file writing
 			String endTime = new SimpleDateFormat("dd MMMM yyyy  -  HH : mm").format(Calendar.getInstance().getTime());
-	    	logWriter.println("- Game ends " + endTime);
+	    	logWriter.println("\n- Game ends " + endTime);
 	    	logWriter.close();
 	    	JPanel result = new JPanel();
+	    	
+	    	// pop-up window showing the result
+	    	
+	    	
+	    	
+	    	
 		}
 		else return;
 	}
@@ -487,8 +572,20 @@ public class MainFrame extends JFrame{
 		betButton.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
 				if(betAmount <= user.getStack()) {
+					logWriter.println(userName + " bets " + betAmount);
+					for(int i = 0; i<players.size(); i++) {
+						if(!players.get(i).getFold()) {
+							logWriter.println(players.get(i).getName() + " folds");
+							players.get(i).setFold();
+						}
+						else
+							logWriter.println(players.get(i).getName() + " folded");
+					}
 					user.setStack(user.getStack()-betAmount);
 					moneyInPot += betAmount;
+					userStack.setText("Balance:" + user.getStack());
+					userStack.setForeground(Color.white);
+					player.revalidate();
 					betAmount = 0;	// reset the bet amount
 					allFold = true; // all the AI folds
 					moneyInPotLable.setText("Money in the pot: " + moneyInPot);
@@ -512,6 +609,8 @@ public class MainFrame extends JFrame{
 		foldButton.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e)
 			{
+				logWriter.println(userName + " folds");
+				user.setFold();
 	        	player.removeAll();
 	        	// if the user folds, remove all the components
 	        	// except the balance/stack
@@ -529,13 +628,19 @@ public class MainFrame extends JFrame{
         callButton.addActionListener(new ActionListener() {
         	public void actionPerformed(ActionEvent e)
         	{
+        		logWriter.println(userName + " calls");
+				for(int i = 0; i < players.size(); i++) {
+					if(!players.get(i).getFold())
+						logWriter.println(players.get(i).getName() + " calls");
+					else
+						logWriter.println(players.get(i).getName() + " folded");
+				}
         		try {
 					transition(false);
 				} catch (InterruptedException e1) {}
         	}
         });
 		
-		int winnerIndex = -1;
 		//centerHand = new Hand();
 		
 		//if the player folds early this loop
@@ -546,28 +651,6 @@ public class MainFrame extends JFrame{
 			else
 				betButton.setEnabled(true);
 		}
-
-		// cards dealt are recorded when initialize players
-		//flop: the three cards
-		logWriter.println("Hand 2:\n");
-		
-		//turn
-		logWriter.println("Hand 3:\n");
-		//river
-		logWriter.println("Hand 4:\n");
-		if(winnerIndex == -1) {
-			Card userC1 = user.getCard1(); 
-			Card userC2 = user.getCard2();
-			logWriter.print("\nYou win with " + userC1.suitToString(userC1.getSuit()) +" "+
-					userC1.rankToString(userC1.getRank()).toLowerCase() + ", " +
-					userC2.suitToString(userC2.getSuit()) + " " +
-					userC2.rankToString(userC2.getRank()).toLowerCase()); //+ ????????
-			logWriter.println("You win $" + user.getMoney());
-		}
-		else{
-			logWriter.println("The winner is " + players.get(winnerIndex) + ".");
-			logWriter.print(players.get(winnerIndex) + "wins $" + players.get(winnerIndex).getMoney());
-		}	
 	}
 	
 	/**
@@ -583,13 +666,14 @@ public class MainFrame extends JFrame{
         chips.setBounds(775,215,165,108);
         chips.setIcon(tempIcon);
         add(chips);
+        /*
         JLabel chipsAmt = new JLabel();
         chipsAmt.setText(String.valueOf(blackChip)+"   "+String.valueOf(whiteChip)+"   "+
         		String.valueOf(redChip)+"   "+String.valueOf(blueChip));
         chipsAmt.setFont(new Font("Consolas", Font.PLAIN, 14));
         chipsAmt.setForeground(Color.white);
         chipsAmt.setBounds(810,300,150,50);
-        add(chipsAmt);
+        add(chipsAmt);*/
         // stack image in the player area
         tempIcon = new ImageIcon(stackImage);
         tempImg = tempIcon.getImage();
@@ -634,7 +718,7 @@ public class MainFrame extends JFrame{
         Image tempImg2 = tempImg.getScaledInstance(65,80,java.awt.Image.SCALE_SMOOTH); 
         tempIcon = new ImageIcon(tempImg2);
 		String name;
-		int money;
+		int stack;
 		Image cardImg;
 		JLabel card1Display = new JLabel();
 		JLabel card2Display = new JLabel();
@@ -649,7 +733,7 @@ public class MainFrame extends JFrame{
 				panel.repaint();
 				displayAICards(num, panel, card1Display, card2Display);
 				name = players.get(num).getName();
-				money = players.get(num).getMoney();
+				stack = players.get(num).getStack();
 				JLabel nameL = new JLabel(name);
 				JLabel label = new JLabel();
 				label.setText("Balance: " + 1000);
@@ -660,10 +744,14 @@ public class MainFrame extends JFrame{
 			c1 = deck.get(cardCount--);
 			c2 = deck.get(cardCount--);
 			name = players.get(num).getName();
-			money = players.get(num).getMoney();
+			stack = players.get(num).getStack();
 			players.get(num).setCard1(c1);
 			players.get(num).setCard2(c2);
 			log(name, 0, c1, c2);
+			JLabel label = new JLabel();
+			label.setText("Balance:" + 1000);
+			label.setForeground(Color.white);
+			panel.add(label);
 		}
 		else{
 			c1 = deck.get(cardCount--);
@@ -671,7 +759,7 @@ public class MainFrame extends JFrame{
 			Card userC1 = new Card(c1.getRank(), c1.getSuit());
 			Card userC2 = new Card(c2.getRank(), c2.getSuit());
 			name = userName;
-			money = user.getMoney();
+			stack = user.getStack();
 			user.setCard1(userC1);
 			user.setCard2(userC2);
 			log(name, 0, c1, c2);
@@ -689,18 +777,18 @@ public class MainFrame extends JFrame{
 	        	tempImg2 = tempImg.getScaledInstance(65,80,java.awt.Image.SCALE_SMOOTH); 
 	        	tempIcon = new ImageIcon(tempImg2);
 	        	card2Display.setIcon(tempIcon);
-
+	        	
 	        	panel.add(card1Display);
 	        	panel.add(card2Display);
 			}
 			catch (IOException ioex){
 			}
+			userStack.setText("Balance:" + user.getStack());
+			userStack.setForeground(Color.white);
+			player.add(userStack);
 		}
 		JLabel nameL = new JLabel(name);
-		JLabel label = new JLabel();
-		label.setText("Balance:" + 1000);
-		label.setForeground(Color.white);
-		panel.add(label);
+		
 		panel.add(nameL);
 	}
 	

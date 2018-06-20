@@ -3,7 +3,6 @@ public class Player {
 	
 	private boolean isAi = false;
 	private String name = "";
-	private int money = 0;
 	private int stack = 1000;
 	private Hand playerHand;
 	private boolean ifFold = false;
@@ -11,16 +10,12 @@ public class Player {
 	public Player(boolean ai, String playerName, int playerMoney) {
 		isAi = ai;
 		name = playerName;
-		money = playerMoney;
+		stack = playerMoney;
 		playerHand = new Hand();
 	}
 	
 	public  String getName() {
 		return name;
-	}
-	
-	public int getMoney() {
-		return money;
 	}
 	
 	public int getStack() {
@@ -65,5 +60,9 @@ public class Player {
 
 	public void bet(){
 		
+	}
+	
+	public Hand getHand() {
+		return playerHand;
 	}
 }
