@@ -219,7 +219,7 @@ public class MainFrame extends JFrame{
         add(fiveCards);
         
         JLabel moneyInPotLable = new JLabel();
-        moneyInPotLable.setText("Money in the pot: " + betAmount+ String.valueOf(moneyInPot));
+        moneyInPotLable.setText("Money in the pot: " + String.valueOf(moneyInPot));
         moneyInPotLable.setFont(new Font("Optima", Font.BOLD, 23));
         moneyInPotLable.setForeground(Color.white);
         pot.add(moneyInPotLable);
