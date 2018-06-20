@@ -66,6 +66,7 @@ public class MainFrame extends JFrame{
     PrintWriter logWriter = null;
     int gameRound = 0;
     boolean allFold = false;
+    boolean ifUserFolds = false;
     
     /**
 	 * Constructor
@@ -403,6 +404,7 @@ public class MainFrame extends JFrame{
 	 * Start a game and go into three transitions
 	 */
 	private void gameStart(){
+
 		// BUTTONS:
 		bet10Button.addActionListener(new ActionListener() {
           public void actionPerformed(ActionEvent e) {
@@ -480,6 +482,8 @@ public class MainFrame extends JFrame{
 			add(label);
         	player.repaint(); player.revalidate();
 
+        	ifUserFolds = true;
+
         	transition();
           }
         });
@@ -497,7 +501,7 @@ public class MainFrame extends JFrame{
 		
 		//if the player folds early this loop
 		//allows the game to continue playing
-		while (gameRound <= 3) {
+		while (gameRound <= 3 && ifUserFolds) {
 			transition();
 		}
 
