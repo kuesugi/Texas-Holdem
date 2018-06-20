@@ -9,11 +9,22 @@ public class Hand {
 		
 		hand = new ArrayList<>();
 	}
-	public Hand(Card card1, Card card2) {
+
+	public boolean isEmpty(){
+		return hand.size() == 0;
+	}
+
+	public int getSize(){
+		return hand.size();
+	}
+
+	// implement FLOP transition
+	public Hand(Card card1, Card card2, Card card3) {
 
 		hand = new ArrayList<>();
 		hand.add(card1);
 		hand.add(card2);
+		hand.add(card3);
 		score = 0;
 	}
 
@@ -31,8 +42,19 @@ public class Hand {
 		
 		return hand.get(card);
 	}
+
+	private void combineHands(Hand centerHand) {
+		int i = 0;
+		while(centerHand.getCard(i) != null){
+			hand.add(centerHand.getCard(i));
+			i++;
+		}
+	}
+
 	//Main method for checking and returning scores
-	public int checkScore() {
+	public int checkScore(Hand centerHand, boolean ifFold) {
+		if(ifFold) return 0;
+		combineHands(centerHand);
 
 		//score of 1000
 		if (checkRoyalFlush() != 0) {
