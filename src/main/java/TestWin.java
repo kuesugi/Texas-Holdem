@@ -25,7 +25,7 @@ public class TestWin {
 		hand1.addCard(card3);
 		hand1.addCard(card4);
 		
-		System.out.println(user.checkScore(hand1, false));
+		//System.out.println(user.checkScore(hand1, false));
 
 	}
 

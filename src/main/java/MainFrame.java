@@ -62,9 +62,6 @@ public class MainFrame extends JFrame{
     // money in the pot
     private int moneyInPot = 0;
 
-    // poker chips
-    private int blackChip, whiteChip, redChip, blueChip;
-   
     // AIs array
     private ArrayList<Player> players;
     private static ArrayList<Card> deck;
@@ -364,10 +361,19 @@ public class MainFrame extends JFrame{
 	 * Show the round number 
 	 */
 	private void showRound() {
-		roundLabel.setText(String.valueOf(gameRound));
+		if(gameRound == 0)
+			roundLabel.setText("Round: Preflop");
+		else if(gameRound == 1)
+			roundLabel.setText("Round: Flop");
+		else if(gameRound == 2)
+			roundLabel.setText("Round: Turn");
+		else if(gameRound == 3)
+			roundLabel.setText("Round: River");
+		else
+			roundLabel.setText("Final");
 		roundLabel.setBackground(new Color(43, 151, 0));
-		northAI1.setBorder(BorderFactory.createLineBorder(Color.white,2));
-		northAI1.setBounds(95,30,310,130);
+		roundLabel.setFont(new Font("Optima", Font.BOLD, 23));
+		roundLabel.setForeground(Color.yellow);
 		pot.add(roundLabel);
 		pot.revalidate();
 	}
@@ -427,11 +433,13 @@ public class MainFrame extends JFrame{
 		// to get the result
 		else if (gameRound == 3){
 			String result = new String();
+			gameRound++;
 			if(user.getFold()) {
 				for(int i = 0; i<players.size(); i++) {
 					logWriter.println(players.get(i).getName() + " calls");
 				}
 			}
+			showRound();
 			logWriter.println("\nFinal:");
 			// disable all the buttons for the user
 			betButton.setEnabled(false);
@@ -447,17 +455,11 @@ public class MainFrame extends JFrame{
 				int winnerIndex = -1;
 				// check the user and AIs' score
 				int maxScore = user.getHand().checkScore(centerHand, user.getFold());
-				//System.out.println(maxScore);
 				int aiHighestScore = 0;
 				int oldAIScore = 0;
-				System.out.println(maxScore);
 				for(int i = 0; i < players.size(); i++) {
 					oldAIScore = aiHighestScore;
 					aiHighestScore = players.get(i).getHand().checkScore(centerHand, allFold);
-					System.out.println(aiHighestScore);
-					if (aiHighestScore == maxScore) {
-						tie = true;
-					}
 					if (aiHighestScore > maxScore) {
 						maxScore = aiHighestScore;
 						winnerIndex = i;
@@ -485,7 +487,7 @@ public class MainFrame extends JFrame{
 					result = "\nYou win with " + userC1.suitToString(userC1.getSuit()) +" "+
 							userC1.rankToString(userC1.getRank()).toLowerCase() + " and " +
 							userC2.suitToString(userC2.getSuit()) + " " +
-							userC2.rankToString(userC2.getRank()).toLowerCase() + "\nYou win $" + moneyInPot;
+							userC2.rankToString(userC2.getRank()).toLowerCase() + ", and you win $" + moneyInPot;
 					logWriter.println(result);
 					// move the money in the pot to the user's pocket
 					userStack.setText("Balance:" + 1000);
@@ -499,7 +501,7 @@ public class MainFrame extends JFrame{
 							aiC1.suitToString(aiC1.getSuit()) +" "+
 							aiC1.rankToString(aiC1.getRank()).toLowerCase() + " and " +
 							aiC2.suitToString(aiC2.getSuit()) + " " +
-							aiC2.rankToString(aiC2.getRank()).toLowerCase() + "\n" + 
+							aiC2.rankToString(aiC2.getRank()).toLowerCase() + ", and " + 
 							players.get(winnerIndex).getName() + " wins $" + moneyInPot;
 					logWriter.println(result);
 				}
@@ -510,14 +512,13 @@ public class MainFrame extends JFrame{
 				result = "\nYou win with " + userC1.suitToString(userC1.getSuit()) +" "+
 						userC1.rankToString(userC1.getRank()).toLowerCase() + " and " +
 						userC2.suitToString(userC2.getSuit()) + " " +
-						userC2.rankToString(userC2.getRank()).toLowerCase() + "\nYou win $" + moneyInPot;
+						userC2.rankToString(userC2.getRank()).toLowerCase() + ", and you win $" + moneyInPot;
 				logWriter.println(result);
 				// move the money in the pot to the user's pocket
 				userStack.setText("Balance:" + 1000);
 				userStack.setForeground(Color.white);
 				player.revalidate();
 			}
-			
 			// log the end time of the game and close the file writing
 			String endTime = new SimpleDateFormat("dd MMMM yyyy  -  HH : mm").format(Calendar.getInstance().getTime());
 	    	logWriter.println("\n- Game ends " + endTime);
@@ -533,6 +534,7 @@ public class MainFrame extends JFrame{
 	 * Start a game and go into three transitions
 	 */
 	private void gameStart(){
+		showRound();
 		// BUTTONS:
 		bet10Button.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
@@ -606,7 +608,8 @@ public class MainFrame extends JFrame{
 			        moneyInPotLable.setForeground(Color.white);
 			        pot.add(moneyInPotLable);
 			        pot.revalidate();
-					/*
+			        aiCardsRemove();
+			        /*
 			         * NOTE: fold button is disabled here because all AIs fold after the user bets
 					 */
 			        foldButton.setEnabled(false);
@@ -632,6 +635,7 @@ public class MainFrame extends JFrame{
 				label.setForeground(Color.white);
 				add(label);
 	        	player.revalidate();
+	        	userCardsRemove();
 	        	try {
 					transition(true);
 				} catch (InterruptedException e1) {}
@@ -653,17 +657,28 @@ public class MainFrame extends JFrame{
 				} catch (InterruptedException e1) {}
         	}
         });
+	}
+	
+	private void userCardsRemove() {
 		
-		//centerHand = new Hand();
-		
-		//if the player folds early this loop
-		//allows the game to continue playing
-		while (gameRound <= 3 && ifUserFold) {
-			if (betAmount < 0 || betAmount == 0)
-				betButton.setEnabled(false);
-			else
-				betButton.setEnabled(true);
-		}
+	}
+	
+	private void aiCardsRemove() {
+		JLabel nameL = new JLabel();
+		JLabel n1StackL = new JLabel(); n1StackL.setText("Balance: " + 1000); n1StackL.setForeground(Color.white);
+        northAI1.removeAll(); nameL = new JLabel(opponents[0]); northAI1.add(n1StackL); northAI1.add(nameL); northAI1.repaint(); northAI1.revalidate(); 
+        JLabel n2StackL = new JLabel(); n2StackL.setText("Balance: " + 1000); n2StackL.setForeground(Color.white);
+        northAI2.removeAll(); nameL = new JLabel(opponents[1]); northAI2.add(n2StackL); northAI2.add(nameL); northAI2.repaint(); northAI2.revalidate(); 
+        JLabel n3StackL = new JLabel(); n3StackL.setText("Balance: " + 1000); n3StackL.setForeground(Color.white);
+        northAI3.removeAll(); nameL = new JLabel(opponents[2]); northAI3.add(n3StackL); northAI3.add(nameL); northAI3.repaint(); northAI3.revalidate();
+        JLabel w1StackL = new JLabel(); w1StackL.setText("Balance: " + 1000); w1StackL.setForeground(Color.white);
+        westAI1.removeAll(); nameL = new JLabel(opponents[3]); westAI1.add(w1StackL); westAI1.add(nameL); westAI1.repaint(); westAI1.revalidate();
+        JLabel w2StackL = new JLabel(); w2StackL.setText("Balance: " + 1000); w2StackL.setForeground(Color.white);
+        westAI2.removeAll(); nameL = new JLabel(opponents[4]); westAI2.add(w2StackL); westAI2.add(nameL); westAI2.repaint(); westAI2.revalidate();
+        JLabel e1StackL = new JLabel(); e1StackL.setText("Balance: " + 1000); e1StackL.setForeground(Color.white);
+        eastAI1.removeAll(); nameL = new JLabel(opponents[5]); eastAI1.add(e1StackL); eastAI1.add(nameL); eastAI1.repaint(); eastAI1.revalidate();
+        JLabel e2StackL = new JLabel(); e2StackL.setText("Balance: " + 1000); e2StackL.setForeground(Color.white);
+        eastAI2.removeAll(); nameL = new JLabel(opponents[6]); eastAI2.add(e2StackL); eastAI2.add(nameL); eastAI2.repaint(); eastAI2.revalidate();
 	}
 	
 	/**
