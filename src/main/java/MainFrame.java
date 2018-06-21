@@ -635,7 +635,6 @@ public class MainFrame extends JFrame{
 				label.setForeground(Color.white);
 				add(label);
 	        	player.revalidate();
-	        	userCardsRemove();
 	        	try {
 					transition(true);
 				} catch (InterruptedException e1) {}
@@ -880,9 +879,6 @@ public class MainFrame extends JFrame{
 	 * Log the event in a text file
 	 */
 	private void log(String name, int event, Card c1, Card c2) {
-		if(event == -1) {
-			
-		}
 		// event: cards dealt
 		if(event == 0) {
 			logWriter.print(name + ": ");
