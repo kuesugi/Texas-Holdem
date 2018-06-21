@@ -426,6 +426,7 @@ public class MainFrame extends JFrame{
 		}
 		// to get the result
 		else if (gameRound == 3){
+			String result = new String();
 			if(user.getFold()) {
 				for(int i = 0; i<players.size(); i++) {
 					logWriter.println(players.get(i).getName() + " calls");
@@ -442,16 +443,22 @@ public class MainFrame extends JFrame{
 			clearButton.setEnabled(false);
 			// display the cards
 			if(!allFold) {
+				boolean tie = false;
 				int winnerIndex = -1;
 				// check the user and AIs' score
 				int maxScore = user.getHand().checkScore(centerHand, user.getFold());
 				//System.out.println(maxScore);
 				int aiHighestScore = 0;
 				int oldAIScore = 0;
+				System.out.println(maxScore);
 				for(int i = 0; i < players.size(); i++) {
 					oldAIScore = aiHighestScore;
 					aiHighestScore = players.get(i).getHand().checkScore(centerHand, allFold);
-					if (aiHighestScore > oldAIScore) {
+					System.out.println(aiHighestScore);
+					if (aiHighestScore == maxScore) {
+						tie = true;
+					}
+					if (aiHighestScore > maxScore) {
 						maxScore = aiHighestScore;
 						winnerIndex = i;
 					}
@@ -475,43 +482,40 @@ public class MainFrame extends JFrame{
 				if(winnerIndex == -1) {
 					Card userC1 = user.getCard1(); 
 					Card userC2 = user.getCard2();
-					logWriter.print("\nYou win with " + userC1.suitToString(userC1.getSuit()) +" "+
+					result = "\nYou win with " + userC1.suitToString(userC1.getSuit()) +" "+
 							userC1.rankToString(userC1.getRank()).toLowerCase() + " and " +
 							userC2.suitToString(userC2.getSuit()) + " " +
-							userC2.rankToString(userC2.getRank()).toLowerCase());
-					logWriter.println("You win $" + moneyInPot);
+							userC2.rankToString(userC2.getRank()).toLowerCase() + "\nYou win $" + moneyInPot;
+					logWriter.println(result);
 				}
 				else{
 					Card aiC1 = players.get(winnerIndex).getCard1();
 					Card aiC2 = players.get(winnerIndex).getCard2();
-					logWriter.println("The winner is " + players.get(winnerIndex).getName() + " with " +
+					result = "The winner is " + players.get(winnerIndex).getName() + " with " +
 							aiC1.suitToString(aiC1.getSuit()) +" "+
 							aiC1.rankToString(aiC1.getRank()).toLowerCase() + " and " +
 							aiC2.suitToString(aiC2.getSuit()) + " " +
-							aiC2.rankToString(aiC2.getRank()).toLowerCase());
-					logWriter.print(players.get(winnerIndex).getName() + " wins $" + moneyInPot);
+							aiC2.rankToString(aiC2.getRank()).toLowerCase() + "\n" + 
+							players.get(winnerIndex).getName() + " wins $" + moneyInPot;
+					logWriter.println(result);
 				}
 			}
 			else {
 				Card userC1 = user.getCard1(); 
 				Card userC2 = user.getCard2();
-				logWriter.print("\nYou win with " + userC1.suitToString(userC1.getSuit()) +" "+
+				result = "\nYou win with " + userC1.suitToString(userC1.getSuit()) +" "+
 						userC1.rankToString(userC1.getRank()).toLowerCase() + " and " +
 						userC2.suitToString(userC2.getSuit()) + " " +
-						userC2.rankToString(userC2.getRank()).toLowerCase());
-				logWriter.println("\nYou win $" + moneyInPot);
+						userC2.rankToString(userC2.getRank()).toLowerCase() + "\nYou win $" + moneyInPot;
+				logWriter.println(result);
 			}
 			// log the end time of the game and close the file writing
 			String endTime = new SimpleDateFormat("dd MMMM yyyy  -  HH : mm").format(Calendar.getInstance().getTime());
 	    	logWriter.println("\n- Game ends " + endTime);
 	    	logWriter.close();
-	    	JPanel result = new JPanel();
 	    	
 	    	// pop-up window showing the result
-	    	
-	    	
-	    	
-	    	
+	    	new resultFrame(result);
 		}
 		else return;
 	}

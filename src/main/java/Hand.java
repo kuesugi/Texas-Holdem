@@ -138,22 +138,22 @@ public class Hand {
 			if (hand.get(i).getRank() == 1) {
 
 				suit = hand.get(i).getSuit();
-				for (i = 0; i < hand.size(); i++) {
+				for (int j = 0; j < hand.size(); j++) {
 					
 					//we proceed to search the rest of the hand for the cards needed in the suit needed
-					if (hand.get(i).getRank() == 10 && hand.get(i).getSuit() == suit) {
+					if (hand.get(j).getRank() == 10 && hand.get(j).getSuit() == suit) {
 
-						for (i = 0; i < hand.size(); i++) {
+						for (int k = 0; k < hand.size(); k++) {
 
-							if (hand.get(i).getRank() == 11 && hand.get(i).getSuit() == suit) {
+							if (hand.get(k).getRank() == 11 && hand.get(k).getSuit() == suit) {
 
-								for (i = 0; i < hand.size(); i++) {
+								for (int m = 0; m < hand.size(); m++) {
 
-									if (hand.get(i).getRank() == 12 && hand.get(i).getSuit() == suit) {
+									if (hand.get(m).getRank() == 12 && hand.get(m).getSuit() == suit) {
 
-										for (i = 0; i < hand.size(); i++) {
+										for (int n = 0; n < hand.size(); n++) {
 
-											if (hand.get(i).getRank() == 13 && hand.get(i).getSuit() == suit) {
+											if (hand.get(n).getRank() == 13 && hand.get(n).getSuit() == suit) {
 
 												return 1000;
 											}
@@ -180,23 +180,23 @@ public class Hand {
 			rank = hand.get(i).getRank();
 			suit = hand.get(i).getSuit();
 			//similar sorting to the royal flush, except the starting card is irrelevant
-			for (i = 0; i < hand.size(); i++) {
+			for (int j = 0; j < hand.size(); j++) {
 
-				if (hand.get(i).getRank() == rank + 1 && hand.get(i).getSuit() == suit) {
+				if (hand.get(j).getRank() == rank + 1 && hand.get(j).getSuit() == suit) {
 
-					for (i = 0; i < hand.size(); i++) {
+					for (int k = 0; k < hand.size(); k++) {
 
-						if (hand.get(i).getRank() == rank + 2 && hand.get(i).getSuit() == suit) {
+						if (hand.get(k).getRank() == rank + 2 && hand.get(k).getSuit() == suit) {
 
-							for (i = 0; i < hand.size(); i++) {
+							for (int m = 0; m < hand.size(); m++) {
 
-								if (hand.get(i).getRank() == rank + 3 && hand.get(i).getSuit() == suit) {
+								if (hand.get(m).getRank() == rank + 3 && hand.get(m).getSuit() == suit) {
 
-									for (i = 0; i < hand.size(); i++) {
+									for (int n = 0; n < hand.size(); n++) {
 
 										//if we were to happen to get a card ending on an ace, we would have a royal flush
 										//therefore, the straight flush cannot end with a 14 score
-										if (hand.get(i).getRank() == rank + 4 && hand.get(i).getSuit() == suit) {
+										if (hand.get(n).getRank() == rank + 4 && hand.get(n).getSuit() == suit) {
 
 											return 900 + (rank + 4);
 										} 
@@ -208,7 +208,6 @@ public class Hand {
 				}
 			}
 		}
-
 		return 0;
 	}
 
@@ -319,18 +318,16 @@ public class Hand {
 			if (hand.get(i).getRank() > rank) {
 
 				rank = hand.get(i).getRank();
+				
+				if (rank == 1) {
+
+					return 114;
+				}
+				
 			}
 		}
-
-		if (rank == 1) {
-
-			return 114;
-		}
-
-		else {
-
-			return rank;
-		}
+		
+		return rank + 100;
 	}
 
 	private int checkFullHouse() {
@@ -421,27 +418,27 @@ public class Hand {
 
 			rank = hand.get(i).getRank();
 
-			for (i = 0; i < hand.size(); i++) {
+			for (int j = 0; j < hand.size(); j++) {
 
-				if (hand.get(i).getRank() == rank + 1) {
+				if (hand.get(j).getRank() == rank + 1) {
 
-					for (i = 0; i < hand.size(); i++) {
+					for (int k = 0; k < hand.size(); k++) {
 
-						if (hand.get(i).getRank() == rank + 2) {
+						if (hand.get(k).getRank() == rank + 2) {
 
-							for (i = 0; i < hand.size(); i++) {
+							for (int m = 0; m < hand.size(); m++) {
 
-								if (hand.get(i).getRank() == rank + 3) {
+								if (hand.get(m).getRank() == rank + 3) {
 
-									for (i = 0; i < hand.size(); i++) {
+									for (int n = 0; n < hand.size(); n++) {
 
-										if (hand.get(i).getRank() == rank + 4) {
+										if (hand.get(n).getRank() == rank + 4) {
 
 											return 500 + (rank + 4);
 										} 
 										else if ((rank + 4) == 14) {
 
-											if (hand.get(i).getRank() == 1) {
+											if (hand.get(n).getRank() == 1) {
 
 												return 514;
 											}
@@ -464,11 +461,19 @@ public class Hand {
 		int pair2 = 0;
 		if(pair1 != 0) {
 			
-			pair2 = checkPair(pair1-200);
+			if(pair1 == 214)
+				pair2 = checkPair(1);
+			else
+				pair2 = checkPair(pair1-200);
 			
 			if(pair2 != 0) {
 				
-				if(pair1 > pair2) {
+				if(pair1-200 == 1 || pair2-200 ==1) {
+					
+					return 314;
+				}
+				
+				else if(pair1 > pair2) {
 					
 					return (pair1-200)+ 300;
 				}

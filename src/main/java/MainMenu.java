@@ -11,6 +11,7 @@ import javax.swing.SwingConstants;
 import java.awt.Font;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.awt.event.WindowEvent;
 import java.awt.Color;
 import javax.swing.JTextField;
 import javax.swing.LayoutStyle.ComponentPlacement;
@@ -150,5 +151,7 @@ public class MainMenu extends JFrame implements ActionListener {
 			new MainFrame(playerName, num);//starts the game passing the player name parameter
 		}
 		
+		setVisible(false);
+		dispose();
 	}
 }

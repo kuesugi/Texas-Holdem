@@ -3,13 +3,17 @@ public class TestWin {
 
 	public static void main(String[] args) {
 		int score = 0;
-		Card card1 = new Card(7,1);
-		Card card2 = new Card(3,2);
-		Card card3 = new Card(13,1);
-		Card card4 = new Card(9,4);
-		Card card5 = new Card(1,1);
-		Card card6 = new Card(4,3);
-		Card card7 = new Card(3,10);
+		
+		Card card1 = new Card(4,1);
+		Card card2 = new Card(11,1);
+		
+		Card card3 = new Card(5,2);
+		Card card4 = new Card(1,2);
+		Card card5 = new Card(3,2);
+		Card card6 = new Card(2,2);
+		Card card7 = new Card(1,4);
+		//Card card8 = new Card(5,3);
+		//Card card9 = new Card(10,1);
 		Hand user = new Hand();
 		Hand hand1 = new Hand();
 		
