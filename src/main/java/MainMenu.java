@@ -149,9 +149,8 @@ public class MainMenu extends JFrame implements ActionListener {
 		
 		else {
 			new MainFrame(playerName, num);//starts the game passing the player name parameter
+			setVisible(false);
+			dispose();
 		}
-		
-		setVisible(false);
-		dispose();
 	}
 }
