@@ -478,7 +478,7 @@ public class MainFrame extends JFrame{
 				else { initAI(northAI1,0,1); initAI(northAI2,1,1); initAI(northAI3,2,1);
 					initAI(westAI1,3,1); initAI(westAI2,4,1); initAI(eastAI1,5,1);
 					initAI(eastAI2,6,1);}
-				// 
+				
 				if(winnerIndex == -1) {
 					Card userC1 = user.getCard1(); 
 					Card userC2 = user.getCard2();
@@ -487,6 +487,10 @@ public class MainFrame extends JFrame{
 							userC2.suitToString(userC2.getSuit()) + " " +
 							userC2.rankToString(userC2.getRank()).toLowerCase() + "\nYou win $" + moneyInPot;
 					logWriter.println(result);
+					// move the money in the pot to the user's pocket
+					userStack.setText("Balance:" + 1000);
+					userStack.setForeground(Color.white);
+					player.revalidate();
 				}
 				else{
 					Card aiC1 = players.get(winnerIndex).getCard1();
@@ -508,7 +512,12 @@ public class MainFrame extends JFrame{
 						userC2.suitToString(userC2.getSuit()) + " " +
 						userC2.rankToString(userC2.getRank()).toLowerCase() + "\nYou win $" + moneyInPot;
 				logWriter.println(result);
+				// move the money in the pot to the user's pocket
+				userStack.setText("Balance:" + 1000);
+				userStack.setForeground(Color.white);
+				player.revalidate();
 			}
+			
 			// log the end time of the game and close the file writing
 			String endTime = new SimpleDateFormat("dd MMMM yyyy  -  HH : mm").format(Calendar.getInstance().getTime());
 	    	logWriter.println("\n- Game ends " + endTime);
@@ -792,7 +801,6 @@ public class MainFrame extends JFrame{
 			player.add(userStack);
 		}
 		JLabel nameL = new JLabel(name);
-		
 		panel.add(nameL);
 	}
 	
