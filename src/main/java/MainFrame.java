@@ -389,6 +389,8 @@ public class MainFrame extends JFrame{
 			displayCenterCards(centerHand, 1);
 			centerHand.addCard(deck.get(cardCount--));
 			gameRound++;
+			if(user.getFold())
+				logWriter.println(userName + " folded");
 			TimeUnit.MILLISECONDS.sleep(560);
 			if(user.getFold()) {
 				for(int i = 0; i<players.size(); i++) {
@@ -405,6 +407,8 @@ public class MainFrame extends JFrame{
 			displayCenterCards(centerHand, 2);
 			centerHand.addCard(deck.get(cardCount--));
 			gameRound++;
+			if(user.getFold())
+				logWriter.println(userName + " folded");
 			TimeUnit.MILLISECONDS.sleep(560);
 			if(user.getFold()) {
 				for(int i = 0; i<players.size(); i++) {
@@ -420,6 +424,8 @@ public class MainFrame extends JFrame{
 			logWriter.println("\nRiver:");
 			displayCenterCards(centerHand, 3);
 			gameRound++;
+			if(user.getFold())
+				logWriter.println(userName + " folded");
 			TimeUnit.MILLISECONDS.sleep(560);
 			if(user.getFold()) {
 				for(int i = 0; i<players.size(); i++) {
@@ -435,6 +441,8 @@ public class MainFrame extends JFrame{
 			logWriter.println("\nFinal:");
 			String result = new String();
 			gameRound++;
+			if(user.getFold())
+				logWriter.println(userName + " folded");
 			if(user.getFold()) {
 				for(int i = 0; i<players.size(); i++) {
 					logWriter.println(players.get(i).getName() + " calls");
@@ -625,7 +633,11 @@ public class MainFrame extends JFrame{
 		foldButton.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e)
 			{
-				logWriter.println(userName + " folds");
+				if(!user.getFold())
+					logWriter.println(userName + " folds");
+				for(int i = 0; i<players.size(); i++){
+					logWriter.println(players.get(i).getName() + " calls");
+				}
 				user.setFold();
 	        	player.removeAll();
 	        	// if the user folds, remove all the components
