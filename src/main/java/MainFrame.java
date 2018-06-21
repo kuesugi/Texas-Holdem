@@ -441,13 +441,6 @@ public class MainFrame extends JFrame{
 			logWriter.println("\nFinal:");
 			String result = new String();
 			gameRound++;
-			if(user.getFold())
-				logWriter.println(userName + " folded");
-			if(user.getFold()) {
-				for(int i = 0; i<players.size(); i++) {
-					logWriter.println(players.get(i).getName() + " calls");
-				}
-			}
 			showRound();
 			// disable all the buttons for the user
 			betButton.setEnabled(false);
