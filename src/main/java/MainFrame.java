@@ -432,6 +432,7 @@ public class MainFrame extends JFrame{
 		}
 		// to get the result
 		else if (gameRound == 3){
+			logWriter.println("\nFinal:");
 			String result = new String();
 			gameRound++;
 			if(user.getFold()) {
@@ -440,7 +441,6 @@ public class MainFrame extends JFrame{
 				}
 			}
 			showRound();
-			logWriter.println("\nFinal:");
 			// disable all the buttons for the user
 			betButton.setEnabled(false);
 			foldButton.setEnabled(false);
