@@ -659,10 +659,6 @@ public class MainFrame extends JFrame{
         });
 	}
 	
-	private void userCardsRemove() {
-		
-	}
-	
 	private void aiCardsRemove() {
 		JLabel nameL = new JLabel();
 		JLabel n1StackL = new JLabel(); n1StackL.setText("Balance: " + 1000); n1StackL.setForeground(Color.white);
