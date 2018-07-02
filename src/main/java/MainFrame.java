@@ -528,34 +528,21 @@ public class MainFrame extends JFrame {
 				}
 
 				if (winnerIndex == -1) {
-					Card userC1 = user.getCard1();
-					Card userC2 = user.getCard2();
-					result = "\nYou win with " + userC1.suitToString(userC1.getSuit()) + " "
-							+ userC1.rankToString(userC1.getRank()).toLowerCase() + " and "
-							+ userC2.suitToString(userC2.getSuit()) + " "
-							+ userC2.rankToString(userC2.getRank()).toLowerCase() + ", and you win $" + moneyInPot;
+
+					result = "\nYou win with " + handType(user) + ", and you win $" + moneyInPot;
 					logWriter.println(result);
 					// move the money in the pot to the user's pocket
 					userStack.setText("Balance:" + 1000);
 					userStack.setForeground(Color.white);
 					player.revalidate();
 				} else {
-					Card aiC1 = players.get(winnerIndex).getCard1();
-					Card aiC2 = players.get(winnerIndex).getCard2();
 					result = "The winner is " + players.get(winnerIndex).getName() + " with "
-							+ aiC1.suitToString(aiC1.getSuit()) + " " + aiC1.rankToString(aiC1.getRank()).toLowerCase()
-							+ " and " + aiC2.suitToString(aiC2.getSuit()) + " "
-							+ aiC2.rankToString(aiC2.getRank()).toLowerCase() + ", and "
+							+ handType(players.get(winnerIndex)) + ", and "
 							+ players.get(winnerIndex).getName() + " wins $" + moneyInPot;
 					logWriter.println(result);
 				}
 			} else {
-				Card userC1 = user.getCard1();
-				Card userC2 = user.getCard2();
-				result = "\nYou win with " + userC1.suitToString(userC1.getSuit()) + " "
-						+ userC1.rankToString(userC1.getRank()).toLowerCase() + " and "
-						+ userC2.suitToString(userC2.getSuit()) + " "
-						+ userC2.rankToString(userC2.getRank()).toLowerCase() + ", and you win $" + moneyInPot;
+				result = "\nYou win with " + handType(user) + ", and you win $" + moneyInPot;
 				logWriter.println(result);
 				// move the money in the pot to the user's pocket
 				userStack.setText("Balance:" + 1000);
@@ -1018,19 +1005,33 @@ public class MainFrame extends JFrame {
 		
 		switch(rank) {
 		case 2: rankString = "Two";
+				break;
 		case 3: rankString = "Three";
+				break;
 		case 4: rankString = "Four";
+				break;
 		case 5: rankString = "Five";
+				break;
 		case 6: rankString = "Sixe";
+				break;
 		case 7: rankString = "Seven";
+				break;
 		case 8: rankString = "Eight";
+				break;
 		case 9: rankString = "Nine";
+				break;
 		case 10: rankString = "Ten";
+				break;
 		case 11: rankString = "Jack";
+				break;
 		case 12: rankString = "Queen";
+				break;
 		case 13: rankString = "King";
+				break;
 		case 14: rankString = "Ace";
+				break;
 		default: rankString = "Two";
+				break;
 		}
 		
 		switch(type) {	
