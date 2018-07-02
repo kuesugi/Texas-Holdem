@@ -17,6 +17,11 @@ public class Hand {
 	public int getSize(){
 		return hand.size();
 	}
+	
+	public int getScore() {
+		
+		return score;
+	}
 
 	// implement FLOP transition
 	public Hand(Card card1, Card card2, Card card3) {
@@ -194,7 +199,21 @@ public class Hand {
 										//if we were to happen to get a card ending on an ace, we would have a royal flush
 										//therefore, the straight flush cannot end with a 14 score
 										if (hand.get(n).getRank() == rank + 4 && hand.get(n).getSuit() == suit) {
+											
+											for (int o = 0; o < hand.size(); o++) {
 
+												if (hand.get(o).getRank() == rank + 5 && hand.get(o).getSuit() == suit) {
+													
+													for (int p = 0; o < hand.size(); p++) {
+
+														if (hand.get(p).getRank() == rank + 6 && hand.get(p).getSuit() == suit) {
+
+															return 900 + (rank + 6);
+														} 
+													}
+													return 900 + (rank + 5);
+												} 
+											}
 											return 900 + (rank + 4);
 										} 
 									}
@@ -431,6 +450,34 @@ public class Hand {
 
 										if (hand.get(n).getRank() == rank + 4) {
 
+											for (int o = 0; o < hand.size(); o++) {
+
+												if (hand.get(o).getRank() == rank + 5) {
+
+													for (int p = 0; p < hand.size(); p++) {
+
+														if (hand.get(p).getRank() == rank + 6) {
+
+															return 500 + (rank + 6);
+														} 
+														else if ((rank + 6) == 14) {
+
+															if (hand.get(n).getRank() == 1) {
+
+																return 514;
+															}
+														}
+													}
+													return 500 + (rank + 5);
+												} 
+												else if ((rank + 5) == 14) {
+
+													if (hand.get(n).getRank() == 1) {
+
+														return 514;
+													}
+												}
+											}
 											return 500 + (rank + 4);
 										} 
 										else if ((rank + 4) == 14) {
