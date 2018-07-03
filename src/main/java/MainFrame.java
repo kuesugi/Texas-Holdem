@@ -28,8 +28,6 @@ public class MainFrame extends JFrame {
 	private JPanel northAI1 = new JPanel();
 	private JPanel northAI2 = new JPanel();
 	private JPanel northAI3 = new JPanel();
-	private String[] opponents = { "Leopold Bloom", "Stephen Dedalus", "Yelverton Barry", "Buck Mulligan",
-			"Martin Cunningham", "Molly Bloom", "Josie Breen" };
 	private JPanel p = new JPanel(new GridLayout(2, 3, 2, 2));
 	private JPanel p2 = new JPanel(new GridLayout(2, 4, 2, 2));
 	private JPanel p3 = new JPanel();
@@ -58,7 +56,9 @@ public class MainFrame extends JFrame {
 
 	// the player name
 	private String userName = new String();
-	private Player user = new Player(false, userName, 1000);
+	private Player user;
+	private String[] opponents = { "Leopold Bloom", "Stephen Dedalus", "Yelverton Barry", "Buck Mulligan",
+			"Martin Cunningham", "Molly Bloom", "Josie Breen" };
 
 	// money in the pot
 	private int moneyInPot = 0;
@@ -76,19 +76,17 @@ public class MainFrame extends JFrame {
 	/**
 	 * Constructor
 	 */
-	public MainFrame(String playerName, int num) {
+	public MainFrame(Player newUser, ArrayList<Player> newPlayers) {
 		super("Texas Hold'em");
-		userName = playerName;
-		numOfAI = num;
-		players = new ArrayList<>();
-		deck = new ArrayList();
-		for (int j = 0; j < numOfAI; j++) {
-			players.add(new Player(true, opponents[j], 1000));
-		}
+		user = newUser;
+		players = (ArrayList<Player>) newPlayers.clone();
+		numOfAI = players.size();
+		String playerName = user.getName();
+		deck = new ArrayList<Card>();
 		buildDeck();
 		shuffle();
 		try {
-			initLog(playerName, num);
+			initLog(playerName, numOfAI);
 		} catch (Exception e) {
 		}
 		initFrame();
@@ -98,6 +96,12 @@ public class MainFrame extends JFrame {
 		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		// Must be the last line of this constructor
 		setVisible(true);
+	}
+
+	public MainFrame(Player user2, ArrayList<Player> players2, JFrame frame) {
+		frame.setVisible(false);
+		frame.dispose();
+		new MainFrame(user2, players2);
 	}
 
 	/**
@@ -225,7 +229,7 @@ public class MainFrame extends JFrame {
 		// space holding the five cards
 		fiveCards.setBackground(new Color(4, 95, 0));
 		fiveCards.setBorder(BorderFactory.createLineBorder(Color.white, 2));
-		fiveCards.setBounds(336, 220, 430, 270);
+		fiveCards.setBounds(336, 220, 430, 95);
 		add(fiveCards);
 		moneyInPotLable.setText("Money in the pot: " + String.valueOf(moneyInPot));
 		moneyInPotLable.setFont(new Font("Optima", Font.BOLD, 23));
@@ -567,8 +571,12 @@ public class MainFrame extends JFrame {
 			logWriter.println("\n- Game ends " + endTime);
 			logWriter.close();
 
+			user.clearHand();
+			for (int j = 0; j < players.size(); j++) {
+				players.get(j).clearHand();
+			}
 			// pop-up window showing the result
-			new resultFrame(result);
+			new resultFrame(result, user, players, this);
 		} else
 			return;
 	}
