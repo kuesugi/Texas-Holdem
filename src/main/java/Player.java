@@ -1,3 +1,4 @@
+import java.util.Random;
 
 public class Player {
 	
@@ -69,5 +70,28 @@ public class Player {
 	public void clearHand() {
 		
 		playerHand = new Hand();
+	}
+	
+	// 0 - raise; 1 - fold; 2 - call;
+	public String aiRandomAction(int match, int round) {
+		String action = "";
+		Random rand = new Random(2);
+		
+		
+		if(round >= 1) {
+			int moves = rand.nextInt() + 1;
+			if(moves == 1) {
+				setFold();
+				action = name + " Has Folded.";
+			}
+			else {
+				
+				call();
+				action = name + " Has Called.";
+			}
+		}
+		
+		
+		return action;
 	}
 }

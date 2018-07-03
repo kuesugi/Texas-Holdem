@@ -571,6 +571,8 @@ public class MainFrame extends JFrame {
 			logWriter.println("\n- Game ends " + endTime);
 			logWriter.close();
 
+			// update user money
+			
 			user.clearHand();
 			for (int j = 0; j < players.size(); j++) {
 				players.get(j).clearHand();
