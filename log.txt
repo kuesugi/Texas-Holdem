@@ -1,0 +1,45 @@
+       * * * Game Log * * *
+- Game started 02 July 2018  -  16 : 30
+- Username: ted
+- Players: 4
+  Leopold Bloom, Stephen Dedalus, Yelverton Barry, Buck Mulligan
+
+Preflop:
+Cards Dealt:
+Leopold Bloom: clubs seven, hearts eight
+Stephen Dedalus: hearts six, spades king
+Yelverton Barry: clubs four, spades ace
+Buck Mulligan: spades jack, hearts five
+ted: diamonds three, spades four
+ted calls
+Leopold Bloom calls
+Stephen Dedalus calls
+Yelverton Barry calls
+Buck Mulligan calls
+
+Flop:
+ted calls
+Leopold Bloom calls
+Stephen Dedalus calls
+Yelverton Barry calls
+Buck Mulligan calls
+
+Turn:
+ted calls
+Leopold Bloom calls
+Stephen Dedalus calls
+Yelverton Barry calls
+Buck Mulligan calls
+
+River:
+ted calls
+Leopold Bloom calls
+Stephen Dedalus calls
+Yelverton Barry calls
+Buck Mulligan calls
+
+Final:
+
+You win with diamonds three and spades four, and you win $0
+
+- Game ends 02 July 2018  -  16 : 31
