@@ -1056,7 +1056,7 @@ public class MainFrame extends JFrame {
 		case 500 : return ("A " + rankString + " High Straight");
 		case 400 : return ("A Three of a Kind with " + rankString + "s");
 		case 300 : return ("Two Pair, " + rankString + "s High");
-		case 200 : return ("A pair of  " + rankString + "s");
+		case 200 : return ("A pair of " + rankString + "s");
 		case 100 : return (rankString + "s High");
 		default : return (rankString + "s High");
 		}
