@@ -63,7 +63,7 @@ public class resultFrame extends JFrame {
         btnPnl.add(quitButton);
         btnPnl.add(nextHandButton);
         
-		if (user.getStack() == 1000) {
+		if (user.getStack() == 0) {
         	nextHandButton.setVisible(false);
         	bustedOrWin.setText("You busted out!");
         	btnPnl.add(bustedOrWin);
