@@ -52,6 +52,9 @@ public class resultFrame extends JFrame {
 		label.setForeground(new Color(255, 255, 255));
 		label.setHorizontalAlignment(SwingConstants.CENTER);
 		
+		JLabel bustedOrWin = new JLabel();
+		
+		
 		JButton quitButton = new JButton("Quit");
 		JButton restart = new JButton("Restart");
 		JButton nextHandButton = new JButton("Next Hand");
@@ -59,13 +62,20 @@ public class resultFrame extends JFrame {
         btnPnl.add(restart);
         btnPnl.add(quitButton);
         btnPnl.add(nextHandButton);
+        
+		if (user.getStack() == 1000) {
+        	nextHandButton.setVisible(false);
+        	bustedOrWin.setText("You busted out!");
+        	btnPnl.add(bustedOrWin);
+        	btnPnl.revalidate();
+        }
 		
         btnPnl.setBorder(BorderFactory.createLineBorder(Color.BLACK));
 		mainPanel.setBackground(new Color(0, 128, 0));
 
         mainPanel.add(label, BorderLayout.CENTER);
         mainPanel.add(btnPnl, BorderLayout.SOUTH);
-
+        
 		quitButton.setBackground(new Color(50, 205, 50));
 		quitButton.addActionListener(new ActionListener() {
 	        public void actionPerformed(ActionEvent e) {
