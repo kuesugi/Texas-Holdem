@@ -527,7 +527,7 @@ public class MainFrame extends JFrame {
 					initAI(eastAI2, 6, 1);
 				}
 
-				if (winnerIndex == -1) {
+				if (winnerIndex == -1 && tie == false) {
 
 					result = "\nYou win with " + handType(user) + ", and you win $" + moneyInPot;
 					logWriter.println(result);
@@ -535,10 +535,23 @@ public class MainFrame extends JFrame {
 					userStack.setText("Balance:" + 1000);
 					userStack.setForeground(Color.white);
 					player.revalidate();
-				} else {
+				} 
+				else if(winnerIndex >= 0 && tie == false){
 					result = "The winner is " + players.get(winnerIndex).getName() + " with "
 							+ handType(players.get(winnerIndex)) + ", and "
 							+ players.get(winnerIndex).getName() + " wins $" + moneyInPot;
+					logWriter.println(result);
+				}
+				else if(winnerIndex == -1 && tie == true) {
+					result = "There is a tie between you and " + players.get(tieIndex).getName() + " with "
+							+ handType(players.get(winnerIndex)) + ", and "
+							+ "both of you recieve" + " wins $" + moneyInPot/2;
+					logWriter.println(result);
+				}
+				else if(winnerIndex >= 0 && tie == true) {
+					result = "There is a tie between " + players.get(tieIndex).getName() + " and "
+							+ players.get(winnerIndex).getName() + " with " + handType(players.get(winnerIndex))
+							+ " ,and both players recieve" + " wins $" + moneyInPot/2;
 					logWriter.println(result);
 				}
 			} else {
