@@ -156,7 +156,12 @@ public class MainMenu extends JFrame implements ActionListener {
 				players.add(new Player(true, opponents[j], 1000));
 			}
 			Player user = new Player(false, playerName, 1000);
-			new MainFrame(user, players);//starts the game passing the player name parameter
+			try {
+				new MainFrame(user, players);
+			} catch (InterruptedException e1) {
+				// TODO Auto-generated catch block
+				e1.printStackTrace();
+			}//starts the game passing the player name parameter
 			setVisible(false);
 			dispose();
 		}
