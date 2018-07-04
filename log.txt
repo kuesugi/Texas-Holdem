@@ -1,45 +1,46 @@
        * * * Game Log * * *
-- Game started 02 July 2018  -  16 : 30
-- Username: ted
-- Players: 4
-  Leopold Bloom, Stephen Dedalus, Yelverton Barry, Buck Mulligan
+- Game started 04 July 2018  -  16 : 37
+- Username: a
+- Players: 6
+  Leopold Bloom, Stephen Dedalus, Yelverton Barry, Buck Mulligan, Martin Cunningham, Molly Bloom
+
+- Hand 1
 
 Preflop:
 Cards Dealt:
-Leopold Bloom: clubs seven, hearts eight
-Stephen Dedalus: hearts six, spades king
-Yelverton Barry: clubs four, spades ace
-Buck Mulligan: spades jack, hearts five
-ted: diamonds three, spades four
-ted calls
-Leopold Bloom calls
-Stephen Dedalus calls
-Yelverton Barry calls
-Buck Mulligan calls
+A: spades seven, hearts six
+A: clubs ten, clubs queen
+A: clubs four, clubs ace
+A: spades eight, spades deuce
+A: clubs deuce, diamonds queen
+A: spades four, hearts ace
+A: hearts ten, hearts five
+Martin Cunningham Has Raised 
+Buck Mulligan Has Folded.
+a Has Called.
 
 Flop:
-ted calls
 Leopold Bloom calls
 Stephen Dedalus calls
 Yelverton Barry calls
 Buck Mulligan calls
+Martin Cunningham calls
+Molly Bloom calls
+a Has Called.
 
 Turn:
-ted calls
 Leopold Bloom calls
 Stephen Dedalus calls
 Yelverton Barry calls
 Buck Mulligan calls
+Martin Cunningham calls
+Molly Bloom calls
+a Has Called.
 
 River:
-ted calls
-Leopold Bloom calls
-Stephen Dedalus calls
-Yelverton Barry calls
-Buck Mulligan calls
+a Has Called.
 
 Final:
+The winner is Stephen Dedalus with A Queen High Straight, and Stephen Dedalus wins $0
 
-You win with diamonds three and spades four, and you win $0
-
-- Game ends 02 July 2018  -  16 : 31
+- Game ends 04 July 2018  -  16 : 37
