@@ -30,9 +30,9 @@ public class MainFrame extends JFrame {
 	private JPanel northAI3 = new JPanel();
 	private String[] opponents = { "Leopold Bloom", "Stephen Dedalus", "Yelverton Barry", "Buck Mulligan",
 			"Martin Cunningham", "Molly Bloom", "Josie Breen" };
-	private JPanel p = new JPanel(new GridLayout(2, 3, 2, 2));
+	private JPanel p = new JPanel(new GridLayout(3, 4, 2, 2));
 	private JPanel p2 = new JPanel(new GridLayout(2, 4, 2, 2));
-	private JPanel p3 = new JPanel();
+	private JPanel p3 = new JPanel(new GridLayout(1, 4, 2, 2));
 	private JPanel player = new JPanel();
 	private JPanel pot = new JPanel();
 	private JPanel eastAI1 = new JPanel();
@@ -48,12 +48,17 @@ public class MainFrame extends JFrame {
 	// USER OPTION BUTTONS
 	private int betAmount = 0;
 	private JButton betButton = new JButton("Bet");
+	private JButton bet1Button = new JButton("$1");
+	private JButton bet5Button = new JButton("$5");
 	private JButton bet10Button = new JButton("$10");
+	private JButton bet25Button = new JButton("$25");
 	private JButton bet50Button = new JButton("$50");
 	private JButton bet100Button = new JButton("$100");
 	private JButton clearButton = new JButton("CLEAR");
 	private JButton callButton = new JButton("Call");
 	private JButton foldButton = new JButton("Fold");
+	private JButton smallBlind = new JButton("Small Blind");
+	private JButton bigBlind = new JButton("Big Blind");
 	private JTextField betAmt = new JTextField("$" + betAmount);
 
 	// the player name
@@ -257,22 +262,35 @@ public class MainFrame extends JFrame {
 		p2.setBackground(new Color(43, 151, 0));
 		p3.setBackground(new Color(43, 151, 0));
 
+		//row1
 		p.add(betButton);
 		p.add(callButton);
+		p.add(smallBlind);
+		
+		//row2 col1
+		p2.add(bet1Button);
+		p2.add(bet5Button);
 		p2.add(bet10Button);
+		p2.add(bet25Button);
 		p2.add(bet50Button);
 		p2.add(bet100Button);
-		p2.add(clearButton);
-
+		
 		player.add(p);
 		p.add(p2);
+		
+		//rest of row2
+		p.add(foldButton);
+		p.add(bigBlind);
+		
+		//row3
+		p3.add(clearButton);
 		betAmt.setPreferredSize(new Dimension(50, 24));
-
+		clearButton.setPreferredSize(new Dimension(50, 24));
 		p3.add(betAmt);
 		betAmt.setEditable(false);
-		p2.add(p3);
-		p.add(foldButton);
-
+		
+		p.add(p3);
+	
 		p.setVisible(true);
 		p2.setVisible(true);
 		p3.setVisible(true);
@@ -445,9 +463,14 @@ public class MainFrame extends JFrame {
 			betButton.setEnabled(false);
 			foldButton.setEnabled(false);
 			callButton.setEnabled(false);
+			bet1Button.setEnabled(false);
+			bet5Button.setEnabled(false);
 			bet10Button.setEnabled(false);
+			bet25Button.setEnabled(false);
 			bet50Button.setEnabled(false);
 			bet100Button.setEnabled(false);
+			smallBlind.setEnabled(false);
+			bigBlind.setEnabled(false);
 			clearButton.setEnabled(false);
 			boolean tie = false;
 			int tieIndex = -1;
@@ -579,6 +602,35 @@ public class MainFrame extends JFrame {
 	private void gameStart() {
 		showRound();
 		// BUTTONS:
+		bet1Button.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+				//handles min bet amount
+				if (user.getStack() >= betAmount + 1 ) {
+					betAmount += 1;
+					betAmt.setText("$" + betAmount);
+					if(betAmount >= 10){
+						//handles minimum bet amt
+						betButton.setEnabled(true);
+					}
+				} else
+					bet1Button.setEnabled(false);
+			}
+		});
+		
+		bet5Button.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+				if (user.getStack() >= betAmount + 5 ) {
+					betAmount += 5;
+					betAmt.setText("$" + betAmount);
+					if(betAmount >= 10){
+						//handles minimum bet amt
+						betButton.setEnabled(true);
+					}
+				} else
+					bet5Button.setEnabled(false);
+			}
+		});
+		
 		bet10Button.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
 				if (user.getStack() >= betAmount + 10) {
@@ -587,6 +639,17 @@ public class MainFrame extends JFrame {
 					betButton.setEnabled(true);
 				} else
 					bet10Button.setEnabled(false);
+			}
+		});
+		
+		bet25Button.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+				if (user.getStack() >= betAmount + 25) {
+					betAmount += 25;
+					betAmt.setText("$" + betAmount);
+					betButton.setEnabled(true);
+				} else
+					bet25Button.setEnabled(false);
 			}
 		});
 
@@ -619,7 +682,10 @@ public class MainFrame extends JFrame {
 				betAmount = 0;
 				betAmt.setText("$" + betAmount);
 				betButton.setEnabled(false);
+				bet1Button.setEnabled(true);
+				bet5Button.setEnabled(true);
 				bet10Button.setEnabled(true);
+				bet25Button.setEnabled(true);
 				bet50Button.setEnabled(true);
 				bet100Button.setEnabled(true);
 			}
