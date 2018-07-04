@@ -65,4 +65,9 @@ public class Player {
 	public Hand getHand() {
 		return playerHand;
 	}
+	
+	public void clearHand() {
+		
+		playerHand = new Hand();
+	}
 }

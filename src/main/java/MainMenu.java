@@ -12,6 +12,7 @@ import java.awt.Font;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.WindowEvent;
+import java.util.ArrayList;
 import java.awt.Color;
 import javax.swing.JTextField;
 import javax.swing.LayoutStyle.ComponentPlacement;
@@ -148,7 +149,14 @@ public class MainMenu extends JFrame implements ActionListener {
 			startWarning.setText("Not a valid number!");
 		
 		else {
-			new MainFrame(playerName, num);//starts the game passing the player name parameter
+			String[] opponents = { "Leopold Bloom", "Stephen Dedalus", "Yelverton Barry", "Buck Mulligan",
+					"Martin Cunningham", "Molly Bloom", "Josie Breen" };
+			ArrayList<Player> players = new ArrayList<>();
+			for (int j = 0; j < num; j++) {
+				players.add(new Player(true, opponents[j], 1000));
+			}
+			Player user = new Player(false, playerName, 1000);
+			new MainFrame(user, players);//starts the game passing the player name parameter
 			setVisible(false);
 			dispose();
 		}
