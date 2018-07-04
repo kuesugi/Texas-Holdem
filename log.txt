@@ -1,45 +1,46 @@
        * * * Game Log * * *
-- Game started 02 July 2018  -  16 : 30
-- Username: ted
+- Game started 04 July 2018  -  01 : 10
+- Username: a
 - Players: 4
   Leopold Bloom, Stephen Dedalus, Yelverton Barry, Buck Mulligan
 
+- Hand 1
+
 Preflop:
 Cards Dealt:
-Leopold Bloom: clubs seven, hearts eight
-Stephen Dedalus: hearts six, spades king
-Yelverton Barry: clubs four, spades ace
-Buck Mulligan: spades jack, hearts five
-ted: diamonds three, spades four
-ted calls
+A: spades eight, spades queen
+A: spades four, spades ten
+A: hearts nine, hearts seven
+A: diamonds nine, clubs king
+A: hearts three, spades six
+ folds
 Leopold Bloom calls
 Stephen Dedalus calls
 Yelverton Barry calls
 Buck Mulligan calls
 
 Flop:
-ted calls
+ folded
 Leopold Bloom calls
 Stephen Dedalus calls
 Yelverton Barry calls
 Buck Mulligan calls
 
 Turn:
-ted calls
+ folded
 Leopold Bloom calls
 Stephen Dedalus calls
 Yelverton Barry calls
 Buck Mulligan calls
 
 River:
-ted calls
+ folded
 Leopold Bloom calls
 Stephen Dedalus calls
 Yelverton Barry calls
 Buck Mulligan calls
 
 Final:
+The winner is Yelverton Barry with A Full House,  Sevens High, and Yelverton Barry wins $0
 
-You win with diamonds three and spades four, and you win $0
-
-- Game ends 02 July 2018  -  16 : 31
+- Game ends 04 July 2018  -  01 : 10

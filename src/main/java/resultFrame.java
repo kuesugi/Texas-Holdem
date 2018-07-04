@@ -2,6 +2,7 @@ import java.awt.EventQueue;
 import java.awt.FlowLayout;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.io.PrintWriter;
 import java.util.ArrayList;
 
 import javax.swing.JFrame;
@@ -31,17 +32,17 @@ public class resultFrame extends JFrame {
 	 * @param players 
 	 * @param user 
 	 */
-	public resultFrame(String result, Player user, ArrayList<Player> players, MainFrame mainFrame) {
-		initialize(result, user, players, mainFrame);
+	public resultFrame(String result, Player user, ArrayList<Player> players, MainFrame mainFrame, PrintWriter logWriter) {
+		initialize(result, user, players, mainFrame, logWriter);
 	}
 
 	/**
 	 * Initialize the contents of the frame.
 	 * @param mainFrame 
 	 * @param players 
-	 * @param user 
+	 * @param user
 	 */
-	private void initialize(String result, Player user, ArrayList<Player> players, MainFrame mainFrame) {
+	private void initialize(String result, Player user, ArrayList<Player> players, MainFrame mainFrame, PrintWriter logWriter) {
 		frame = new JFrame();
         JPanel btnPnl = new JPanel(new FlowLayout(FlowLayout.CENTER));
         JPanel mainPanel = new JPanel(new BorderLayout());
@@ -98,13 +99,24 @@ public class resultFrame extends JFrame {
 		frame.setBounds(100, 100, 1100, 300);
 		frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		frame.setVisible(true);
-		
 
 		nextHandButton.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
+				int handNumber = mainFrame.getHandNumber();
 				mainFrame.setVisible(false);
+				logWriter.println("\n\n-Hand " + handNumber +"\n\n");
+				mainFrame.setHandNumber(handNumber + 1);
+				// if no more AI players in the list,
+				// close the logWriter
+				if(mainFrame.isPlayersEmpty())
+					logWriter.close();
+				mainFrame.setDealerID();
+				// System.out.println(mainFrame.getHandNumber());
 				mainFrame.dispose();
+				// System.out.println(mainFrame.getHandNumber());
 				new MainFrame(user, players, frame);
+				
+				
 				
 			}
 		});
@@ -117,5 +129,4 @@ public class resultFrame extends JFrame {
 		});
 	}
 
-	
 }
