@@ -1,20 +1,22 @@
+import java.util.Random;
 
 public class Player {
 	
-	private boolean isAi = false;
+	private boolean isAI = false;
 	private String name = "";
 	private int stack = 1000;
 	private Hand playerHand;
 	private boolean ifFold = false;
+	private boolean ifOut = false;
 	
 	public Player(boolean ai, String playerName, int playerMoney) {
-		isAi = ai;
+		isAI = ai;
 		name = playerName;
 		stack = playerMoney;
 		playerHand = new Hand();
 	}
 	
-	public  String getName() {
+	public String getName() {
 		return name;
 	}
 	
@@ -27,7 +29,7 @@ public class Player {
 	}
 
 	public boolean isPlayerAi() {
-		return isAi;
+		return isAI;
 	}
 
 	public Card getCard1(){
@@ -36,6 +38,10 @@ public class Player {
 
 	public Card getCard2(){
 		return playerHand.getCard(1);
+	}
+	
+	public void outOfGame() {
+		ifOut = true;
 	}
 
 	public void setCard1(Card card){
@@ -56,10 +62,15 @@ public class Player {
 
 	public void call(){
 		
+			
 	}
 
 	public void bet(){
 		
+	}
+	
+	public void fold() {
+		setFold();
 	}
 	
 	public Hand getHand() {
@@ -69,5 +80,48 @@ public class Player {
 	public void clearHand() {
 		
 		playerHand = new Hand();
+	}
+	
+	public boolean ifOutOfGame() {
+		return ifOut;
+	}
+	// 0 - raise; 1 - fold; 2 - call;
+	public String aiRandomAction(int round) {
+		String action = "";
+		Random rand = new Random();
+		int moves = -1;
+		
+		// To determine the AI's action randomly
+		// if not the first round
+		if(round >= 1) {
+			moves = rand.nextInt(3) + 1;
+			if(moves == 2) {
+				fold();
+				action = name + " Has Folded.";
+			}
+			else if (moves == 3){
+				call();
+				action = name + " Has Called.";
+			}
+			else {}
+		}
+		// if in the first round
+		else {
+			moves = rand.nextInt(3);
+			if(moves == 0) {
+				// TODO: raised how much money
+				action = name + " Has Raised ";
+			}
+			else if(moves == 1) {
+				fold();
+				action = name + " Has Folded.";
+			}
+			else {
+				call();
+				action = name + " Has Called.";
+			}
+		}
+		// System.out.println(moves);
+		return action;
 	}
 }
