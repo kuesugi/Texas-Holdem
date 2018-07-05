@@ -9,6 +9,7 @@ import java.util.jar.Attributes.Name;
 import java.text.SimpleDateFormat;
 
 import javax.swing.*;
+import javax.swing.Timer;
 import javax.swing.border.EmptyBorder;
 import javax.imageio.*;
 
@@ -72,18 +73,20 @@ public class MainFrame extends JFrame {
 			"Martin Cunningham", "Molly Bloom", "Josie Breen" };
 
 	// money in the pot
-	static int moneyInPot = 0;
+	private int moneyInPot = 0;
 
 	// AIs array
 	private ArrayList<Player> players;
 	private static ArrayList<Card> deck;
+	private boolean setTransition = false;
 
 	// initialize the log file
 	static PrintWriter logWriter = null;
 	static int handNumber = 1;
 	static int dealerID = -1;
 	int nextIndex = -1;
-	int gameRound = 0;
+	int gameRound = -1;
+	int highBet = 0;
 	boolean ifUserFold = false;
 	boolean userMoved = false;
 
@@ -331,7 +334,7 @@ public class MainFrame extends JFrame {
 		p.setVisible(true);
 		p2.setVisible(true);
 		p3.setVisible(true);
-		
+
 		// START GAME!
 		showRoundAndHand();
 		setVisible(true);
@@ -440,29 +443,32 @@ public class MainFrame extends JFrame {
 	 */
 	private void transition() throws InterruptedException {
 		// currently in preflop; to enter the flop round
-		if (gameRound == 0) {
+
+		if (gameRound == -1) {
+
+			deal();
+		} else if (gameRound == 0) {
 			// go to the moves for the first round
-			firstMoves();
+
 			// log the round name
 			logWriter.println("\nFlop:");
 			displayCenterCards(centerHand, 1);
 			centerHand.addCard(deck.get(cardCount--));
-			gameRound++;
 			showRoundAndHand();
+			betting(false);
 		}
 		// to enter the turn round
 		else if (gameRound == 1) {
 			logWriter.println("\nTurn:");
 			displayCenterCards(centerHand, 2);
 			centerHand.addCard(deck.get(cardCount--));
-			gameRound++;
 			showRoundAndHand();
+			betting(false);
 		}
 		// to enter the river round
 		else if (gameRound == 2) {
 			logWriter.println("\nRiver:");
 			displayCenterCards(centerHand, 3);
-			gameRound++;
 			if (user.getFold())
 				logWriter.println(userName + " folded");
 			if (user.getFold()) {
@@ -471,6 +477,7 @@ public class MainFrame extends JFrame {
 				}
 			}
 			showRoundAndHand();
+			betting(false);
 		}
 		// to get the result
 		else if (gameRound == 3) {
@@ -483,6 +490,7 @@ public class MainFrame extends JFrame {
 			String result = new String();
 			gameRound++;
 			showRoundAndHand();
+			betting(false);
 			// disable all the buttons for the user
 			boolean tie = false;
 			int tieIndex = -1;
@@ -585,14 +593,14 @@ public class MainFrame extends JFrame {
 							+ players.get(winnerIndex).getName() + " with " + handType(players.get(winnerIndex))
 							+ " ,and both players recieve" + " wins $" + moneyInPot / 2;
 					logWriter.println(result);
+				} else {
+					result = "\nYou win with " + handType(user) + ", and you win $" + moneyInPot;
+					logWriter.println(result);
+					// move the money in the pot to the user's pocket
+					userStack.setText("Balance:" + 1000);
+					userStack.setForeground(Color.white);
+					player.revalidate();
 				}
-			} else {
-				result = "\nYou win with " + handType(user) + ", and you win $" + moneyInPot;
-				logWriter.println(result);
-				// move the money in the pot to the user's pocket
-				userStack.setText("Balance:" + 1000);
-				userStack.setForeground(Color.white);
-				player.revalidate();
 			}
 			// log the end time of the game and close the file writing
 			String endTime = new SimpleDateFormat("dd MMMM yyyy  -  HH : mm").format(Calendar.getInstance().getTime());
@@ -615,7 +623,8 @@ public class MainFrame extends JFrame {
 			return;
 	}
 
-	private void firstMoves() throws InterruptedException {
+	private void deal() throws InterruptedException {
+
 		if (dealerID != players.size())
 			dealerIDLabel.setText(players.get(dealerID).getName());
 		else
@@ -625,177 +634,113 @@ public class MainFrame extends JFrame {
 		dealerIDLabel.revalidate();
 		// In the first round of that hand
 		// System.out.println(dealerID + "aaa" + players.size());
-		if(dealerID != players.size())
+		if (dealerID != players.size()) {
 			action = players.get(dealerID).getName() + " Has Dealt.";
-		else
+		}
+
+		else {
+
 			action = userName + " Has Dealt.";
+		}
+
 		logWriter.println(action);
 		playerAction.setText(action);
 		playerAction.setFont(new Font("Optima", Font.BOLD, 23));
 		playerAction.setForeground(Color.white);
 		playerAction.revalidate();
-		//disableButtons();
-		// small blind
-		int cur = dealerID;
-		Player nextS = null;
-		do {
-			nextS = findNext(cur);
-		} while (nextS.ifOutOfGame());
-		// if the next one is not the user
-		//System.out.println(dealerID + " " + getPlayerIndex(nextS));
-		if (nextS != user) {
-			// System.out.println(dealerID + " " + nextIndex);
-			action = nextS.getName() + " is the small blind.";
-			players.get(getPlayerIndex(nextS)).setStack(players.get(getPlayerIndex(nextS)).getStack() - 10);
-			playerAction.setText(action);
-			playerAction.setFont(new Font("Optima", Font.BOLD, 23));
-			playerAction.setForeground(Color.white);
-			playerAction.revalidate();
-			logWriter.println(action);
-			//disableButtons();
-			//TimeUnit.MILLISECONDS.sleep(520);
-		}
-		// if user is the small blind
-		else {
-			user.setStack(user.getStack() - 10);
-			moneyInPot += 10;
-			logWriter.println(userName + " is the small blind");
-			playerAction.setText(userName + " is the small blind");
-			playerAction.setFont(new Font("Optima", Font.BOLD, 23));
-			playerAction.setForeground(Color.white);
-			playerAction.revalidate();
-			// update money in pot
-			moneyInPotLabel.setText("Money in the pot: " + moneyInPot);
-			moneyInPotLabel.setFont(new Font("Optima", Font.BOLD, 23));
-			moneyInPotLabel.setForeground(Color.white);
-			pot.add(moneyInPotLabel);
-			pot.revalidate();
-			//TimeUnit.MILLISECONDS.sleep(520);
-			// handle buttons
-			//disableButtons();
-		}
-		int sbIndex = -1;
-		if(nextS != user)
-			sbIndex = getPlayerIndex(nextS);
-		else sbIndex = players.size();
-		// big blind
-		int curS = sbIndex;
-		Player nextB = null;
-		do {
-			nextB = findNext(curS);
-		} while (nextB.ifOutOfGame());
-		// if the next one is not the user
-		if (nextB != user) {
-			// System.out.println(dealerID + " " + nextIndex);
-			action = nextB.getName() + " is the big blind.";
-			players.get(getPlayerIndex(nextB)).setStack(players.get(getPlayerIndex(nextB)).getStack() - 20);
-			playerAction.setText(action);
-			playerAction.setFont(new Font("Optima", Font.BOLD, 23));
-			playerAction.setForeground(Color.white);
-			playerAction.revalidate();
-			logWriter.println(action);
-			//disableButtons();
-			//TimeUnit.MILLISECONDS.sleep(520);
-		}
-		// If user is not the big blind
-		else {
-			user.setStack(user.getStack() - 20);
-			moneyInPot += 20;
-			logWriter.println(userName + " is the big blind");
-			playerAction.setText(userName + " is the big blind");
-			playerAction.setFont(new Font("Optima", Font.BOLD, 23));
-			playerAction.setForeground(Color.white);
-			playerAction.revalidate();
-			// update money in pot
-			moneyInPotLabel.setText("Money in the pot: " + moneyInPot);
-			moneyInPotLabel.setFont(new Font("Optima", Font.BOLD, 23));
-			moneyInPotLabel.setForeground(Color.white);
-			pot.add(moneyInPotLabel);
-			pot.revalidate();
-			//TimeUnit.MILLISECONDS.sleep(520);
-			//disableButtons();
-		}
-		// for players not folding
-		int bbIndex = -1;
-		if(nextB != user)
-			bbIndex = getPlayerIndex(nextB);
-		else bbIndex = players.size();
-		Player next = null;
-		next = findNext(bbIndex);
-		do {
-			if(!next.getFold()) {
-				if(next != user)
-					aiRandomAction(0, getPlayerIndex(next), next);
-				else {
-					enableButtons();
-					userMoved = true;
-				}
-			}
-			//System.out.println(bbIndex);
-			bbIndex = getPlayerIndex(next);
-			if(bbIndex == -1) bbIndex = players.size();
-			next = findNext(bbIndex);
-		} while(!next.getFold() && !userMoved);
+		// disableButtons();
+		smallBlind();
 	}
-	
+
 	/**
 	 * To find who the next player is
-	 * @param cur the current player's index
+	 * 
+	 * @param cur
+	 *            the current player's index
 	 */
 	public Player findNext(int cur) {
 		Player next = null;
-		if(players.size() == 1) {
-			if(cur == 0) next = user;
-			if(cur == 1) next = players.get(0);
-		}
-		else if(players.size() == 2) {
-			if(cur == 0) next = players.get(1);
-			if(cur == 1) next = user;
-			if(cur == 2) next = players.get(0);
-		}
-		else if(players.size() == 3) {
-			if(cur == 0) next = players.get(1);
-			if(cur == 1) next = players.get(2);
-			if(cur == 2) next = user;
-			if(cur == 3) next = players.get(0);
-		}
-		else if(players.size() == 4) {
-			if(cur == 0) next = players.get(1);
-			if(cur == 1) next = players.get(2);
-			if(cur == 2) next = user;
-			if(cur == 4) next = players.get(3);
-			if(cur == 3) next = players.get(0);
-		}
-		else if(players.size() == 5) {
-			if(cur == 0) next = players.get(1);
-			if(cur == 1) next = players.get(2);
-			if(cur == 2) next = user;
-			if(cur == 5) next = players.get(4);
-			if(cur == 4) next = players.get(3);
-			if(cur == 3) next = players.get(0);
-		}
-		else if(players.size() == 6) {
-			if(cur == 0) next = players.get(1);
-			if(cur == 1) next = players.get(2);
-			if(cur == 2) next = players.get(5);
-			if(cur == 5) next = user;
-			if(cur == 6) next = players.get(4);
-			if(cur == 4) next = players.get(3);
-			if(cur == 3) next = players.get(0);
-		}
-		else{
-			if(cur == 0) next = players.get(1);
-			if(cur == 1) next = players.get(2);
-			if(cur == 2) next = players.get(5);
-			if(cur == 5) next = players.get(6);
-			if(cur == 6) next = user;
-			if(cur == 7) next = players.get(4);
-			if(cur == 4) next = players.get(3);
-			if(cur == 3) next = players.get(0);
+		if (players.size() == 1) {
+			if (cur == 0)
+				next = user;
+			if (cur == 1)
+				next = players.get(0);
+		} else if (players.size() == 2) {
+			if (cur == 0)
+				next = players.get(1);
+			if (cur == 1)
+				next = user;
+			if (cur == 2)
+				next = players.get(0);
+		} else if (players.size() == 3) {
+			if (cur == 0)
+				next = players.get(1);
+			if (cur == 1)
+				next = players.get(2);
+			if (cur == 2)
+				next = user;
+			if (cur == 3)
+				next = players.get(0);
+		} else if (players.size() == 4) {
+			if (cur == 0)
+				next = players.get(1);
+			if (cur == 1)
+				next = players.get(2);
+			if (cur == 2)
+				next = user;
+			if (cur == 4)
+				next = players.get(3);
+			if (cur == 3)
+				next = players.get(0);
+		} else if (players.size() == 5) {
+			if (cur == 0)
+				next = players.get(1);
+			if (cur == 1)
+				next = players.get(2);
+			if (cur == 2)
+				next = user;
+			if (cur == 5)
+				next = players.get(4);
+			if (cur == 4)
+				next = players.get(3);
+			if (cur == 3)
+				next = players.get(0);
+		} else if (players.size() == 6) {
+			if (cur == 0)
+				next = players.get(1);
+			if (cur == 1)
+				next = players.get(2);
+			if (cur == 2)
+				next = players.get(5);
+			if (cur == 5)
+				next = user;
+			if (cur == 6)
+				next = players.get(4);
+			if (cur == 4)
+				next = players.get(3);
+			if (cur == 3)
+				next = players.get(0);
+		} else {
+			if (cur == 0)
+				next = players.get(1);
+			if (cur == 1)
+				next = players.get(2);
+			if (cur == 2)
+				next = players.get(5);
+			if (cur == 5)
+				next = players.get(6);
+			if (cur == 6)
+				next = user;
+			if (cur == 7)
+				next = players.get(4);
+			if (cur == 4)
+				next = players.get(3);
+			if (cur == 3)
+				next = players.get(0);
 		}
 		return next;
 	}
-	
+
 	/**
 	 * Start a game and go into three transitions
 	 * 
@@ -808,7 +753,6 @@ public class MainFrame extends JFrame {
 			dealerID = rand.nextInt(players.size() + 1);
 			// NOTE: we increment handNumber in the resultFrame, not here
 		}
-
 		transition();
 
 		// BUTTONS:
@@ -902,7 +846,7 @@ public class MainFrame extends JFrame {
 		betButton.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
 				if (betAmount <= user.getStack()) {
-					userMoved = false;
+					userMoved = true;
 					// TODO
 					// dealerID = nextIndex;
 
@@ -923,50 +867,103 @@ public class MainFrame extends JFrame {
 					pot.revalidate();
 
 					// TODO
-					aiCardsRemove();
+					//aiCardsRemove();
 
 					// bet button is disabled before the next round
 					betButton.setEnabled(false);
 
 					// TODO
 					try {
-						transition();
+						remainingBets();
 					} catch (InterruptedException e1) {
+						// TODO Auto-generated catch block
+						e1.printStackTrace();
 					}
 				}
 			}
 		});
 
 		smallBlind.addActionListener(new ActionListener() {
-			public void actionPerformed(ActionEvent e) {}
+			public void actionPerformed(ActionEvent e) {
+
+				user.setStack(user.getStack() - 10);
+				moneyInPot += 10;
+				moneyInPotLabel.setText("Money in the pot: " + moneyInPot);
+				moneyInPotLabel.setFont(new Font("Optima", Font.BOLD, 23));
+				moneyInPotLabel.setForeground(Color.white);
+				pot.add(moneyInPotLabel);
+				pot.revalidate();
+				enableButtons();
+				try {
+					bigBlind();
+				} catch (InterruptedException e1) {
+					// TODO Auto-generated catch block
+					e1.printStackTrace();
+				}
+			}
 		});
 
 		bigBlind.addActionListener(new ActionListener() {
-			public void actionPerformed(ActionEvent e) {}
+			public void actionPerformed(ActionEvent e) {
+
+				user.setStack(user.getStack() - 20);
+				moneyInPot += 20;
+				moneyInPotLabel.setText("Money in the pot: " + moneyInPot);
+				moneyInPotLabel.setFont(new Font("Optima", Font.BOLD, 23));
+				moneyInPotLabel.setForeground(Color.white);
+				pot.add(moneyInPotLabel);
+				pot.revalidate();
+				enableButtons();
+				try {
+					betting(true);
+				} catch (InterruptedException e1) {
+					// TODO Auto-generated catch block
+					e1.printStackTrace();
+				}
+
+			}
 		});
 
 		foldButton.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
-				userMoved = false;
+				userMoved = true;
 				logWriter.println(userName + " Has Folded.");
 				user.setFold();
 				try {
-					transition();
+					remainingBets();
 				} catch (InterruptedException e1) {
+					// TODO Auto-generated catch block
+					e1.printStackTrace();
 				}
+
 			}
 		});
 
 		callButton.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
-				userMoved = false;
+				userMoved = true;
 				logWriter.println(userName + " Has Called.");
 				try {
-					transition();
+					remainingBets();
 				} catch (InterruptedException e1) {
+					// TODO Auto-generated catch block
+					e1.printStackTrace();
 				}
 			}
 		});
+	}
+
+	private void removeAICards(JPanel panel, int index) {
+		JLabel nameL = new JLabel();
+		JLabel stackL = new JLabel();
+		stackL.setText("Balance: " + players.get(index));
+		stackL.setForeground(Color.white);
+		panel.removeAll();
+		nameL = new JLabel(opponents[index]);
+		panel.add(stackL);
+		panel.add(nameL);
+		panel.repaint();
+		panel.revalidate();
 	}
 
 	private void aiCardsRemove() {
@@ -1476,8 +1473,9 @@ public class MainFrame extends JFrame {
 	public int getPlayerIndex(Player p) {
 		int index = -1;
 		for (int i = 0; i < players.size(); i++)
-			if (players.get(i).getName().equals(p.getName()))
+			if (players.get(i).getName().equals(p.getName()) || user.getName().equals(p.getName())) {
 				index = i;
+			}
 		return index;
 	}
 
@@ -1503,6 +1501,10 @@ public class MainFrame extends JFrame {
 				playerAction.setFont(new Font("Optima", Font.BOLD, 23));
 				playerAction.setForeground(Color.white);
 				playerAction.revalidate();
+				JPanel panel = new JPanel();
+				panel = getPanelNum(getPlayerIndex(p));
+				removeAICards(panel, getPlayerIndex(p));
+				//display(getPlayerIndex(p), panel, p.getCard1(), p.getCard2());
 			} else {
 				p.call();
 				action = p.getName() + " Has Called.";
@@ -1511,6 +1513,32 @@ public class MainFrame extends JFrame {
 				playerAction.setFont(new Font("Optima", Font.BOLD, 23));
 				playerAction.setForeground(Color.white);
 				playerAction.revalidate();
+			}
+		}
+
+		else if (round == -1) {
+			moves = rand.nextInt(1);
+			if (moves == 0) {
+				int betAmt = 20;
+				action = p.getName() + " Has Bet " + betAmt;
+				moneyInPot = betAmt + moneyInPot;
+				logWriter.println(action);
+				playerAction.setText(action);
+				playerAction.setFont(new Font("Optima", Font.BOLD, 23));
+				playerAction.setForeground(Color.white);
+				playerAction.revalidate();
+				// update money in pot
+				moneyInPotLabel.setText("Money in the pot: " + moneyInPot);
+				moneyInPotLabel.setFont(new Font("Optima", Font.BOLD, 23));
+				moneyInPotLabel.setForeground(Color.white);
+				pot.add(moneyInPotLabel);
+				pot.revalidate();
+			} else {
+				p.fold();
+				JPanel panel = new JPanel();
+				panel = getPanelNum(getPlayerIndex(p));
+				removeAICards(panel, getPlayerIndex(p));
+				action = p.getName() + " Has Folded.";
 			}
 		}
 		// if in the first round
@@ -1533,6 +1561,9 @@ public class MainFrame extends JFrame {
 				pot.revalidate();
 			} else if (moves == 1) {
 				p.fold();
+				JPanel panel = new JPanel();
+				panel = getPanelNum(getPlayerIndex(p));
+				removeAICards(panel, getPlayerIndex(p));
 				action = p.getName() + " Has Folded.";
 			} else {
 				p.call();
@@ -1543,21 +1574,35 @@ public class MainFrame extends JFrame {
 		return action;
 	}
 
-	public void disableButtons() {
+	public void disableButtons(int bigOrSmall) {
 		betButton.setEnabled(false);
-		foldButton.setEnabled(false);
-		callButton.setEnabled(false);
 		bet1Button.setEnabled(false);
 		bet5Button.setEnabled(false);
 		bet10Button.setEnabled(false);
 		bet25Button.setEnabled(false);
 		bet50Button.setEnabled(false);
 		bet100Button.setEnabled(false);
-		smallBlind.setEnabled(false);
-		bigBlind.setEnabled(false);
+		if (bigOrSmall == 0) {
+			smallBlind.setEnabled(true);
+			bigBlind.setEnabled(false);
+			foldButton.setEnabled(false);
+			callButton.setEnabled(false);
+		}
+		if (bigOrSmall == 1) {
+			smallBlind.setEnabled(false);
+			bigBlind.setEnabled(true);
+			foldButton.setEnabled(false);
+			callButton.setEnabled(false);
+		}
+		if (bigOrSmall == 2) {
+			smallBlind.setEnabled(false);
+			bigBlind.setEnabled(false);
+			foldButton.setEnabled(true);
+			callButton.setEnabled(true);
+		}
 		clearButton.setEnabled(false);
 	}
-	
+
 	public void enableButtons() {
 		betButton.setEnabled(false);
 		foldButton.setEnabled(true);
@@ -1571,5 +1616,276 @@ public class MainFrame extends JFrame {
 		smallBlind.setEnabled(true);
 		bigBlind.setEnabled(true);
 		clearButton.setEnabled(true);
+	}
+
+	private void smallBlind() throws InterruptedException {
+		moneyInPotLabel.setText("Money in the pot: " + moneyInPot);
+		moneyInPotLabel.setFont(new Font("Optima", Font.BOLD, 23));
+		moneyInPotLabel.setForeground(Color.white);
+		pot.add(moneyInPotLabel);
+		pot.revalidate();
+		int cur = dealerID;
+		Player nextS = null;
+		do {
+			nextS = findNext(cur);
+		} while (nextS.ifOutOfGame());
+		// if the next one is not the user
+		// System.out.println(dealerID + " " + getPlayerIndex(nextS));
+		if (nextS != user) {
+			// System.out.println(dealerID + " " + nextIndex);
+			action = nextS.getName() + " is the small blind.";
+			players.get(getPlayerIndex(nextS)).setStack(players.get(getPlayerIndex(nextS)).getStack() - 10);
+			moneyInPot += 10;
+			playerAction.setText(action);
+			playerAction.setFont(new Font("Optima", Font.BOLD, 23));
+			playerAction.setForeground(Color.white);
+			playerAction.revalidate();
+			pot.revalidate();
+			bigBlind();
+		}
+		// if user is the small blind
+		else {
+			logWriter.println(userName + " is the small blind");
+			playerAction.setText("You are the small blind");
+			playerAction.setFont(new Font("Optima", Font.BOLD, 23));
+			playerAction.setForeground(Color.white);
+			playerAction.revalidate();
+			disableButtons(0);
+			// update money in pot
+
+			// TimeUnit.MILLISECONDS.sleep(520);
+			// handle buttons
+
+		}
+
+	}
+
+	public void bigBlind() throws InterruptedException {
+
+		moneyInPotLabel.setText("Money in the pot: " + moneyInPot);
+		moneyInPotLabel.setFont(new Font("Optima", Font.BOLD, 23));
+		moneyInPotLabel.setForeground(Color.white);
+		pot.add(moneyInPotLabel);
+		pot.revalidate();
+		Player nextS = null;
+		int cur = getDealerID();
+		nextS = findNext(cur);
+
+		int sbIndex = -1;
+		if (nextS != user && nextS != null)
+			sbIndex = getPlayerIndex(nextS);
+		else
+			sbIndex = players.size();
+		// big blind
+		int curS = sbIndex;
+		Player nextB = null;
+		do {
+			nextB = findNext(curS);
+		} while (nextB.ifOutOfGame());
+		// if the next one is not the user
+		if (nextB != user) {
+			// System.out.println(dealerID + " " + nextIndex);
+			action = nextB.getName() + " is the big blind.";
+			players.get(getPlayerIndex(nextB)).setStack(players.get(getPlayerIndex(nextB)).getStack() - 20);
+			moneyInPot += 20;
+			playerAction.setText(action);
+			playerAction.setFont(new Font("Optima", Font.BOLD, 23));
+			playerAction.setForeground(Color.white);
+			playerAction.revalidate();
+			logWriter.println(action);
+			pot.revalidate();
+			betting(true);
+		}
+		// If user is not the big blind
+		else {
+			pot.revalidate();
+			logWriter.println("You the big blind");
+			playerAction.setText("You are the big blind");
+			playerAction.setFont(new Font("Optima", Font.BOLD, 23));
+			playerAction.setForeground(Color.white);
+			playerAction.revalidate();
+			disableButtons(1);
+			// update money in pot
+
+		}
+	}
+
+	private JPanel getPanelNum(int index) {
+		if(index == 0) return northAI1;
+		else if(index == 1) return northAI2;
+		else if(index == 2) return northAI3;
+		else if(index == 3) return westAI1;
+		else if(index == 4) return westAI2;
+		else if(index == 5) return eastAI1;
+		else if(index == 6) return eastAI2;
+		return null;
+	}
+
+	public void betting(boolean isBlind) throws InterruptedException {
+
+		// for players not folding
+
+		moneyInPotLabel.setText("Money in the pot: " + moneyInPot);
+		moneyInPotLabel.setFont(new Font("Optima", Font.BOLD, 23));
+		moneyInPotLabel.setForeground(Color.white);
+		pot.add(moneyInPotLabel);
+		pot.revalidate();
+		int cur = getDealerID();
+		Player nextB = findNext(cur);
+		int bbIndex = -1;
+		if (nextB != user && nextB != null) {
+
+			bbIndex = getPlayerIndex(nextB);
+		}
+
+		else {
+			bbIndex = players.size();
+			if(isBlind == true) {
+				
+				logWriter.println("Player's turn, Calling Bets 20");
+				playerAction.setText("Player's turn, Calling Bets 20");
+				disableButtons(2);
+			}
+			else {
+				logWriter.println("Player's turn, Calling Bets 0");
+				playerAction.setText("Player's turn, Calling Bets 0");
+				enableButtons();
+			}
+			
+			playerAction.setFont(new Font("Optima", Font.BOLD, 23));
+			playerAction.setForeground(Color.white);
+			playerAction.revalidate();
+
+		}
+
+		Player next = null;
+		next = findNext(bbIndex);
+		for (int i = 0; i < players.size() + 1; i++) {
+
+			if (!next.getFold() && !next.hasGone()) {
+				if (next != user) {
+					aiRandomAction(-1, getPlayerIndex(next), next);
+					moneyInPotLabel.setText("Money in the pot: " + moneyInPot);
+					moneyInPotLabel.setFont(new Font("Optima", Font.BOLD, 23));
+					moneyInPotLabel.setForeground(Color.white);
+					pot.add(moneyInPotLabel);
+					pot.revalidate();
+					next.playerHasGone();
+					bbIndex = getPlayerIndex(next);
+					if (bbIndex == -1)
+						bbIndex = players.size();
+					next = findNext(bbIndex);
+				}
+
+				else {
+
+					if(isBlind == true) {
+						
+						logWriter.println("Player's turn, Calling Bets 20");
+						playerAction.setText("Player's turn, Calling Bets 20");
+						disableButtons(2);
+					}
+					else {
+						logWriter.println("Player's turn, Calling Bets 0");
+						playerAction.setText("Player's turn, Calling Bets 0");
+						enableButtons();
+					}
+					playerAction.setFont(new Font("Optima", Font.BOLD, 23));
+					playerAction.setForeground(Color.white);
+					playerAction.revalidate();
+					bbIndex = getPlayerIndex(next);
+					if (bbIndex == -1)
+						bbIndex = players.size();
+					next = findNext(bbIndex);
+				}
+			}
+		}
+
+	}
+
+	public void remainingBets() throws InterruptedException {
+
+		pot.revalidate();
+		int cur = getDealerID();
+		Player nextB = findNext(cur);
+		int bbIndex = -1;
+		if (nextB != user && nextB != null) {
+
+			bbIndex = getPlayerIndex(nextB);
+		}
+
+		else {
+			bbIndex = players.size();
+			logWriter.println("Player's turn");
+			playerAction.setText("Player's turn");
+			playerAction.setFont(new Font("Optima", Font.BOLD, 23));
+			playerAction.setForeground(Color.white);
+			playerAction.revalidate();
+			enableButtons();
+
+		}
+
+		Player next = null;
+		next = findNext(bbIndex);
+		for (int i = 0; i < players.size() + 1; i++) {
+
+			if (!next.getFold() && !next.hasGone() && nextB != user) {
+				if (next != user) {
+					aiRandomAction(-1, getPlayerIndex(next), next);
+					pot.revalidate();
+					next.playerHasGone();
+					bbIndex = getPlayerIndex(next);
+					if (bbIndex == -1)
+						bbIndex = players.size();
+					next = findNext(bbIndex);
+				}
+
+			}
+		}
+
+		resetGone();
+		highBet = 0;
+		gameRound++;
+		transition();
+	}
+
+	public void resetGone() throws InterruptedException {
+
+		pot.revalidate();
+		int cur = getDealerID();
+		Player nextB = findNext(cur);
+		int bbIndex = -1;
+		if (nextB != user && nextB != null) {
+
+			bbIndex = getPlayerIndex(nextB);
+		}
+
+		else {
+			bbIndex = players.size();
+			logWriter.println("Player's turn");
+			playerAction.setText("Player's turn");
+			playerAction.setFont(new Font("Optima", Font.BOLD, 23));
+			playerAction.setForeground(Color.white);
+			playerAction.revalidate();
+			enableButtons();
+
+		}
+
+		Player next = null;
+		next = findNext(bbIndex);
+		for (int i = 0; i < players.size() + 1; i++) {
+
+			if (!next.getFold() && nextB != user) {
+				if (next != user) {
+					pot.revalidate();
+					next.newRoundNotGone();
+					bbIndex = getPlayerIndex(next);
+					if (bbIndex == -1)
+						bbIndex = players.size();
+					next = findNext(bbIndex);
+				}
+
+			}
+		}
 	}
 }
