@@ -117,15 +117,11 @@ public class resultFrame extends JFrame {
 				try {
 					new MainFrame(user, players, frame);
 				} catch (InterruptedException e1) {}
-				
-				
-				
 			}
 		});
 		
 		quitButton.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
-				
 				System.exit(0);
 			}
 		});

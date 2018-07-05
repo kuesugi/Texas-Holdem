@@ -55,8 +55,7 @@ public class Hand {
 	}
 
 	//Main method for checking and returning scores
-	public int checkScore(Hand centerHand, boolean ifFold) {
-		if(ifFold) return 0;
+	public int checkScore(Hand centerHand) {
 		combineHands(centerHand);
 
 		//score of 1000
