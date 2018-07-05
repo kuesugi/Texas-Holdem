@@ -145,7 +145,7 @@ public class MainMenu extends JFrame implements ActionListener {
 		if(playerName == null || nameField.getText().isEmpty())
 			startWarning.setText("Player must enter name before starting");
 		
-		if(num == 0 || num > 7 || numberField.getText().isEmpty())
+		else if(num == 0 || num > 7 || numberField.getText().isEmpty())
 			startWarning.setText("Not a valid number!");
 		
 		else {
