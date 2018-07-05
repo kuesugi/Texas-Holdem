@@ -731,7 +731,7 @@ public class MainFrame extends JFrame {
 					userMoved = true;
 				}
 			}
-			System.out.println(bbIndex);
+			//System.out.println(bbIndex);
 			bbIndex = getPlayerIndex(next);
 			if(bbIndex == -1) bbIndex = players.size();
 			next = findNext(bbIndex);
