@@ -67,6 +67,7 @@ public class MainFrame extends JFrame {
 
 	// the player name
 	private String userName = new String();
+	private boolean isBlind = true;
 	private Player user;
 	private String action;
 	private String[] opponents = { "Leopold Bloom", "Stephen Dedalus", "Yelverton Barry", "Buck Mulligan",
@@ -100,6 +101,13 @@ public class MainFrame extends JFrame {
 		user = newUser;
 		userName = user.getName();
 		players = (ArrayList<Player>) newPlayers.clone();
+		for(int i = 0; i < players.size(); i++) {
+			
+			if(players.get(i).getStack() <= 0) {
+				
+				players.remove(i);
+			}
+		}
 		numOfAI = players.size();
 		String playerName = user.getName();
 		deck = new ArrayList<Card>();
@@ -427,8 +435,6 @@ public class MainFrame extends JFrame {
 			roundLabel.setText("Round: Turn");
 		else if (gameRound == 3)
 			roundLabel.setText("Round: River");
-		else
-			roundLabel.setText("Final");
 		roundLabel.setBackground(new Color(43, 151, 0));
 		roundLabel.setFont(new Font("Optima", Font.BOLD, 23));
 		roundLabel.setForeground(Color.yellow);
@@ -451,11 +457,14 @@ public class MainFrame extends JFrame {
 			// go to the moves for the first round
 
 			// log the round name
+			isBlind = false;
 			logWriter.println("\nFlop:");
 			displayCenterCards(centerHand, 1);
 			centerHand.addCard(deck.get(cardCount--));
 			showRoundAndHand();
-			betting(false);
+
+			betting();
+
 		}
 		// to enter the turn round
 		else if (gameRound == 1) {
@@ -463,7 +472,8 @@ public class MainFrame extends JFrame {
 			displayCenterCards(centerHand, 2);
 			centerHand.addCard(deck.get(cardCount--));
 			showRoundAndHand();
-			betting(false);
+			betting();
+
 		}
 		// to enter the river round
 		else if (gameRound == 2) {
@@ -477,7 +487,8 @@ public class MainFrame extends JFrame {
 				}
 			}
 			showRoundAndHand();
-			betting(false);
+			betting();
+
 		}
 		// to get the result
 		else if (gameRound == 3) {
@@ -486,21 +497,29 @@ public class MainFrame extends JFrame {
 			 * for(int i = 0; i < players.size(); i++) {
 			 * System.out.println(players.get(i).aiRandomAction(0, 0)); }
 			 */
+
 			logWriter.println("\nFinal:");
 			String result = new String();
 			gameRound++;
 			showRoundAndHand();
-			betting(false);
+			betting();
+
 			// disable all the buttons for the user
 			boolean tie = false;
 			int tieIndex = -1;
 			// display the cards
-			if (true) {
-				int winnerIndex = -1;
-				// check the user and AIs' score
-				int maxScore = user.getHand().checkScore(centerHand);
-				int aiHighestScore = 0;
-				for (int i = 0; i < players.size(); i++) {
+
+			int winnerIndex = -1;
+			int maxScore = 0;
+			// check the user and AIs' score
+			if (!user.getFold()) {
+				maxScore = user.getHand().checkScore(centerHand);
+			}
+
+			int aiHighestScore = 0;
+			for (int i = 0; i < players.size(); i++) {
+
+				if (!players.get(i).getFold()) {
 					aiHighestScore = players.get(i).getHand().checkScore(centerHand);
 					if (aiHighestScore > maxScore) {
 						maxScore = aiHighestScore;
@@ -532,76 +551,85 @@ public class MainFrame extends JFrame {
 						}
 					}
 				}
-				// display AI cards
-				if (numOfAI == 1)
-					initAI(northAI1, 0, 1);
-				else if (numOfAI == 2) {
-					initAI(northAI1, 0, 1);
-					initAI(northAI2, 1, 1);
-				} else if (numOfAI == 3) {
-					initAI(northAI1, 0, 1);
-					initAI(northAI2, 1, 1);
-					initAI(northAI3, 2, 1);
-				} else if (numOfAI == 4) {
-					initAI(northAI1, 0, 1);
-					initAI(northAI2, 1, 1);
-					initAI(northAI3, 2, 1);
-					initAI(westAI1, 3, 1);
-				} else if (numOfAI == 5) {
-					initAI(northAI1, 0, 1);
-					initAI(northAI2, 1, 1);
-					initAI(northAI3, 2, 1);
-					initAI(westAI1, 3, 1);
-					initAI(westAI2, 4, 1);
-				} else if (numOfAI == 6) {
-					initAI(northAI1, 0, 1);
-					initAI(northAI2, 1, 1);
-					initAI(northAI3, 2, 1);
-					initAI(westAI1, 3, 1);
-					initAI(westAI2, 4, 1);
-					initAI(eastAI1, 5, 1);
-				} else {
-					initAI(northAI1, 0, 1);
-					initAI(northAI2, 1, 1);
-					initAI(northAI3, 2, 1);
-					initAI(westAI1, 3, 1);
-					initAI(westAI2, 4, 1);
-					initAI(eastAI1, 5, 1);
-					initAI(eastAI2, 6, 1);
-				}
-
-				if (winnerIndex == -1 && tie == false) {
-
-					result = "\nYou win with " + handType(user) + ", and you win $" + moneyInPot;
-					logWriter.println(result);
-					// move the money in the pot to the user's pocket
-					userStack.setText("Balance:" + 1000);
-					userStack.setForeground(Color.white);
-					player.revalidate();
-				} else if (winnerIndex >= 0 && tie == false) {
-					result = "The winner is " + players.get(winnerIndex).getName() + " with "
-							+ handType(players.get(winnerIndex)) + ", and " + players.get(winnerIndex).getName()
-							+ " wins $" + moneyInPot;
-					logWriter.println(result);
-				} else if (winnerIndex == -1 && tie == true) {
-					result = "There is a tie between you and " + players.get(tieIndex).getName() + " with "
-							+ handType(players.get(winnerIndex)) + ", and " + "both of you recieve" + " wins $"
-							+ moneyInPot / 2;
-					logWriter.println(result);
-				} else if (winnerIndex >= 0 && tie == true) {
-					result = "There is a tie between " + players.get(tieIndex).getName() + " and "
-							+ players.get(winnerIndex).getName() + " with " + handType(players.get(winnerIndex))
-							+ " ,and both players recieve" + " wins $" + moneyInPot / 2;
-					logWriter.println(result);
-				} else {
-					result = "\nYou win with " + handType(user) + ", and you win $" + moneyInPot;
-					logWriter.println(result);
-					// move the money in the pot to the user's pocket
-					userStack.setText("Balance:" + 1000);
-					userStack.setForeground(Color.white);
-					player.revalidate();
-				}
 			}
+			// display AI cards
+			if (numOfAI == 1)
+				initAI(northAI1, 0, 1);
+			else if (numOfAI == 2) {
+				initAI(northAI1, 0, 1);
+				initAI(northAI2, 1, 1);
+			} else if (numOfAI == 3) {
+				initAI(northAI1, 0, 1);
+				initAI(northAI2, 1, 1);
+				initAI(northAI3, 2, 1);
+			} else if (numOfAI == 4) {
+				initAI(northAI1, 0, 1);
+				initAI(northAI2, 1, 1);
+				initAI(northAI3, 2, 1);
+				initAI(westAI1, 3, 1);
+			} else if (numOfAI == 5) {
+				initAI(northAI1, 0, 1);
+				initAI(northAI2, 1, 1);
+				initAI(northAI3, 2, 1);
+				initAI(westAI1, 3, 1);
+				initAI(westAI2, 4, 1);
+			} else if (numOfAI == 6) {
+				initAI(northAI1, 0, 1);
+				initAI(northAI2, 1, 1);
+				initAI(northAI3, 2, 1);
+				initAI(westAI1, 3, 1);
+				initAI(westAI2, 4, 1);
+				initAI(eastAI1, 5, 1);
+			} else {
+				initAI(northAI1, 0, 1);
+				initAI(northAI2, 1, 1);
+				initAI(northAI3, 2, 1);
+				initAI(westAI1, 3, 1);
+				initAI(westAI2, 4, 1);
+				initAI(eastAI1, 5, 1);
+				initAI(eastAI2, 6, 1);
+			}
+
+			if (winnerIndex == -1 && tie == false) {
+
+				user.setStack(user.getStack() + moneyInPot);
+				result = "\nYou win with " + handType(user) + ", and you win $" + moneyInPot;
+				logWriter.println(result);
+				// move the money in the pot to the user's pocket
+				userStack.setText("Balance:" + user.getStack());
+				userStack.setForeground(Color.white);
+				player.revalidate();
+			} else if (winnerIndex >= 0 && tie == false) {
+				players.get(winnerIndex).setStack(players.get(winnerIndex).getStack() + moneyInPot);
+				result = "The winner is " + players.get(winnerIndex).getName() + " with "
+						+ handType(players.get(winnerIndex)) + ", and " + players.get(winnerIndex).getName() + " wins $"
+						+ moneyInPot;
+				logWriter.println(result);
+			} else if (winnerIndex == -1 && tie == true) {
+				user.setStack(user.getStack() + moneyInPot / 2);
+				players.get(tieIndex).setStack(players.get(tieIndex).getStack() + moneyInPot / 2);
+				result = "There is a tie between you and " + players.get(tieIndex).getName() + " with "
+						+ handType(players.get(tieIndex)) + ", and " + "both of you recieve" + " wins $"
+						+ moneyInPot / 2;
+				logWriter.println(result);
+			} else if (winnerIndex >= 0 && tie == true) {
+				players.get(tieIndex).setStack(players.get(tieIndex).getStack() + moneyInPot / 2);
+				players.get(winnerIndex).setStack(players.get(winnerIndex).getStack() + moneyInPot / 2);
+				result = "There is a tie between " + players.get(tieIndex).getName() + " and "
+						+ players.get(winnerIndex).getName() + " with " + handType(players.get(winnerIndex))
+						+ " ,and both players recieve" + " wins $" + moneyInPot / 2;
+				logWriter.println(result);
+			} else {
+				result = "\nYou win with " + handType(user) + ", and you win $" + moneyInPot;
+				logWriter.println(result);
+				// move the money in the pot to the user's pocket
+				user.setStack(user.getStack() + moneyInPot);
+				userStack.setText("Balance:" + user.getStack());
+				userStack.setForeground(Color.white);
+				player.revalidate();
+
+			}
+
 			// log the end time of the game and close the file writing
 			String endTime = new SimpleDateFormat("dd MMMM yyyy  -  HH : mm").format(Calendar.getInstance().getTime());
 			logWriter.println("\n- Game ends " + endTime);
@@ -845,7 +873,9 @@ public class MainFrame extends JFrame {
 
 		betButton.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
-				if (betAmount <= user.getStack()) {
+
+				if (betAmount <= user.getStack() || betAmount > highBet) {
+
 					userMoved = true;
 					// TODO
 					// dealerID = nextIndex;
@@ -858,6 +888,11 @@ public class MainFrame extends JFrame {
 					userStack.setText("Balance:" + user.getStack());
 					userStack.setForeground(Color.white);
 					player.revalidate();
+					highBet = betAmount;
+					if(user.getStack() <= 0) {
+						
+						user.allIn();
+					}
 					betAmount = 0; // reset the bet amount
 
 					moneyInPotLabel.setText("Money in the pot: " + moneyInPot);
@@ -867,7 +902,8 @@ public class MainFrame extends JFrame {
 					pot.revalidate();
 
 					// TODO
-					//aiCardsRemove();
+
+
 
 					// bet button is disabled before the next round
 					betButton.setEnabled(false);
@@ -915,7 +951,8 @@ public class MainFrame extends JFrame {
 				pot.revalidate();
 				enableButtons();
 				try {
-					betting(true);
+					betting();
+
 				} catch (InterruptedException e1) {
 					// TODO Auto-generated catch block
 					e1.printStackTrace();
@@ -942,6 +979,9 @@ public class MainFrame extends JFrame {
 		callButton.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
 				userMoved = true;
+				moneyInPot += highBet;
+				user.setStack(user.getStack() - highBet);
+
 				logWriter.println(userName + " Has Called.");
 				try {
 					remainingBets();
@@ -953,85 +993,6 @@ public class MainFrame extends JFrame {
 		});
 	}
 
-	private void removeAICards(JPanel panel, int index) {
-		JLabel nameL = new JLabel();
-		JLabel stackL = new JLabel();
-		stackL.setText("Balance: " + players.get(index));
-		stackL.setForeground(Color.white);
-		panel.removeAll();
-		nameL = new JLabel(opponents[index]);
-		panel.add(stackL);
-		panel.add(nameL);
-		panel.repaint();
-		panel.revalidate();
-	}
-
-	private void aiCardsRemove() {
-		JLabel nameL = new JLabel();
-		JLabel n1StackL = new JLabel();
-		n1StackL.setText("Balance: " + 1000);
-		n1StackL.setForeground(Color.white);
-		northAI1.removeAll();
-		nameL = new JLabel(opponents[0]);
-		northAI1.add(n1StackL);
-		northAI1.add(nameL);
-		northAI1.repaint();
-		northAI1.revalidate();
-		JLabel n2StackL = new JLabel();
-		n2StackL.setText("Balance: " + 1000);
-		n2StackL.setForeground(Color.white);
-		northAI2.removeAll();
-		nameL = new JLabel(opponents[1]);
-		northAI2.add(n2StackL);
-		northAI2.add(nameL);
-		northAI2.repaint();
-		northAI2.revalidate();
-		JLabel n3StackL = new JLabel();
-		n3StackL.setText("Balance: " + 1000);
-		n3StackL.setForeground(Color.white);
-		northAI3.removeAll();
-		nameL = new JLabel(opponents[2]);
-		northAI3.add(n3StackL);
-		northAI3.add(nameL);
-		northAI3.repaint();
-		northAI3.revalidate();
-		JLabel w1StackL = new JLabel();
-		w1StackL.setText("Balance: " + 1000);
-		w1StackL.setForeground(Color.white);
-		westAI1.removeAll();
-		nameL = new JLabel(opponents[3]);
-		westAI1.add(w1StackL);
-		westAI1.add(nameL);
-		westAI1.repaint();
-		westAI1.revalidate();
-		JLabel w2StackL = new JLabel();
-		w2StackL.setText("Balance: " + 1000);
-		w2StackL.setForeground(Color.white);
-		westAI2.removeAll();
-		nameL = new JLabel(opponents[4]);
-		westAI2.add(w2StackL);
-		westAI2.add(nameL);
-		westAI2.repaint();
-		westAI2.revalidate();
-		JLabel e1StackL = new JLabel();
-		e1StackL.setText("Balance: " + 1000);
-		e1StackL.setForeground(Color.white);
-		eastAI1.removeAll();
-		nameL = new JLabel(opponents[5]);
-		eastAI1.add(e1StackL);
-		eastAI1.add(nameL);
-		eastAI1.repaint();
-		eastAI1.revalidate();
-		JLabel e2StackL = new JLabel();
-		e2StackL.setText("Balance: " + 1000);
-		e2StackL.setForeground(Color.white);
-		eastAI2.removeAll();
-		nameL = new JLabel(opponents[6]);
-		eastAI2.add(e2StackL);
-		eastAI2.add(nameL);
-		eastAI2.repaint();
-		eastAI2.revalidate();
-	}
 
 	/**
 	 * Add the poker chips images
@@ -1109,7 +1070,7 @@ public class MainFrame extends JFrame {
 				stack = players.get(num).getStack();
 				JLabel nameL = new JLabel(name);
 				JLabel label = new JLabel();
-				label.setText("Balance: " + 1000);
+				label.setText("Balance: " + players.get(num).getStack());
 				label.setForeground(Color.white);
 				panel.add(label);
 				panel.add(nameL);
@@ -1124,7 +1085,7 @@ public class MainFrame extends JFrame {
 			// TODO
 			log(name, 0, c1, c2);
 			JLabel label = new JLabel();
-			label.setText("Balance:" + 1000);
+			label.setText("Balance: " + players.get(num).getStack());
 			label.setForeground(Color.white);
 			panel.add(label);
 			JLabel nameL = new JLabel(name);
@@ -1476,6 +1437,9 @@ public class MainFrame extends JFrame {
 			if (players.get(i).getName().equals(p.getName()) || user.getName().equals(p.getName())) {
 				index = i;
 			}
+
+
+
 		return index;
 	}
 
@@ -1489,31 +1453,37 @@ public class MainFrame extends JFrame {
 		Random rand = new Random();
 		int moves = -1;
 
-		// To determine the AI's action randomly
-		// if not the first round
-		if (round >= 1) {
-			moves = rand.nextInt(2);
+		if (round == 0) {
+
+			moves = rand.nextInt(1);
+
 			if (moves == 0) {
-				p.fold();
-				action = p.getName() + " Has Folded.";
+				int betAmt = 20;
+				p.setStack(p.getStack() - 20);
+				action = p.getName() + " Has Bet " + betAmt;
+				moneyInPot = betAmt + moneyInPot;
 				logWriter.println(action);
 				playerAction.setText(action);
 				playerAction.setFont(new Font("Optima", Font.BOLD, 23));
 				playerAction.setForeground(Color.white);
 				playerAction.revalidate();
+
+				// update money in pot
+				moneyInPotLabel.setText("Money in the pot: " + moneyInPot);
+				moneyInPotLabel.setFont(new Font("Optima", Font.BOLD, 23));
+				moneyInPotLabel.setForeground(Color.white);
+				pot.add(moneyInPotLabel);
+				pot.revalidate();
+
+			} else {
+				p.fold();
+				action = p.getName() + " Has Folded.";
 				JPanel panel = new JPanel();
 				panel = getPanelNum(getPlayerIndex(p));
 				removeAICards(panel, getPlayerIndex(p));
-				//display(getPlayerIndex(p), panel, p.getCard1(), p.getCard2());
-			} else {
-				p.call();
-				action = p.getName() + " Has Called.";
-				logWriter.println(action);
-				playerAction.setText(action);
-				playerAction.setFont(new Font("Optima", Font.BOLD, 23));
-				playerAction.setForeground(Color.white);
-				playerAction.revalidate();
+
 			}
+
 		}
 
 		else if (round == -1) {
@@ -1544,8 +1514,11 @@ public class MainFrame extends JFrame {
 		// if in the first round
 		else {
 			moves = rand.nextInt(3);
+			if(moves == 0 && p.getStack() <=0) {
+				moves ++;
+			}
 			if (moves == 0) {
-				int betAmt = p.bet();
+				int betAmt = p.bet(highBet);
 				action = p.getName() + " Has Bet " + betAmt;
 				moneyInPot = betAmt + moneyInPot;
 				logWriter.println(action);
@@ -1553,6 +1526,7 @@ public class MainFrame extends JFrame {
 				playerAction.setFont(new Font("Optima", Font.BOLD, 23));
 				playerAction.setForeground(Color.white);
 				playerAction.revalidate();
+				highBet = betAmt;
 				// update money in pot
 				moneyInPotLabel.setText("Money in the pot: " + moneyInPot);
 				moneyInPotLabel.setFont(new Font("Optima", Font.BOLD, 23));
@@ -1565,8 +1539,11 @@ public class MainFrame extends JFrame {
 				panel = getPanelNum(getPlayerIndex(p));
 				removeAICards(panel, getPlayerIndex(p));
 				action = p.getName() + " Has Folded.";
+				JPanel panel = new JPanel();
+				panel = getPanelNum(getPlayerIndex(p));
+				removeAICards(panel, getPlayerIndex(p));
 			} else {
-				p.call();
+				p.call(highBet);
 				action = p.getName() + " Has Called.";
 			}
 		}
@@ -1600,6 +1577,9 @@ public class MainFrame extends JFrame {
 			foldButton.setEnabled(true);
 			callButton.setEnabled(true);
 		}
+
+
+
 		clearButton.setEnabled(false);
 	}
 
@@ -1613,12 +1593,23 @@ public class MainFrame extends JFrame {
 		bet25Button.setEnabled(true);
 		bet50Button.setEnabled(true);
 		bet100Button.setEnabled(true);
-		smallBlind.setEnabled(true);
-		bigBlind.setEnabled(true);
+		smallBlind.setEnabled(false);
+		bigBlind.setEnabled(false);
 		clearButton.setEnabled(true);
 	}
 
 	private void smallBlind() throws InterruptedException {
+
+		user.newRoundUnFold();
+		user.newRoundNotAllIn();
+		for (int i = 0; i < players.size(); i++) {
+
+			players.get(i).newRoundUnFold();
+			players.get(i).newRoundNotGone();
+			
+
+		}
+
 		moneyInPotLabel.setText("Money in the pot: " + moneyInPot);
 		moneyInPotLabel.setFont(new Font("Optima", Font.BOLD, 23));
 		moneyInPotLabel.setForeground(Color.white);
@@ -1645,7 +1636,8 @@ public class MainFrame extends JFrame {
 		}
 		// if user is the small blind
 		else {
-			logWriter.println(userName + " is the small blind");
+			logWriter.println("You are the small blind");
+
 			playerAction.setText("You are the small blind");
 			playerAction.setFont(new Font("Optima", Font.BOLD, 23));
 			playerAction.setForeground(Color.white);
@@ -1670,6 +1662,8 @@ public class MainFrame extends JFrame {
 		Player nextS = null;
 		int cur = getDealerID();
 		nextS = findNext(cur);
+		playerHasRaised();
+
 
 		int sbIndex = -1;
 		if (nextS != user && nextS != null)
@@ -1687,14 +1681,15 @@ public class MainFrame extends JFrame {
 			// System.out.println(dealerID + " " + nextIndex);
 			action = nextB.getName() + " is the big blind.";
 			players.get(getPlayerIndex(nextB)).setStack(players.get(getPlayerIndex(nextB)).getStack() - 20);
-			moneyInPot += 20;
+
 			playerAction.setText(action);
 			playerAction.setFont(new Font("Optima", Font.BOLD, 23));
 			playerAction.setForeground(Color.white);
 			playerAction.revalidate();
 			logWriter.println(action);
 			pot.revalidate();
-			betting(true);
+			betting();
+
 		}
 		// If user is not the big blind
 		else {
@@ -1704,24 +1699,21 @@ public class MainFrame extends JFrame {
 			playerAction.setFont(new Font("Optima", Font.BOLD, 23));
 			playerAction.setForeground(Color.white);
 			playerAction.revalidate();
+			playerAction.setText(action);
+			playerAction.setFont(new Font("Optima", Font.BOLD, 23));
+			playerAction.setForeground(Color.white);
+			playerAction.revalidate();
+			logWriter.println(action);
+			pot.revalidate();
+
 			disableButtons(1);
 			// update money in pot
 
 		}
 	}
 
-	private JPanel getPanelNum(int index) {
-		if(index == 0) return northAI1;
-		else if(index == 1) return northAI2;
-		else if(index == 2) return northAI3;
-		else if(index == 3) return westAI1;
-		else if(index == 4) return westAI2;
-		else if(index == 5) return eastAI1;
-		else if(index == 6) return eastAI2;
-		return null;
-	}
+	public void betting() throws InterruptedException {
 
-	public void betting(boolean isBlind) throws InterruptedException {
 
 		// for players not folding
 
@@ -1733,28 +1725,32 @@ public class MainFrame extends JFrame {
 		int cur = getDealerID();
 		Player nextB = findNext(cur);
 		int bbIndex = -1;
+		int scoreCheck = highBet;
+
 		if (nextB != user && nextB != null) {
 
 			bbIndex = getPlayerIndex(nextB);
 		}
 
 		else {
-			bbIndex = players.size();
-			if(isBlind == true) {
-				
+
+			if (isBlind == true) {
+
 				logWriter.println("Player's turn, Calling Bets 20");
 				playerAction.setText("Player's turn, Calling Bets 20");
 				disableButtons(2);
-			}
-			else {
+			} else {
+
 				logWriter.println("Player's turn, Calling Bets 0");
 				playerAction.setText("Player's turn, Calling Bets 0");
 				enableButtons();
 			}
-			
+
 			playerAction.setFont(new Font("Optima", Font.BOLD, 23));
 			playerAction.setForeground(Color.white);
 			playerAction.revalidate();
+			return;
+
 
 		}
 
@@ -1764,7 +1760,12 @@ public class MainFrame extends JFrame {
 
 			if (!next.getFold() && !next.hasGone()) {
 				if (next != user) {
-					aiRandomAction(-1, getPlayerIndex(next), next);
+					if (isBlind == true) {
+						aiRandomAction(0, getPlayerIndex(next), next);
+					} else {
+						aiRandomAction(1, getPlayerIndex(next), next);
+					}
+
 					moneyInPotLabel.setText("Money in the pot: " + moneyInPot);
 					moneyInPotLabel.setFont(new Font("Optima", Font.BOLD, 23));
 					moneyInPotLabel.setForeground(Color.white);
@@ -1776,29 +1777,45 @@ public class MainFrame extends JFrame {
 						bbIndex = players.size();
 					next = findNext(bbIndex);
 				}
+				else if (!user.getFold() || !user.isAllIn()) {
 
-				else {
+					if (isBlind == true) {
 
-					if(isBlind == true) {
-						
 						logWriter.println("Player's turn, Calling Bets 20");
 						playerAction.setText("Player's turn, Calling Bets 20");
 						disableButtons(2);
-					}
-					else {
-						logWriter.println("Player's turn, Calling Bets 0");
-						playerAction.setText("Player's turn, Calling Bets 0");
+					} else {
+						logWriter.println("Player's turn, Calling Bets " + highBet);
+						playerAction.setText("Player's turn, Calling Bets " + highBet);
+
 						enableButtons();
 					}
 					playerAction.setFont(new Font("Optima", Font.BOLD, 23));
 					playerAction.setForeground(Color.white);
 					playerAction.revalidate();
+					pot.revalidate();
+
 					bbIndex = getPlayerIndex(next);
 					if (bbIndex == -1)
 						bbIndex = players.size();
 					next = findNext(bbIndex);
+					
+					if(scoreCheck == highBet ||  isBlind == true) {
+						return;
+					}
+					else if(isBlind == false) {
+						playerHasRaised();
+						betting();
+						
+					}
+
 				}
 			}
+			next = findNext(bbIndex);
+		}
+		if (user.getFold()) {
+			remainingBets();
+
 		}
 
 	}
@@ -1816,12 +1833,7 @@ public class MainFrame extends JFrame {
 
 		else {
 			bbIndex = players.size();
-			logWriter.println("Player's turn");
-			playerAction.setText("Player's turn");
-			playerAction.setFont(new Font("Optima", Font.BOLD, 23));
-			playerAction.setForeground(Color.white);
-			playerAction.revalidate();
-			enableButtons();
+
 
 		}
 
@@ -1831,7 +1843,15 @@ public class MainFrame extends JFrame {
 
 			if (!next.getFold() && !next.hasGone() && nextB != user) {
 				if (next != user) {
-					aiRandomAction(-1, getPlayerIndex(next), next);
+					if (isBlind == true) {
+
+						aiRandomAction(0, getPlayerIndex(next), next);
+					} else {
+
+						aiRandomAction(1, getPlayerIndex(next), next);
+					}
+
+
 					pot.revalidate();
 					next.playerHasGone();
 					bbIndex = getPlayerIndex(next);
@@ -1842,6 +1862,13 @@ public class MainFrame extends JFrame {
 
 			}
 		}
+
+		logWriter.println("Player's turn, Calling Bets " + highBet);
+		playerAction.setText("Player's turn, Calling Bets " + highBet);
+		playerAction.setFont(new Font("Optima", Font.BOLD, 23));
+		playerAction.setForeground(Color.white);
+		playerAction.revalidate();
+		pot.revalidate();
 
 		resetGone();
 		highBet = 0;
@@ -1862,12 +1889,7 @@ public class MainFrame extends JFrame {
 
 		else {
 			bbIndex = players.size();
-			logWriter.println("Player's turn");
-			playerAction.setText("Player's turn");
-			playerAction.setFont(new Font("Optima", Font.BOLD, 23));
-			playerAction.setForeground(Color.white);
-			playerAction.revalidate();
-			enableButtons();
+
 
 		}
 
@@ -1888,4 +1910,48 @@ public class MainFrame extends JFrame {
 			}
 		}
 	}
+
+	private void removeAICards(JPanel panel, int index) {
+		JLabel nameL = new JLabel();
+		JLabel stackL = new JLabel();
+		stackL.setText("Balance: " + players.get(index).getStack());
+		stackL.setForeground(Color.white);
+		panel.removeAll();
+		nameL = new JLabel(opponents[index]);
+		panel.add(stackL);
+		panel.add(nameL);
+		panel.repaint();
+		panel.revalidate();
+	}
+
+	private JPanel getPanelNum(int index) {
+		if (index == 0)
+			return northAI1;
+		else if (index == 1)
+			return northAI2;
+		else if (index == 2)
+			return northAI3;
+		else if (index == 3)
+			return westAI1;
+		else if (index == 4)
+			return westAI2;
+		else if (index == 5)
+			return eastAI1;
+		else if (index == 6)
+			return eastAI2;
+		return null;
+	}
+	
+	private void playerHasRaised() {
+		
+		user.newRoundNotAllIn();
+		for (int i = 0; i < players.size(); i++) {
+
+			players.get(i).newRoundNotGone();
+			
+
+		}
+	}
+
+
 }

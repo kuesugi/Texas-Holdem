@@ -1,7 +1,8 @@
+import java.util.Random;
 
 public class TestWin {
 
-	public static void main(String[] args) {
+	public static void main(String[] args) throws InterruptedException {
 		
 		Card card1 = new Card(6,1);
 		Card card2 = new Card(7,1);
@@ -24,7 +25,19 @@ public class TestWin {
 		
 		System.out.println(user.checkScore(hand1));
 		System.out.println(1000 % 100);
+		System.out.println(bet(10));
+		
+		
 
+	}
+	public static int bet(int highBet) throws InterruptedException{
+		Random rand = new Random();
+		if(highBet == 0) {
+			highBet = 10;
+		}
+		int betAmt = rand.nextInt(201) + highBet;
+		int stack = 100 - betAmt;
+		return betAmt;
 	}
 
 }

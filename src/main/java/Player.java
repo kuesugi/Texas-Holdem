@@ -10,6 +10,7 @@ public class Player {
 	private boolean ifFold = false;
 	private boolean ifOut = false;
 	private boolean allIn = false;
+	private boolean hasGone = false;
 	
 	public Player(boolean ai, String playerName, int playerMoney) {
 		isAI = ai;
@@ -29,9 +30,42 @@ public class Player {
 	public boolean getFold() {
 		return ifFold;
 	}
+	
+	public boolean isAllIn() {
+		return allIn;
+	}
 
 	public boolean isPlayerAi() {
 		return isAI;
+	}
+	
+	public void playerHasGone() {
+		
+		hasGone = true;
+	}
+	
+	public void allIn() {
+		
+		allIn = true;
+	}
+	
+	public void newRoundUnFold() {
+		
+		ifFold = false;
+	}
+	public boolean hasGone() {
+		
+		return hasGone;
+	}
+	
+	public void newRoundNotGone() {
+		
+		hasGone = false;
+	}
+	
+	public void newRoundNotAllIn() {
+		
+		allIn = false;
 	}
 
 	public Card getCard1(){
@@ -62,15 +96,17 @@ public class Player {
 		stack = newStack;
 	}
 
-	public void call() throws InterruptedException{
-		TimeUnit.MILLISECONDS.sleep(560);
-			
+	public void call(int highBet) throws InterruptedException{
+		
+		stack -= highBet; 	
 	}
 
-	public int bet() throws InterruptedException{
-		TimeUnit.MILLISECONDS.sleep(560);
+	public int bet(int highBet) throws InterruptedException{
 		Random rand = new Random();
-		int betAmt = rand.nextInt(201) + 10;
+		if(highBet == 0) {
+			highBet = 10;
+		}
+		int betAmt = rand.nextInt(201) + highBet;
 		stack = stack - betAmt;
 		if(stack == 0) allIn = true;
 		return betAmt;
