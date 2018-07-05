@@ -10,6 +10,7 @@ public class Player {
 	private boolean ifFold = false;
 	private boolean ifOut = false;
 	private boolean allIn = false;
+	private boolean hasGone = false;
 	
 	public Player(boolean ai, String playerName, int playerMoney) {
 		isAI = ai;
@@ -32,6 +33,21 @@ public class Player {
 
 	public boolean isPlayerAi() {
 		return isAI;
+	}
+	
+	public void playerHasGone() {
+		
+		hasGone = true;
+	}
+	
+	public boolean hasGone() {
+		
+		return hasGone;
+	}
+	
+	public void newRoundNotGone() {
+		
+		hasGone = false;
 	}
 
 	public Card getCard1(){
