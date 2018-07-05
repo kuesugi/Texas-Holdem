@@ -1,36 +1,42 @@
        * * * Game Log * * *
-- Game started 04 July 2018  -  18 : 59
-- Username: a6
-- Players: 4
-  Leopold Bloom, Stephen Dedalus, Yelverton Barry, Buck Mulligan
+- Game started 04 July 2018  -  23 : 01
+- Username: a
+- Players: 7
+  Leopold Bloom, Stephen Dedalus, Yelverton Barry, Buck Mulligan, Martin Cunningham, Molly Bloom, Josie Breen
 
 - Hand 1
 
 Preflop:
 Cards Dealt:
-A: hearts six, clubs seven
-A: diamonds queen, diamonds ten
-A: diamonds eight, clubs six
-A: clubs nine, diamonds king
-A: clubs four, hearts nine
+A: clubs seven, clubs five
+A: diamonds seven, spades four
+A: hearts ten, hearts six
+A: spades deuce, clubs jack
+A: hearts five, hearts deuce
+A: clubs eight, spades nine
+A: diamonds king, hearts king
+A: hearts jack, hearts seven
 
 Flop:
-Stephen Dedalus Has Dealt.
-Leopold Bloom is the small blind.
-Leopold Bloom is the big blind.
-a6 Has Called.
+a Has Dealt.
+Martin Cunningham is the small blind.
+Buck Mulligan is the big blind.
+a Has Called.
 
 Turn:
 Leopold Bloom calls
 Stephen Dedalus calls
 Yelverton Barry calls
 Buck Mulligan calls
-a6 Has Called.
+Martin Cunningham calls
+Molly Bloom calls
+Josie Breen calls
+a Has Called.
 
 River:
-a6 Has Called.
+a Has Called.
 
 Final:
-The winner is Stephen Dedalus with A Full House,  Queens High, and Stephen Dedalus wins $60
+The winner is Molly Bloom with A Three of a Kind with Nines, and Molly Bloom wins $161
 
-- Game ends 04 July 2018  -  18 : 59
+- Game ends 04 July 2018  -  23 : 01
