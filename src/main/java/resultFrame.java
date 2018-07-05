@@ -114,16 +114,14 @@ public class resultFrame extends JFrame {
 				// System.out.println(mainFrame.getHandNumber());
 				mainFrame.dispose();
 				// System.out.println(mainFrame.getHandNumber());
-				new MainFrame(user, players, frame);
-				
-				
-				
+				try {
+					new MainFrame(user, players, frame);
+				} catch (InterruptedException e1) {}
 			}
 		});
 		
 		quitButton.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
-				
 				System.exit(0);
 			}
 		});

@@ -1,46 +1,37 @@
        * * * Game Log * * *
-- Game started 04 July 2018  -  16 : 37
+- Game started 05 July 2018  -  01 : 49
 - Username: a
-- Players: 6
-  Leopold Bloom, Stephen Dedalus, Yelverton Barry, Buck Mulligan, Martin Cunningham, Molly Bloom
+- Players: 7
+  Leopold Bloom, Stephen Dedalus, Yelverton Barry, Buck Mulligan, Martin Cunningham, Molly Bloom, Josie Breen
 
 - Hand 1
 
 Preflop:
 Cards Dealt:
-A: spades seven, hearts six
-A: clubs ten, clubs queen
-A: clubs four, clubs ace
-A: spades eight, spades deuce
-A: clubs deuce, diamonds queen
-A: spades four, hearts ace
-A: hearts ten, hearts five
-Martin Cunningham Has Raised 
-Buck Mulligan Has Folded.
-a Has Called.
+Leopold Bloom: clubs ten, diamonds ten
+Stephen Dedalus: diamonds eight, diamonds deuce
+Yelverton Barry: diamonds nine, diamonds five
+Buck Mulligan: spades three, spades ten
+Martin Cunningham: spades six, clubs three
+Molly Bloom: hearts king, diamonds four
+Josie Breen: diamonds king, spades ace
+a: spades nine, hearts jack
+Josie Breen Has Dealt.
+a is the small blind
+Martin Cunningham is the big blind.
+Stephen Dedalus Has Bet 18
+Molly Bloom Has Bet 119
 
 Flop:
-Leopold Bloom calls
-Stephen Dedalus calls
-Yelverton Barry calls
-Buck Mulligan calls
-Martin Cunningham calls
-Molly Bloom calls
 a Has Called.
 
 Turn:
-Leopold Bloom calls
-Stephen Dedalus calls
-Yelverton Barry calls
-Buck Mulligan calls
-Martin Cunningham calls
-Molly Bloom calls
 a Has Called.
 
 River:
 a Has Called.
 
 Final:
-The winner is Stephen Dedalus with A Queen High Straight, and Stephen Dedalus wins $0
+The winner is Stephen Dedalus with A Full House,  Eights High, and Stephen Dedalus wins $147
 
-- Game ends 04 July 2018  -  16 : 37
+- Game ends 05 July 2018  -  01 : 49

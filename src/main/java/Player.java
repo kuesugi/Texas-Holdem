@@ -1,4 +1,5 @@
 import java.util.Random;
+import java.util.concurrent.TimeUnit;
 
 public class Player {
 	
@@ -8,6 +9,7 @@ public class Player {
 	private Hand playerHand;
 	private boolean ifFold = false;
 	private boolean ifOut = false;
+	private boolean allIn = false;
 	
 	public Player(boolean ai, String playerName, int playerMoney) {
 		isAI = ai;
@@ -60,16 +62,29 @@ public class Player {
 		stack = newStack;
 	}
 
-	public void call(){
-		
+	public void call() throws InterruptedException{
+		TimeUnit.MILLISECONDS.sleep(560);
 			
 	}
 
-	public void bet(){
-		
+	public int bet() throws InterruptedException{
+		TimeUnit.MILLISECONDS.sleep(560);
+		Random rand = new Random();
+		int betAmt = rand.nextInt(201) + 10;
+		stack = stack - betAmt;
+		if(stack == 0) allIn = true;
+		return betAmt;
 	}
 	
-	public void fold() {
+	public void blind(int betAmt) throws InterruptedException {
+		TimeUnit.MILLISECONDS.sleep(560);
+		stack -= betAmt;
+		if(stack == 0)
+			allIn = true;
+	}
+	
+	public void fold() throws InterruptedException {
+		TimeUnit.MILLISECONDS.sleep(560);
 		setFold();
 	}
 	
@@ -84,44 +99,5 @@ public class Player {
 	
 	public boolean ifOutOfGame() {
 		return ifOut;
-	}
-	// 0 - raise; 1 - fold; 2 - call;
-	public String aiRandomAction(int round) {
-		String action = "";
-		Random rand = new Random();
-		int moves = -1;
-		
-		// To determine the AI's action randomly
-		// if not the first round
-		if(round >= 1) {
-			moves = rand.nextInt(3) + 1;
-			if(moves == 2) {
-				fold();
-				action = name + " Has Folded.";
-			}
-			else if (moves == 3){
-				call();
-				action = name + " Has Called.";
-			}
-			else {}
-		}
-		// if in the first round
-		else {
-			moves = rand.nextInt(3);
-			if(moves == 0) {
-				// TODO: raised how much money
-				action = name + " Has Raised ";
-			}
-			else if(moves == 1) {
-				fold();
-				action = name + " Has Folded.";
-			}
-			else {
-				call();
-				action = name + " Has Called.";
-			}
-		}
-		// System.out.println(moves);
-		return action;
 	}
 }
