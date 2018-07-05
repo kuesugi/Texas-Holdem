@@ -1539,7 +1539,6 @@ public class MainFrame extends JFrame {
 				panel = getPanelNum(getPlayerIndex(p));
 				removeAICards(panel, getPlayerIndex(p));
 				action = p.getName() + " Has Folded.";
-				JPanel panel = new JPanel();
 				panel = getPanelNum(getPlayerIndex(p));
 				removeAICards(panel, getPlayerIndex(p));
 			} else {
@@ -1694,6 +1693,7 @@ public class MainFrame extends JFrame {
 		// If user is not the big blind
 		else {
 			pot.revalidate();
+			action = ("You the big blind");
 			logWriter.println("You the big blind");
 			playerAction.setText("You are the big blind");
 			playerAction.setFont(new Font("Optima", Font.BOLD, 23));
