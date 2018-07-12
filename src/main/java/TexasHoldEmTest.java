@@ -83,7 +83,7 @@ class TexasHoldEmTest {
 		hand.addCard(card5);
 		hand.addCard(card6);
 		hand.addCard(card7);
-		player.getHand().checkScore(hand, false);
+		player.getHand().checkScore(hand);
 		assertEquals(510, player.getHand().getScore());
 	}
 	
@@ -104,7 +104,7 @@ class TexasHoldEmTest {
 		hand.addCard(card5);
 		hand.addCard(card6);
 		hand.addCard(card7);
-		player.getHand().checkScore(hand, false);
+		player.getHand().checkScore(hand);
 		assertEquals(204, player.getHand().getScore());
 	}
 	
@@ -125,7 +125,7 @@ class TexasHoldEmTest {
 		hand.addCard(card5);
 		hand.addCard(card6);
 		hand.addCard(card7);
-		player.getHand().checkScore(hand, false);
+		player.getHand().checkScore(hand);
 		assertEquals(308, player.getHand().getScore());
 	}
 	@Test
@@ -145,7 +145,7 @@ class TexasHoldEmTest {
 		hand.addCard(card5);
 		hand.addCard(card6);
 		hand.addCard(card7);
-		player.getHand().checkScore(hand, false);
+		player.getHand().checkScore(hand);
 		Player player2 = new Player(false, "Joey", 1000);
 		card1a = new Card(11,1);
 		card2a = new Card(7,2);
@@ -172,7 +172,7 @@ class TexasHoldEmTest {
 		hand.addCard(card5);
 		hand.addCard(card6);
 		hand.addCard(card7);
-		player.getHand().checkScore(hand, false);
+		player.getHand().checkScore(hand);
 		Player player2 = new Player(false, "Joey", 1000);
 		card1a = new Card(11,1);
 		player2.setCard1(card1a);
@@ -198,7 +198,7 @@ class TexasHoldEmTest {
 		hand.addCard(card5);
 		hand.addCard(card6);
 		hand.addCard(card7);
-		player.getHand().checkScore(hand, false);
+		player.getHand().checkScore(hand);
 		Player player2 = new Player(false, "Joey", 1000);
 		card1a = new Card(11,1);
 		player2.setCard1(card1a);
@@ -224,7 +224,7 @@ class TexasHoldEmTest {
 		hand.addCard(card5);
 		hand.addCard(card6);
 		hand.addCard(card7);
-		player.getHand().checkScore(hand, false);
+		player.getHand().checkScore(hand);
 		Player player2 = new Player(false, "Joey", 1000);
 		player2.setCard1(card1);
 		player2.setCard2(card2);
