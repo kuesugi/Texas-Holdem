@@ -32,7 +32,7 @@ public class MainMenu extends JFrame implements ActionListener {
 	private JTextField nameField = new JTextField();
 	private JTextField numberField = new JTextField();
 	private JLabel startWarning = new JLabel("");//Give a base from which to write any error messages
-	JLabel label;
+	JLabel avatar;
 	/**
 	 * Sets size of the frame
 	 */
@@ -90,11 +90,7 @@ public class MainMenu extends JFrame implements ActionListener {
 	    btnBrowse.setFont(new Font("Gill Sans MT Ext Condensed Bold", Font.PLAIN, 13));
 	    btnBrowse.addActionListener(this);//Initializes the button listener
 	
-	    label = new JLabel();
-	    label.setBounds(10,10,45,45);
-	    add(btnBrowse);
-	    add(label);
-		
+
 		
 		startWarning.setFont(new Font("Gill Sans MT Condensed", Font.PLAIN, 14));
 		startWarning.setForeground(new Color(255, 255, 255));
@@ -106,6 +102,10 @@ public class MainMenu extends JFrame implements ActionListener {
 					.addContainerGap()
 					.addComponent(MainTitle, GroupLayout.PREFERRED_SIZE, 658, GroupLayout.PREFERRED_SIZE)
 					.addContainerGap(GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+				.addGroup(Alignment.LEADING, gl_contentPane.createSequentialGroup()
+						.addContainerGap()
+						.addComponent(MainTitle, GroupLayout.PREFERRED_SIZE, 658, GroupLayout.PREFERRED_SIZE)
+						.addContainerGap(GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
 				.addGroup(Alignment.LEADING, gl_contentPane.createSequentialGroup()
 					.addGap(65)
 					.addComponent(nameLabel, GroupLayout.PREFERRED_SIZE, 130, GroupLayout.PREFERRED_SIZE)
@@ -131,6 +131,11 @@ public class MainMenu extends JFrame implements ActionListener {
 					.addComponent(btnStart, GroupLayout.PREFERRED_SIZE, 312, GroupLayout.PREFERRED_SIZE)
 					.addContainerGap(181, Short.MAX_VALUE))
 		);
+		
+	    avatar = new JLabel();
+	    avatar.setBounds(10,10,45,45);
+	    add(avatar);
+
 		gl_contentPane.setVerticalGroup(
 			gl_contentPane.createParallelGroup(Alignment.LEADING)
 				.addGroup(Alignment.TRAILING, gl_contentPane.createSequentialGroup()
@@ -151,6 +156,8 @@ public class MainMenu extends JFrame implements ActionListener {
 					.addComponent(btnStart)
 					.addGap(15))
 		);
+		
+
 		contentPane.setLayout(gl_contentPane);
 	    
 		btnBrowse.addActionListener(new ActionListener() {
@@ -167,7 +174,7 @@ public class MainMenu extends JFrame implements ActionListener {
 	          if(result == JFileChooser.APPROVE_OPTION){
 	              File selectedFile = file.getSelectedFile();
 	              String path = selectedFile.getAbsolutePath();
-	              label.setIcon(ResizeImage(path));
+	              avatar.setIcon(ResizeImage(path));
 	          }
 	           //if the user click on save in Jfilechooser
 
@@ -225,7 +232,7 @@ public class MainMenu extends JFrame implements ActionListener {
    {
        ImageIcon MyImage = new ImageIcon(ImagePath);
        Image img = MyImage.getImage();
-       Image newImg = img.getScaledInstance(label.getWidth(), label.getHeight(), Image.SCALE_SMOOTH);
+       Image newImg = img.getScaledInstance(avatar.getWidth(), avatar.getHeight(), Image.SCALE_SMOOTH);
        ImageIcon image = new ImageIcon(newImg);
        return image;
    }
