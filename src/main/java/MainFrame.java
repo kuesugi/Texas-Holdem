@@ -4,28 +4,25 @@ import java.awt.List;
 import java.io.*;
 import java.lang.reflect.Array;
 import java.util.*;
+import java.util.Timer;
 import java.util.concurrent.TimeUnit;
 import java.util.jar.Attributes.Name;
 import java.text.SimpleDateFormat;
 
 import javax.swing.*;
-import javax.swing.Timer;
 import javax.swing.border.EmptyBorder;
 import javax.imageio.*;
 
 @SuppressWarnings("unchecked")
 
 public class MainFrame extends JFrame {
-	// to convert and display images
 	private Image stackImage;
 	private Image chips;
 	private Image back;
-
-	// AI and card
+	private Timer timer;
+	static private int theme = 0;
 	private int numOfAI;
 	private int cardCount = 51;
-
-	// the frame structures
 	private JPanel northAI1 = new JPanel();
 	private JPanel northAI2 = new JPanel();
 	private JPanel northAI3 = new JPanel();
@@ -48,6 +45,9 @@ public class MainFrame extends JFrame {
 	private JLabel dealerLabel = new JLabel();
 	private JLabel dealerIDLabel = new JLabel();
 	private JLabel handLabel = new JLabel();
+	private JPanel timerPanel = new JPanel();
+	private JLabel timerTextLabel = new JLabel();
+	private static JLabel timerLabel = new JLabel();
 
 	// USER OPTION BUTTONS
 	private int betAmount = 0;
@@ -79,7 +79,6 @@ public class MainFrame extends JFrame {
 	// AIs array
 	private ArrayList<Player> players;
 	private static ArrayList<Card> deck;
-	private boolean setTransition = false;
 
 	// initialize the log file
 	static PrintWriter logWriter = null;
@@ -96,15 +95,16 @@ public class MainFrame extends JFrame {
 	 * 
 	 * @throws InterruptedException
 	 */
-	public MainFrame(Player newUser, ArrayList<Player> newPlayers) throws InterruptedException {
+	public MainFrame(Player newUser, ArrayList<Player> newPlayers, int whichTheme) throws InterruptedException {
 		super("Texas Hold'em");
 		user = newUser;
 		userName = user.getName();
 		players = (ArrayList<Player>) newPlayers.clone();
-		for(int i = 0; i < players.size(); i++) {
-			
-			if(players.get(i).getStack() <= 0) {
-				
+		theme = whichTheme;
+		for (int i = 0; i < players.size(); i++) {
+
+			if (players.get(i).getStack() <= 0) {
+
 				players.remove(i);
 			}
 		}
@@ -133,10 +133,11 @@ public class MainFrame extends JFrame {
 	/**
 	 * @wbp.parser.constructor
 	 */
-	public MainFrame(Player user2, ArrayList<Player> players2, JFrame frame) throws InterruptedException {
+	public MainFrame(Player user2, ArrayList<Player> players2, JFrame frame, int themeMode)
+			throws InterruptedException {
 		frame.setVisible(false);
 		frame.dispose();
-		new MainFrame(user2, players2);
+		new MainFrame(user2, players2, themeMode);
 	}
 
 	/**
@@ -183,7 +184,30 @@ public class MainFrame extends JFrame {
 	private void initFrame() throws InterruptedException {
 		setBounds(100, 100, 450, 300);
 		JPanel contentPane = new JPanel();
-		contentPane.setBackground(new Color(9, 120, 0));
+		
+		if (theme == 1) {
+			contentPane.setBackground(new Color(22, 65, 111));
+			pot.setBackground(new Color(42, 84, 136));
+			fiveCards.setBackground(new Color(42, 84, 136));
+			playerAction.setBackground(new Color(42, 84, 136));		
+			p.setBackground(new Color(31, 114, 205));
+			p2.setBackground(new Color(31, 114, 205));
+			p3.setBackground(new Color(31, 114, 205));
+			timerPanel.setBackground(new Color(31, 114, 205));
+			player.setBackground(new Color(31, 114, 205));
+		}
+		else {
+			contentPane.setBackground(new Color(9, 120, 0));
+			pot.setBackground(new Color(4, 95, 0));
+			fiveCards.setBackground(new Color(4, 95, 0));
+			playerAction.setBackground(new Color(4, 95, 0));
+			p.setBackground(new Color(43, 151, 0));
+			p2.setBackground(new Color(43, 151, 0));
+			p3.setBackground(new Color(43, 151, 0));
+			timerPanel.setBackground(new Color(43, 151, 0));
+			player.setBackground(new Color(43, 151, 0));
+		}
+		
 		contentPane.setBorder(new EmptyBorder(5, 5, 5, 5));
 		setContentPane(contentPane);
 		getContentPane().setLayout(null);
@@ -260,16 +284,13 @@ public class MainFrame extends JFrame {
 		// CENTER
 		// stack chips
 		setPokerChips();
-		pot.setBackground(new Color(4, 95, 0));
 		pot.setBorder(BorderFactory.createLineBorder(Color.white, 3));
 		pot.setBounds(326, 180, 630, 320);
 		// space holding the five cards
-		fiveCards.setBackground(new Color(4, 95, 0));
 		fiveCards.setBorder(BorderFactory.createLineBorder(Color.white, 2));
 		fiveCards.setBounds(336, 220, 430, 95);
 		getContentPane().add(fiveCards);
 		handLabel.setText("Hand " + handNumber);
-		handLabel.setBackground(new Color(43, 151, 0));
 		handLabel.setFont(new Font("Optima", Font.BOLD, 23));
 		handLabel.setForeground(Color.yellow);
 		pot.add(handLabel);
@@ -277,7 +298,6 @@ public class MainFrame extends JFrame {
 		moneyInPotLabel.setFont(new Font("Optima", Font.BOLD, 23));
 		moneyInPotLabel.setForeground(Color.white);
 		pot.add(moneyInPotLabel);
-		playerAction.setBackground(new Color(4, 95, 0));
 		playerAction.setBorder(BorderFactory.createLineBorder(Color.white, 2));
 		playerAction.setBounds(336, 325, 430, 165);
 		getContentPane().add(playerAction);
@@ -288,7 +308,6 @@ public class MainFrame extends JFrame {
 		dealerLabel.setBounds(772, 320, 100, 25);
 		getContentPane().add(dealerLabel);
 		// name of the dealer
-		dealerIDLabel.setBackground(new Color(4, 95, 0));
 		dealerIDLabel.setBorder(BorderFactory.createLineBorder(Color.white, 2));
 		dealerIDLabel.setBounds(772, 353, 175, 137);
 		getContentPane().add(dealerIDLabel);
@@ -302,21 +321,33 @@ public class MainFrame extends JFrame {
 		}
 
 		// SOUTH
-		player.setBackground(new Color(43, 151, 0));
+		timerTextLabel.setBounds(10, 500, 110, 30);
+		timerTextLabel.setText("Time Left:");
+		timerTextLabel.setFont(new Font("Optima", Font.BOLD, 20));
+		timerTextLabel.setForeground(Color.white);
+		
+		timerPanel.setBorder(BorderFactory.createLineBorder(Color.white, 2));
+		timerPanel.setBounds(10, 531, 110, 40);
+
+		timerLabel.setText("-- s");
+		timerLabel.setFont(new Font("Optima", Font.BOLD, 20));
+		timerLabel.setForeground(Color.white);
+		timerPanel.add(timerLabel);
+
+		add(timerTextLabel);
+		add(timerPanel);
+
 		player.setBorder(BorderFactory.createLineBorder(Color.white, 2));
 		player.setBounds(135, 506, 1050, 196);
+
 		centerHand.addCard(deck.get(cardCount--));
 		centerHand.addCard(deck.get(cardCount--));
 		centerHand.addCard(deck.get(cardCount--));
 		initAI(player, -1, 0);
-		getContentPane().add(player);
+		add(player);
 		betButton.setEnabled(false);
 
 		// FORMATTING FOR USER OPTIONS (in SOUTH)
-		p.setBackground(new Color(43, 151, 0));
-		p2.setBackground(new Color(43, 151, 0));
-		p3.setBackground(new Color(43, 151, 0));
-
 		p.add(betButton);
 		p.add(callButton);
 		p.add(smallBlind);
@@ -346,7 +377,37 @@ public class MainFrame extends JFrame {
 		// START GAME!
 		showRoundAndHand();
 		setVisible(true);
+		counter();
 		gameStart();
+	}
+
+	/*
+	 * private void counter() { Thread timerThread = new Thread();
+	 * 
+	 * }
+	 */
+
+	private void counter() {
+		if (timer != null)
+			timer.cancel();
+		timer = new Timer();
+		timer.schedule(new timeTask(), 0, 1000);
+		/*
+		 * Thread timerThread = new Thread() { public void run() {} };
+		 * timerThread.start();
+		 */
+	}
+
+	static class timeTask extends TimerTask {
+		int timeLeft = 5;
+
+		public void run() {
+			timerLabel.setText(timeLeft + " s");
+			timerLabel.revalidate();
+			timeLeft--;
+			if (timeLeft == -1)
+				cancel();
+		}
 	}
 
 	/**
@@ -435,7 +496,6 @@ public class MainFrame extends JFrame {
 			roundLabel.setText("Round: Turn");
 		else if (gameRound == 3)
 			roundLabel.setText("Round: River");
-		roundLabel.setBackground(new Color(43, 151, 0));
 		roundLabel.setFont(new Font("Optima", Font.BOLD, 23));
 		roundLabel.setForeground(Color.yellow);
 		pot.add(roundLabel);
@@ -462,9 +522,7 @@ public class MainFrame extends JFrame {
 			displayCenterCards(centerHand, 1);
 			centerHand.addCard(deck.get(cardCount--));
 			showRoundAndHand();
-
 			betting();
-
 		}
 		// to enter the turn round
 		else if (gameRound == 1) {
@@ -473,7 +531,6 @@ public class MainFrame extends JFrame {
 			centerHand.addCard(deck.get(cardCount--));
 			showRoundAndHand();
 			betting();
-
 		}
 		// to enter the river round
 		else if (gameRound == 2) {
@@ -488,7 +545,6 @@ public class MainFrame extends JFrame {
 			}
 			showRoundAndHand();
 			betting();
-
 		}
 		// to get the result
 		else if (gameRound == 3) {
@@ -591,7 +647,6 @@ public class MainFrame extends JFrame {
 			}
 
 			if (winnerIndex == -1 && tie == false) {
-
 				user.setStack(user.getStack() + moneyInPot);
 				result = "\nYou win with " + handType(user) + ", and you win $" + moneyInPot;
 				logWriter.println(result);
@@ -627,7 +682,6 @@ public class MainFrame extends JFrame {
 				userStack.setText("Balance:" + user.getStack());
 				userStack.setForeground(Color.white);
 				player.revalidate();
-
 			}
 
 			// log the end time of the game and close the file writing
@@ -646,7 +700,7 @@ public class MainFrame extends JFrame {
 			// centerHand = new Hand();
 
 			// pop-up window showing the result
-			new resultFrame(result, user, players, this, logWriter);
+			new resultFrame(result, user, players, this, logWriter, theme);
 		} else
 			return;
 	}
@@ -667,7 +721,6 @@ public class MainFrame extends JFrame {
 		}
 
 		else {
-
 			action = userName + " Has Dealt.";
 		}
 
@@ -889,8 +942,8 @@ public class MainFrame extends JFrame {
 					userStack.setForeground(Color.white);
 					player.revalidate();
 					highBet = betAmount;
-					if(user.getStack() <= 0) {
-						
+					if (user.getStack() <= 0) {
+
 						user.allIn();
 					}
 					betAmount = 0; // reset the bet amount
@@ -900,10 +953,6 @@ public class MainFrame extends JFrame {
 					moneyInPotLabel.setForeground(Color.white);
 					pot.add(moneyInPotLabel);
 					pot.revalidate();
-
-					// TODO
-
-
 
 					// bet button is disabled before the next round
 					betButton.setEnabled(false);
@@ -921,7 +970,6 @@ public class MainFrame extends JFrame {
 
 		smallBlind.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
-
 				user.setStack(user.getStack() - 10);
 				moneyInPot += 10;
 				moneyInPotLabel.setText("Money in the pot: " + moneyInPot);
@@ -941,7 +989,6 @@ public class MainFrame extends JFrame {
 
 		bigBlind.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
-
 				user.setStack(user.getStack() - 20);
 				moneyInPot += 20;
 				moneyInPotLabel.setText("Money in the pot: " + moneyInPot);
@@ -957,7 +1004,6 @@ public class MainFrame extends JFrame {
 					// TODO Auto-generated catch block
 					e1.printStackTrace();
 				}
-
 			}
 		});
 
@@ -972,7 +1018,6 @@ public class MainFrame extends JFrame {
 					// TODO Auto-generated catch block
 					e1.printStackTrace();
 				}
-
 			}
 		});
 
@@ -981,7 +1026,6 @@ public class MainFrame extends JFrame {
 				userMoved = true;
 				moneyInPot += highBet;
 				user.setStack(user.getStack() - highBet);
-
 				logWriter.println(userName + " Has Called.");
 				try {
 					remainingBets();
@@ -992,7 +1036,6 @@ public class MainFrame extends JFrame {
 			}
 		});
 	}
-
 
 	/**
 	 * Add the poker chips images
@@ -1131,20 +1174,29 @@ public class MainFrame extends JFrame {
 	 * Set the north AI players
 	 */
 	private void setNorth() {
-		northAI1.setBackground(new Color(43, 151, 0));
+		if (theme == 1)
+			northAI1.setBackground(new Color(31, 114, 205));
+		else
+			northAI1.setBackground(new Color(43, 151, 0));
 		northAI1.setBorder(BorderFactory.createLineBorder(Color.white, 2));
 		northAI1.setBounds(95, 30, 310, 130);
 		initAI(northAI1, 0, 0);
 		getContentPane().add(northAI1);
 		if (numOfAI == 2 || numOfAI == 3 || numOfAI > 3) {
-			northAI2.setBackground(new Color(43, 151, 0));
+			if (theme == 1)
+				northAI2.setBackground(new Color(31, 114, 205));
+			else
+				northAI2.setBackground(new Color(43, 151, 0));
 			northAI2.setBorder(BorderFactory.createLineBorder(Color.white, 2));
 			northAI2.setBounds(481, 30, 310, 130);
 			initAI(northAI2, 1, 0);
 			getContentPane().add(northAI2);
 		}
 		if (numOfAI == 3 || numOfAI > 3) {
-			northAI3.setBackground(new Color(43, 151, 0));
+			if (theme == 1)
+				northAI3.setBackground(new Color(31, 114, 205));
+			else
+				northAI3.setBackground(new Color(43, 151, 0));
 			northAI3.setBorder(BorderFactory.createLineBorder(Color.white, 2));
 			northAI3.setBounds(866, 30, 310, 130);
 			initAI(northAI3, 2, 0);
@@ -1156,13 +1208,19 @@ public class MainFrame extends JFrame {
 	 * Set the west AI players
 	 */
 	private void setWest() {
-		westAI1.setBackground(new Color(43, 151, 0));
+		if (theme == 1)
+			westAI1.setBackground(new Color(31, 114, 205));
+		else
+			westAI1.setBackground(new Color(43, 151, 0));
 		westAI1.setBorder(BorderFactory.createLineBorder(Color.white, 2));
 		westAI1.setBounds(10, 180, 310, 130);
 		initAI(westAI1, 3, 0);
 		getContentPane().add(westAI1);
 		if (numOfAI == 5 || numOfAI > 5) {
-			westAI2.setBackground(new Color(43, 151, 0));
+			if (theme == 1)
+				westAI2.setBackground(new Color(31, 114, 205));
+			else
+				westAI2.setBackground(new Color(43, 151, 0));
 			westAI2.setBorder(BorderFactory.createLineBorder(Color.white, 2));
 			westAI2.setBounds(10, 330, 310, 130);
 			initAI(westAI2, 4, 0);
@@ -1174,13 +1232,19 @@ public class MainFrame extends JFrame {
 	 * Set the east AI players
 	 */
 	private void setEast() {
-		eastAI1.setBackground(new Color(43, 151, 0));
+		if (theme == 1)
+			eastAI1.setBackground(new Color(31, 114, 205));
+		else
+			eastAI1.setBackground(new Color(43, 151, 0));
 		eastAI1.setBorder(BorderFactory.createLineBorder(Color.white, 2));
 		eastAI1.setBounds(962, 180, 310, 130);
 		initAI(eastAI1, 5, 0);
 		getContentPane().add(eastAI1);
 		if (numOfAI == 7) {
-			eastAI2.setBackground(new Color(43, 151, 0));
+			if (theme == 1)
+				eastAI2.setBackground(new Color(31, 114, 205));
+			else
+				eastAI2.setBackground(new Color(43, 151, 0));
 			eastAI2.setBorder(BorderFactory.createLineBorder(Color.white, 2));
 			eastAI2.setBounds(962, 330, 310, 130);
 			initAI(eastAI2, 6, 0);
@@ -1437,9 +1501,6 @@ public class MainFrame extends JFrame {
 			if (players.get(i).getName().equals(p.getName()) || user.getName().equals(p.getName())) {
 				index = i;
 			}
-
-
-
 		return index;
 	}
 
@@ -1514,8 +1575,8 @@ public class MainFrame extends JFrame {
 		// if in the first round
 		else {
 			moves = rand.nextInt(3);
-			if(moves == 0 && p.getStack() <=0) {
-				moves ++;
+			if (moves == 0 && p.getStack() <= 0) {
+				moves++;
 			}
 			if (moves == 0) {
 				int betAmt = p.bet(highBet);
@@ -1577,8 +1638,6 @@ public class MainFrame extends JFrame {
 			callButton.setEnabled(true);
 		}
 
-
-
 		clearButton.setEnabled(false);
 	}
 
@@ -1605,7 +1664,6 @@ public class MainFrame extends JFrame {
 
 			players.get(i).newRoundUnFold();
 			players.get(i).newRoundNotGone();
-			
 
 		}
 
@@ -1663,7 +1721,6 @@ public class MainFrame extends JFrame {
 		nextS = findNext(cur);
 		playerHasRaised();
 
-
 		int sbIndex = -1;
 		if (nextS != user && nextS != null)
 			sbIndex = getPlayerIndex(nextS);
@@ -1714,7 +1771,6 @@ public class MainFrame extends JFrame {
 
 	public void betting() throws InterruptedException {
 
-
 		// for players not folding
 
 		moneyInPotLabel.setText("Money in the pot: " + moneyInPot);
@@ -1751,7 +1807,6 @@ public class MainFrame extends JFrame {
 			playerAction.revalidate();
 			return;
 
-
 		}
 
 		Player next = null;
@@ -1776,8 +1831,7 @@ public class MainFrame extends JFrame {
 					if (bbIndex == -1)
 						bbIndex = players.size();
 					next = findNext(bbIndex);
-				}
-				else if (!user.getFold() || !user.isAllIn()) {
+				} else if (!user.getFold() || !user.isAllIn()) {
 
 					if (isBlind == true) {
 
@@ -1799,14 +1853,13 @@ public class MainFrame extends JFrame {
 					if (bbIndex == -1)
 						bbIndex = players.size();
 					next = findNext(bbIndex);
-					
-					if(scoreCheck == highBet ||  isBlind == true) {
+
+					if (scoreCheck == highBet || isBlind == true) {
 						return;
-					}
-					else if(isBlind == false) {
+					} else if (isBlind == false) {
 						playerHasRaised();
 						betting();
-						
+
 					}
 
 				}
@@ -1834,7 +1887,6 @@ public class MainFrame extends JFrame {
 		else {
 			bbIndex = players.size();
 
-
 		}
 
 		Player next = null;
@@ -1850,7 +1902,6 @@ public class MainFrame extends JFrame {
 
 						aiRandomAction(1, getPlayerIndex(next), next);
 					}
-
 
 					pot.revalidate();
 					next.playerHasGone();
@@ -1889,7 +1940,6 @@ public class MainFrame extends JFrame {
 
 		else {
 			bbIndex = players.size();
-
 
 		}
 
@@ -1941,17 +1991,15 @@ public class MainFrame extends JFrame {
 			return eastAI2;
 		return null;
 	}
-	
+
 	private void playerHasRaised() {
-		
+
 		user.newRoundNotAllIn();
 		for (int i = 0; i < players.size(); i++) {
 
 			players.get(i).newRoundNotGone();
-			
 
 		}
 	}
-
 
 }
