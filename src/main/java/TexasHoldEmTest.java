@@ -151,7 +151,7 @@ class TexasHoldEmTest {
 		card2a = new Card(7,2);
 		player2.setCard1(card1a);
 		player2.setCard2(card2a);
-		player2.getHand().checkScore(hand, false);
+		player2.getHand().checkScore(hand);
 		assertEquals(2, tieBreaker(player, player2));
 	}
 	
@@ -177,7 +177,7 @@ class TexasHoldEmTest {
 		card1a = new Card(11,1);
 		player2.setCard1(card1a);
 		player2.setCard2(card2);
-		player2.getHand().checkScore(hand, false);
+		player2.getHand().checkScore(hand);
 		assertEquals(2, tieBreaker(player, player2));
 	}
 	
@@ -203,7 +203,7 @@ class TexasHoldEmTest {
 		card1a = new Card(11,1);
 		player2.setCard1(card1a);
 		player2.setCard2(card2);
-		player2.getHand().checkScore(hand, false);
+		player2.getHand().checkScore(hand);
 		assertEquals(2, tieBreaker(player, player2));
 	}
 	
@@ -228,7 +228,7 @@ class TexasHoldEmTest {
 		Player player2 = new Player(false, "Joey", 1000);
 		player2.setCard1(card1);
 		player2.setCard2(card2);
-		player2.getHand().checkScore(hand, false);
+		player2.getHand().checkScore(hand);
 		assertEquals(0, tieBreaker(player, player2));
 	}
 	
@@ -260,7 +260,7 @@ class TexasHoldEmTest {
 					p.fold();
 					action = p.getName() + " Has Folded.";
 				} else{
-					p.call();
+					p.call(1);
 					action = p.getName() + " Has Called.";
 				}
 			}
@@ -268,14 +268,14 @@ class TexasHoldEmTest {
 			else {
 				moves = rand.nextInt(3);
 				if (moves == 0) {
-					int betAmt = p.bet();
+					int betAmt = p.bet(1);
 					action = p.getName() + " Has Bet " + betAmt;
 					moneyInPot = betAmt + moneyInPot;
 				} else if (moves == 1) {
 					p.fold();
 					action = p.getName() + " Has Folded.";
 				} else {
-					p.call();
+					p.call(1);
 					action = p.getName() + " Has Called.";
 				}
 			}

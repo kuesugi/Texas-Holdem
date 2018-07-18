@@ -457,6 +457,7 @@ public class MainFrame extends JFrame {
 			// go to the moves for the first round
 
 			// log the round name
+			highBet = 0;
 			isBlind = false;
 			logWriter.println("\nFlop:");
 			displayCenterCards(centerHand, 1);
@@ -468,6 +469,7 @@ public class MainFrame extends JFrame {
 		}
 		// to enter the turn round
 		else if (gameRound == 1) {
+			highBet = 0;
 			logWriter.println("\nTurn:");
 			displayCenterCards(centerHand, 2);
 			centerHand.addCard(deck.get(cardCount--));
@@ -477,6 +479,7 @@ public class MainFrame extends JFrame {
 		}
 		// to enter the river round
 		else if (gameRound == 2) {
+			highBet = 0;
 			logWriter.println("\nRiver:");
 			displayCenterCards(centerHand, 3);
 			if (user.getFold())
@@ -498,6 +501,7 @@ public class MainFrame extends JFrame {
 			 * System.out.println(players.get(i).aiRandomAction(0, 0)); }
 			 */
 
+			highBet = 0;
 			logWriter.println("\nFinal:");
 			String result = new String();
 			gameRound++;
@@ -1693,7 +1697,7 @@ public class MainFrame extends JFrame {
 		// If user is not the big blind
 		else {
 			pot.revalidate();
-			action = ("You the big blind");
+			action = nextB.getName() + " is the big blind.";
 			logWriter.println("You the big blind");
 			playerAction.setText("You are the big blind");
 			playerAction.setFont(new Font("Optima", Font.BOLD, 23));
@@ -1729,6 +1733,13 @@ public class MainFrame extends JFrame {
 
 		if (nextB != user && nextB != null) {
 
+			bbIndex = getPlayerIndex(nextB);
+		}
+		
+		else if(user.getFold() && nextB != null) {
+			
+			bbIndex = getPlayerIndex(nextB);
+			nextB = findNext(bbIndex);
 			bbIndex = getPlayerIndex(nextB);
 		}
 
