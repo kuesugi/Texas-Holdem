@@ -32,8 +32,8 @@ public class resultFrame extends JFrame {
 	 * @param players 
 	 * @param user 
 	 */
-	public resultFrame(String result, Player user, ArrayList<Player> players, MainFrame mainFrame, PrintWriter logWriter) {
-		initialize(result, user, players, mainFrame, logWriter);
+	public resultFrame(String result, Player user, ArrayList<Player> players, MainFrame mainFrame, JLabel avatar, PrintWriter logWriter) {
+		initialize(result, user, players, mainFrame, avatar, logWriter);
 	}
 
 	/**
@@ -42,7 +42,7 @@ public class resultFrame extends JFrame {
 	 * @param players 
 	 * @param user
 	 */
-	private void initialize(String result, Player user, ArrayList<Player> players, MainFrame mainFrame, PrintWriter logWriter) {
+	private void initialize(String result, Player user, ArrayList<Player> players, MainFrame mainFrame, JLabel avatar, PrintWriter logWriter) {
 		frame = new JFrame();
         JPanel btnPnl = new JPanel(new FlowLayout(FlowLayout.CENTER));
         JPanel mainPanel = new JPanel(new BorderLayout());
@@ -115,7 +115,7 @@ public class resultFrame extends JFrame {
 				mainFrame.dispose();
 				// System.out.println(mainFrame.getHandNumber());
 				try {
-					new MainFrame(user, players, frame);
+					new MainFrame(user, players, frame, avatar);
 				} catch (InterruptedException e1) {}
 			}
 		});

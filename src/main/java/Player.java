@@ -1,26 +1,37 @@
+import java.awt.Image;
+import java.io.IOException;
 import java.util.Random;
 import java.util.concurrent.TimeUnit;
+
+import javax.imageio.ImageIO;
 
 public class Player {
 	
 	private boolean isAI = false;
 	private String name = "";
 	private int stack = 1000;
+	private Image avatar;
 	private Hand playerHand;
 	private boolean ifFold = false;
 	private boolean ifOut = false;
 	private boolean allIn = false;
 	private boolean hasGone = false;
 	
-	public Player(boolean ai, String playerName, int playerMoney) {
+	public Player(boolean ai, String playerName, int playerMoney, int avatarNum) throws IOException {
 		isAI = ai;
 		name = playerName;
 		stack = playerMoney;
 		playerHand = new Hand();
+		String image = "/"+avatarNum+".png";
+		avatar = ImageIO.read(getClass().getResource(image));
 	}
 	
 	public String getName() {
 		return name;
+	}
+	
+	public Image getAvatar() {
+		return avatar;
 	}
 	
 	public int getStack() {

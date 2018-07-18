@@ -1,0 +1,47 @@
+       * * * Game Log * * *
+- Game started 17 July 2018  -  23 : 46
+- Username: Jay
+- Players: 7
+  Leopold Bloom, Stephen Dedalus, Yelverton Barry, Buck Mulligan, Martin Cunningham, Molly Bloom, Josie Breen
+
+- Hand 1
+
+Preflop:
+Cards Dealt:
+Leopold Bloom: spades king, diamonds four
+Stephen Dedalus: clubs queen, hearts six
+Yelverton Barry: clubs eight, clubs three
+Buck Mulligan: spades nine, diamonds king
+Martin Cunningham: hearts seven, spades deuce
+Molly Bloom: diamonds six, spades queen
+Josie Breen: spades three, hearts queen
+Jay: spades five, hearts deuce
+Yelverton Barry Has Dealt.
+Josie Breen is the big blind.
+Josie Breen Has Bet 20
+Player's turn, Calling Bets 20
+Jay Has Folded.
+Player's turn, Calling Bets 0
+
+Flop:
+Player's turn, Calling Bets 0
+
+Turn:
+Player's turn, Calling Bets 0
+
+River:
+Jay folded
+Leopold Bloom calls
+Stephen Dedalus calls
+Yelverton Barry calls
+Buck Mulligan calls
+Martin Cunningham calls
+Molly Bloom calls
+Josie Breen calls
+Player's turn, Calling Bets 0
+
+Final:
+Player's turn, Calling Bets 0
+The winner is Stephen Dedalus with A King High Flush, and Stephen Dedalus wins $30
+
+- Game ends 17 July 2018  -  23 : 48

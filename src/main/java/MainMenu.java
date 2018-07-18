@@ -16,6 +16,7 @@ import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.WindowEvent;
 import java.io.File;
+import java.io.IOException;
 import java.util.ArrayList;
 import java.awt.Color;
 import javax.swing.JTextField;
@@ -33,6 +34,7 @@ public class MainMenu extends JFrame implements ActionListener {
 	private JTextField numberField = new JTextField();
 	private JLabel startWarning = new JLabel("");//Give a base from which to write any error messages
 	JLabel avatar;
+	Player user;
 	/**
 	 * Sets size of the frame
 	 */
@@ -208,11 +210,21 @@ public class MainMenu extends JFrame implements ActionListener {
 							"Martin Cunningham", "Molly Bloom", "Josie Breen" };
 					ArrayList<Player> players = new ArrayList<>();
 					for (int j = 0; j < num; j++) {
-						players.add(new Player(true, opponents[j], 1000));
+						try {
+							players.add(new Player(true, opponents[j], 1000, j+1));
+						} catch (IOException e1) {
+							// TODO Auto-generated catch block
+							e1.printStackTrace();
+						}
 					}
-					Player user = new Player(false, playerName, 1000);
+					 try {
+						user = new Player(false, playerName, 1000, 1);
+					} catch (IOException e2) {
+						// TODO Auto-generated catch block
+						e2.printStackTrace();
+					}
 					try {
-						new MainFrame(user, players);
+						new MainFrame(user, players, avatar);
 					} catch (InterruptedException e1) {
 						// TODO Auto-generated catch block
 						e1.printStackTrace();

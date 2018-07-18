@@ -78,6 +78,7 @@ public class MainFrame extends JFrame {
 
 	// AIs array
 	private ArrayList<Player> players;
+	private JLabel avatar;
 	private static ArrayList<Card> deck;
 	private boolean setTransition = false;
 
@@ -96,9 +97,10 @@ public class MainFrame extends JFrame {
 	 * 
 	 * @throws InterruptedException
 	 */
-	public MainFrame(Player newUser, ArrayList<Player> newPlayers) throws InterruptedException {
+	public MainFrame(Player newUser, ArrayList<Player> newPlayers, JLabel newAvatar) throws InterruptedException {
 		super("Texas Hold'em");
 		user = newUser;
+		avatar = newAvatar;
 		userName = user.getName();
 		players = (ArrayList<Player>) newPlayers.clone();
 		for(int i = 0; i < players.size(); i++) {
@@ -133,10 +135,10 @@ public class MainFrame extends JFrame {
 	/**
 	 * @wbp.parser.constructor
 	 */
-	public MainFrame(Player user2, ArrayList<Player> players2, JFrame frame) throws InterruptedException {
+	public MainFrame(Player user2, ArrayList<Player> players2, JFrame frame, JLabel newAvatar) throws InterruptedException {
 		frame.setVisible(false);
 		frame.dispose();
-		new MainFrame(user2, players2);
+		new MainFrame(user2, players2, newAvatar);
 	}
 
 	/**
@@ -303,6 +305,7 @@ public class MainFrame extends JFrame {
 
 		// SOUTH
 		player.setBackground(new Color(43, 151, 0));
+		player.add(avatar);
 		player.setBorder(BorderFactory.createLineBorder(Color.white, 2));
 		player.setBounds(135, 506, 1050, 196);
 		centerHand.addCard(deck.get(cardCount--));
@@ -646,7 +649,7 @@ public class MainFrame extends JFrame {
 			// centerHand = new Hand();
 
 			// pop-up window showing the result
-			new resultFrame(result, user, players, this, logWriter);
+			new resultFrame(result, user, players, this, avatar, logWriter);
 		} else
 			return;
 	}
@@ -1056,6 +1059,8 @@ public class MainFrame extends JFrame {
 		JLabel card2Display = new JLabel();
 		Card c1 = null;
 		Card c2 = null;
+		Image aiAvatar = null;
+		ImageIcon tempAvatar = null;
 		if (num != -1) {
 			card1Display.setIcon(tempIcon);
 			card2Display.setIcon(tempIcon);
@@ -1066,10 +1071,13 @@ public class MainFrame extends JFrame {
 				panel.revalidate();
 				panel.repaint();
 				displayAICards(num, panel, card1Display, card2Display);
+				aiAvatar = players.get(num).getAvatar();
+				tempAvatar = new ImageIcon(aiAvatar);
 				name = players.get(num).getName();
 				stack = players.get(num).getStack();
 				JLabel nameL = new JLabel(name);
 				JLabel label = new JLabel();
+				label.setIcon(tempAvatar);
 				label.setText("Balance: " + players.get(num).getStack());
 				label.setForeground(Color.white);
 				panel.add(label);
@@ -1078,6 +1086,8 @@ public class MainFrame extends JFrame {
 			}
 			c1 = deck.get(cardCount--);
 			c2 = deck.get(cardCount--);
+			aiAvatar = players.get(num).getAvatar();
+			tempAvatar = new ImageIcon(aiAvatar);
 			name = players.get(num).getName();
 			stack = players.get(num).getStack();
 			players.get(num).setCard1(c1);
@@ -1085,6 +1095,7 @@ public class MainFrame extends JFrame {
 			// TODO
 			log(name, 0, c1, c2);
 			JLabel label = new JLabel();
+			label.setIcon(tempAvatar);
 			label.setText("Balance: " + players.get(num).getStack());
 			label.setForeground(Color.white);
 			panel.add(label);
