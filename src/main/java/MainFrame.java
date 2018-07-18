@@ -49,7 +49,6 @@ public class MainFrame extends JFrame {
 	private JLabel timerTextLabel = new JLabel();
 	private static JLabel timerLabel = new JLabel();
 
-	// USER OPTION BUTTONS
 	private int betAmount = 0;
 	private JButton betButton = new JButton("Bet");
 	private JButton bet1Button = new JButton("$1");
@@ -65,22 +64,18 @@ public class MainFrame extends JFrame {
 	private JButton bigBlind = new JButton("Big Blind");
 	private JTextField betAmt = new JTextField("$" + betAmount);
 
-	// the player name
 	private String userName = new String();
 	private boolean isBlind = true;
 	private Player user;
 	private String action;
 	private String[] opponents = { "Leopold Bloom", "Stephen Dedalus", "Yelverton Barry", "Buck Mulligan",
 			"Martin Cunningham", "Molly Bloom", "Josie Breen" };
-
-	// money in the pot
 	private int moneyInPot = 0;
 
-	// AIs array
 	private ArrayList<Player> players;
 	private static ArrayList<Card> deck;
+	private JLabel avatar;
 
-	// initialize the log file
 	static PrintWriter logWriter = null;
 	static int handNumber = 1;
 	static int dealerID = -1;
@@ -95,12 +90,14 @@ public class MainFrame extends JFrame {
 	 * 
 	 * @throws InterruptedException
 	 */
-	public MainFrame(Player newUser, ArrayList<Player> newPlayers, int whichTheme) throws InterruptedException {
+	public MainFrame(Player newUser, ArrayList<Player> newPlayers, int whichTheme, JLabel newAvatar)
+			throws InterruptedException {
 		super("Texas Hold'em");
 		user = newUser;
 		userName = user.getName();
 		players = (ArrayList<Player>) newPlayers.clone();
 		theme = whichTheme;
+		avatar = newAvatar;
 		for (int i = 0; i < players.size(); i++) {
 
 			if (players.get(i).getStack() <= 0) {
@@ -133,11 +130,11 @@ public class MainFrame extends JFrame {
 	/**
 	 * @wbp.parser.constructor
 	 */
-	public MainFrame(Player user2, ArrayList<Player> players2, JFrame frame, int themeMode)
+	public MainFrame(Player user2, ArrayList<Player> players2, JFrame frame, int themeMode, JLabel newAvatar)
 			throws InterruptedException {
 		frame.setVisible(false);
 		frame.dispose();
-		new MainFrame(user2, players2, themeMode);
+		new MainFrame(user2, players2, themeMode, newAvatar);
 	}
 
 	/**
@@ -184,19 +181,18 @@ public class MainFrame extends JFrame {
 	private void initFrame() throws InterruptedException {
 		setBounds(100, 100, 450, 300);
 		JPanel contentPane = new JPanel();
-		
+
 		if (theme == 1) {
 			contentPane.setBackground(new Color(22, 65, 111));
 			pot.setBackground(new Color(42, 84, 136));
 			fiveCards.setBackground(new Color(42, 84, 136));
-			playerAction.setBackground(new Color(42, 84, 136));		
+			playerAction.setBackground(new Color(42, 84, 136));
 			p.setBackground(new Color(31, 114, 205));
 			p2.setBackground(new Color(31, 114, 205));
 			p3.setBackground(new Color(31, 114, 205));
 			timerPanel.setBackground(new Color(31, 114, 205));
 			player.setBackground(new Color(31, 114, 205));
-		}
-		else {
+		} else {
 			contentPane.setBackground(new Color(9, 120, 0));
 			pot.setBackground(new Color(4, 95, 0));
 			fiveCards.setBackground(new Color(4, 95, 0));
@@ -207,7 +203,7 @@ public class MainFrame extends JFrame {
 			timerPanel.setBackground(new Color(43, 151, 0));
 			player.setBackground(new Color(43, 151, 0));
 		}
-		
+
 		contentPane.setBorder(new EmptyBorder(5, 5, 5, 5));
 		setContentPane(contentPane);
 		getContentPane().setLayout(null);
@@ -325,7 +321,7 @@ public class MainFrame extends JFrame {
 		timerTextLabel.setText("Time Left:");
 		timerTextLabel.setFont(new Font("Optima", Font.BOLD, 20));
 		timerTextLabel.setForeground(Color.white);
-		
+
 		timerPanel.setBorder(BorderFactory.createLineBorder(Color.white, 2));
 		timerPanel.setBounds(10, 531, 110, 40);
 
@@ -337,6 +333,7 @@ public class MainFrame extends JFrame {
 		add(timerTextLabel);
 		add(timerPanel);
 
+		player.add(avatar);
 		player.setBorder(BorderFactory.createLineBorder(Color.white, 2));
 		player.setBounds(135, 506, 1050, 196);
 
@@ -700,7 +697,7 @@ public class MainFrame extends JFrame {
 			// centerHand = new Hand();
 
 			// pop-up window showing the result
-			new resultFrame(result, user, players, this, logWriter, theme);
+			new resultFrame(result, user, players, this, logWriter, theme, avatar);
 		} else
 			return;
 	}
@@ -1099,6 +1096,8 @@ public class MainFrame extends JFrame {
 		JLabel card2Display = new JLabel();
 		Card c1 = null;
 		Card c2 = null;
+		Image aiAvatar = null;
+		ImageIcon tempAvatar = null;
 		if (num != -1) {
 			card1Display.setIcon(tempIcon);
 			card2Display.setIcon(tempIcon);
@@ -1109,10 +1108,13 @@ public class MainFrame extends JFrame {
 				panel.revalidate();
 				panel.repaint();
 				displayAICards(num, panel, card1Display, card2Display);
+				aiAvatar = players.get(num).getAvatar();
+				tempAvatar = new ImageIcon(aiAvatar);
 				name = players.get(num).getName();
 				stack = players.get(num).getStack();
 				JLabel nameL = new JLabel(name);
 				JLabel label = new JLabel();
+				label.setIcon(tempAvatar);
 				label.setText("Balance: " + players.get(num).getStack());
 				label.setForeground(Color.white);
 				panel.add(label);
@@ -1121,6 +1123,8 @@ public class MainFrame extends JFrame {
 			}
 			c1 = deck.get(cardCount--);
 			c2 = deck.get(cardCount--);
+			aiAvatar = players.get(num).getAvatar();
+			tempAvatar = new ImageIcon(aiAvatar);
 			name = players.get(num).getName();
 			stack = players.get(num).getStack();
 			players.get(num).setCard1(c1);
@@ -1128,6 +1132,7 @@ public class MainFrame extends JFrame {
 			// TODO
 			log(name, 0, c1, c2);
 			JLabel label = new JLabel();
+			label.setIcon(tempAvatar);
 			label.setText("Balance: " + players.get(num).getStack());
 			label.setForeground(Color.white);
 			panel.add(label);
@@ -1607,7 +1612,6 @@ public class MainFrame extends JFrame {
 				action = p.getName() + " Has Called.";
 			}
 		}
-		// System.out.println(moves);
 		return action;
 	}
 

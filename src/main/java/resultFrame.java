@@ -34,8 +34,8 @@ public class resultFrame extends JFrame {
 	 * @param user
 	 */
 	public resultFrame(String result, Player user, ArrayList<Player> players, MainFrame mainFrame,
-			PrintWriter logWriter, int theme) {
-		initialize(result, user, players, mainFrame, logWriter, theme);
+			PrintWriter logWriter, int theme, JLabel avatar) {
+		initialize(result, user, players, mainFrame, logWriter, theme, avatar);
 	}
 
 	/**
@@ -46,7 +46,7 @@ public class resultFrame extends JFrame {
 	 * @param user
 	 */
 	private void initialize(String result, Player user, ArrayList<Player> players, MainFrame mainFrame,
-			PrintWriter logWriter, int theme) {
+			PrintWriter logWriter, int theme, JLabel avatar) {
 		frame = new JFrame();
 		JPanel btnPnl = new JPanel(new FlowLayout(FlowLayout.CENTER));
 		JPanel mainPanel = new JPanel(new BorderLayout());
@@ -115,7 +115,6 @@ public class resultFrame extends JFrame {
 				mainFrame.setDealerID(dealerID);
 				mainFrame.setVisible(false);
 				mainFrame.setHandNumber(handNumber + 1);
-				System.out.println(theme);
 				// if no more AI players in the list,
 				// close the logWriter
 				if (mainFrame.isPlayersEmpty())
@@ -124,7 +123,7 @@ public class resultFrame extends JFrame {
 				mainFrame.dispose();
 				// System.out.println(mainFrame.getHandNumber());
 				try {
-					new MainFrame(user, players, frame, theme);
+					new MainFrame(user, players, frame, theme, avatar);
 				} catch (InterruptedException e1) {
 				}
 			}

@@ -1,5 +1,8 @@
 import java.util.Random;
 import java.util.concurrent.TimeUnit;
+import java.awt.Image;
+import java.io.IOException;
+import javax.imageio.ImageIO;
 
 public class Player {
 	
@@ -11,12 +14,15 @@ public class Player {
 	private boolean ifOut = false;
 	private boolean allIn = false;
 	private boolean hasGone = false;
+	private Image avatar;
 	
-	public Player(boolean ai, String playerName, int playerMoney) {
+	public Player(boolean ai, String playerName, int playerMoney, int avatarNum) throws IOException {
 		isAI = ai;
 		name = playerName;
 		stack = playerMoney;
 		playerHand = new Hand();
+		String image = "/"+avatarNum+".png";
+		avatar = ImageIO.read(getClass().getResource(image));
 	}
 	
 	public String getName() {
@@ -29,6 +35,10 @@ public class Player {
 	
 	public boolean getFold() {
 		return ifFold;
+	}
+	
+	public Image getAvatar() {
+		return avatar;
 	}
 	
 	public boolean isAllIn() {

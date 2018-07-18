@@ -15,6 +15,7 @@ import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.WindowEvent;
 import java.io.File;
+import java.io.IOException;
 import java.util.ArrayList;
 import java.awt.Color;
 import javax.swing.JTextField;
@@ -32,6 +33,7 @@ public class MainMenu extends JFrame implements ActionListener {
 	private JTextField numberField = new JTextField();
 	private JLabel startWarning = new JLabel("");// Give a base from which to write any error messages
 	JLabel avatar;
+	Player user;
 	static int whichTheme = 0;
 
 	/**
@@ -223,31 +225,40 @@ public class MainMenu extends JFrame implements ActionListener {
 			 */
 			@Override
 
-			public void actionPerformed(ActionEvent e) {
-
+			public void actionPerformed(ActionEvent e) {					
 				playerName = nameField.getText();
 				num = Integer.parseInt(numberField.getText());
-				// if player name is null a warning message will appear on screen
-				if (playerName == null || nameField.getText().isEmpty())
+				//if player name is null a warning message will appear on screen
+				if(playerName == null || nameField.getText().isEmpty())
 					startWarning.setText("Player must enter name before starting");
-
-				else if (num == 0 || num > 7 || numberField.getText().isEmpty())
+								
+				else if(num == 0 || num > 7 || numberField.getText().isEmpty())
 					startWarning.setText("Not a valid number!");
-
+								
 				else {
 					String[] opponents = { "Leopold Bloom", "Stephen Dedalus", "Yelverton Barry", "Buck Mulligan",
-							"Martin Cunningham", "Molly Bloom", "Josie Breen" };
+						"Martin Cunningham", "Molly Bloom", "Josie Breen" };
 					ArrayList<Player> players = new ArrayList<>();
 					for (int j = 0; j < num; j++) {
-						players.add(new Player(true, opponents[j], 1000));
-					}
-					Player user = new Player(false, playerName, 1000);
 					try {
-						new MainFrame(user, players, whichTheme);
-					} catch (InterruptedException e1) {
+						players.add(new Player(true, opponents[j], 1000, j+1));
+					} catch (IOException e1) {
 						// TODO Auto-generated catch block
 						e1.printStackTrace();
-					} // starts the game passing the player name parameter
+					}
+				}
+				try {
+					user = new Player(false, playerName, 1000, 1);
+				} catch (IOException e2) {
+					// TODO Auto-generated catch block
+					e2.printStackTrace();
+				}
+				try {
+					new MainFrame(user, players, whichTheme, avatar);
+				} catch (InterruptedException e1) {
+					// TODO Auto-generated catch block
+					e1.printStackTrace();
+				} //starts the game passing the player name parameter
 					setVisible(false);
 					dispose();
 				}
