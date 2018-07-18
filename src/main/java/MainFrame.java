@@ -452,6 +452,7 @@ public class MainFrame extends JFrame {
 
 		if (gameRound == -1) {
 
+			resetGone();
 			deal();
 		} else if (gameRound == 0) {
 			// go to the moves for the first round
