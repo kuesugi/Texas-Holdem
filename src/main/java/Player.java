@@ -5,7 +5,7 @@ import java.io.IOException;
 import javax.imageio.ImageIO;
 
 public class Player {
-	
+
 	private boolean isAI = false;
 	private String name = "";
 	private int stack = 1000;
@@ -15,32 +15,32 @@ public class Player {
 	private boolean allIn = false;
 	private boolean hasGone = false;
 	private Image avatar;
-	
+
 	public Player(boolean ai, String playerName, int playerMoney, int avatarNum) throws IOException {
 		isAI = ai;
 		name = playerName;
 		stack = playerMoney;
 		playerHand = new Hand();
-		String image = "/"+avatarNum+".png";
+		String image = "/" + avatarNum + ".png";
 		avatar = ImageIO.read(getClass().getResource(image));
 	}
-	
+
 	public String getName() {
 		return name;
 	}
-	
+
 	public int getStack() {
 		return stack;
 	}
-	
+
 	public boolean getFold() {
 		return ifFold;
 	}
-	
+
 	public Image getAvatar() {
 		return avatar;
 	}
-	
+
 	public boolean isAllIn() {
 		return allIn;
 	}
@@ -48,101 +48,105 @@ public class Player {
 	public boolean isPlayerAi() {
 		return isAI;
 	}
-	
+
 	public void playerHasGone() {
-		
+
 		hasGone = true;
 	}
-	
+
 	public void allIn() {
-		
+
 		allIn = true;
 	}
-	
+
 	public void newRoundUnFold() {
-		
+
 		ifFold = false;
 	}
+
 	public boolean hasGone() {
-		
+
 		return hasGone;
 	}
-	
+
 	public void newRoundNotGone() {
-		
+
 		hasGone = false;
 	}
-	
+
 	public void newRoundNotAllIn() {
-		
+
 		allIn = false;
 	}
 
-	public Card getCard1(){
+	public Card getCard1() {
 		return playerHand.getCard(0);
 	}
 
-	public Card getCard2(){
+	public Card getCard2() {
 		return playerHand.getCard(1);
 	}
-	
+
 	public void outOfGame() {
 		ifOut = true;
 	}
 
-	public void setCard1(Card card){
+	public void setCard1(Card card) {
 		playerHand.addCard(card, 0);
 	}
 
-	public void setCard2(Card card){
+	public void setCard2(Card card) {
 		playerHand.addCard(card, 1);
 	}
 
-	public void setFold(){
+	public void setFold() {
 		ifFold = true;
 	}
-	
-	public void setStack(int newStack){
+
+	public void setStack(int newStack) {
 		stack = newStack;
 	}
 
-	public void call(int highBet) throws InterruptedException{
-		
-		stack -= highBet; 	
+	public void call(int highBet) throws InterruptedException {
+		if ((stack - highBet) <= 0) {
+			highBet = stack;
+		}
+		stack -= highBet;
 	}
 
-	public int bet(int highBet) throws InterruptedException{
+	public int bet(int highBet) throws InterruptedException {
 		Random rand = new Random();
-		if(highBet == 0) {
+		if (highBet == 0) {
 			highBet = 10;
 		}
 		int betAmt = rand.nextInt(201) + highBet;
 		stack = stack - betAmt;
-		if(stack == 0) allIn = true;
+		if (stack == 0)
+			allIn = true;
 		return betAmt;
 	}
-	
+
 	public void blind(int betAmt) throws InterruptedException {
 		TimeUnit.MILLISECONDS.sleep(560);
 		stack -= betAmt;
-		if(stack == 0)
+		if (stack == 0)
 			allIn = true;
 	}
-	
+
 	public void fold() throws InterruptedException {
 		TimeUnit.MILLISECONDS.sleep(560);
 		setFold();
 	}
-	
+
 	public Hand getHand() {
 		return playerHand;
 	}
-	
+
 	public void clearHand() {
-		
+
 		playerHand = new Hand();
 	}
-	
+
 	public boolean ifOutOfGame() {
 		return ifOut;
 	}

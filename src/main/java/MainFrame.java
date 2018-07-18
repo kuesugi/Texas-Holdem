@@ -19,6 +19,7 @@ public class MainFrame extends JFrame {
 	private Image stackImage;
 	private Image chips;
 	private Image back;
+	private Image nvback;
 	private Timer timer;
 	static private int theme = 0;
 	private int numOfAI;
@@ -212,6 +213,7 @@ public class MainFrame extends JFrame {
 			stackImage = ImageIO.read(getClass().getResource("/stacks.png"));
 			chips = ImageIO.read(getClass().getResource("/pokerchips.png"));
 			back = ImageIO.read(getClass().getResource("/back.png"));
+			nvback = ImageIO.read(getClass().getResource("/navycard.png"));
 			Image clubs2 = ImageIO.read(getClass().getResource("/clubs2.png"));
 			Image clubs3 = ImageIO.read(getClass().getResource("/clubs3.png"));
 			Image clubs4 = ImageIO.read(getClass().getResource("/clubs4.png"));
@@ -283,8 +285,7 @@ public class MainFrame extends JFrame {
 		pot.setBorder(BorderFactory.createLineBorder(Color.white, 3));
 		pot.setBounds(326, 180, 630, 320);
 		// space holding the five cards
-		fiveCards.setBorder(BorderFactory.createLineBorder(Color.white, 2));
-		fiveCards.setBounds(336, 220, 430, 95);
+		fiveCards.setBounds(336, 235, 430, 95);
 		getContentPane().add(fiveCards);
 		handLabel.setText("Hand " + handNumber);
 		handLabel.setFont(new Font("Optima", Font.BOLD, 23));
@@ -294,8 +295,7 @@ public class MainFrame extends JFrame {
 		moneyInPotLabel.setFont(new Font("Optima", Font.BOLD, 23));
 		moneyInPotLabel.setForeground(Color.white);
 		pot.add(moneyInPotLabel);
-		playerAction.setBorder(BorderFactory.createLineBorder(Color.white, 2));
-		playerAction.setBounds(336, 325, 430, 165);
+		playerAction.setBounds(336, 335, 430, 145);
 		getContentPane().add(playerAction);
 		// "Dealer: "
 		dealerLabel.setText("Dealer:");
@@ -508,11 +508,12 @@ public class MainFrame extends JFrame {
 		// currently in preflop; to enter the flop round
 
 		if (gameRound == -1) {
-
+			resetGone();
+			user.newRoundNotGone();
 			deal();
 		} else if (gameRound == 0) {
 			// go to the moves for the first round
-
+			highBet = 0;
 			// log the round name
 			isBlind = false;
 			logWriter.println("\nFlop:");
@@ -523,6 +524,7 @@ public class MainFrame extends JFrame {
 		}
 		// to enter the turn round
 		else if (gameRound == 1) {
+			highBet = 0;
 			logWriter.println("\nTurn:");
 			displayCenterCards(centerHand, 2);
 			centerHand.addCard(deck.get(cardCount--));
@@ -531,6 +533,7 @@ public class MainFrame extends JFrame {
 		}
 		// to enter the river round
 		else if (gameRound == 2) {
+			highBet = 0;
 			logWriter.println("\nRiver:");
 			displayCenterCards(centerHand, 3);
 			if (user.getFold())
@@ -550,7 +553,7 @@ public class MainFrame extends JFrame {
 			 * for(int i = 0; i < players.size(); i++) {
 			 * System.out.println(players.get(i).aiRandomAction(0, 0)); }
 			 */
-
+			highBet = 0;
 			logWriter.println("\nFinal:");
 			String result = new String();
 			gameRound++;
@@ -840,7 +843,7 @@ public class MainFrame extends JFrame {
 				if (user.getStack() >= betAmount + 1) {
 					betAmount += 1;
 					betAmt.setText("$" + betAmount);
-					if (betAmount >= 10) {
+					if (betAmount >= 10 && betAmount >= highBet) {
 						// handles minimum bet amt
 						betButton.setEnabled(true);
 					}
@@ -854,7 +857,7 @@ public class MainFrame extends JFrame {
 				if (user.getStack() >= betAmount + 5) {
 					betAmount += 5;
 					betAmt.setText("$" + betAmount);
-					if (betAmount >= 10) {
+					if (betAmount >= 10 && betAmount >= highBet) {
 						// handles minimum bet amt
 						betButton.setEnabled(true);
 					}
@@ -868,7 +871,10 @@ public class MainFrame extends JFrame {
 				if (user.getStack() >= betAmount + 10) {
 					betAmount += 10;
 					betAmt.setText("$" + betAmount);
-					betButton.setEnabled(true);
+					if (betAmount >= highBet) {
+						// handles minimum bet amt
+						betButton.setEnabled(true);
+					}
 				} else
 					bet10Button.setEnabled(false);
 			}
@@ -878,7 +884,10 @@ public class MainFrame extends JFrame {
 				if (user.getStack() >= betAmount + 25) {
 					betAmount += 25;
 					betAmt.setText("$" + betAmount);
-					betButton.setEnabled(true);
+					if (betAmount >= highBet) {
+						// handles minimum bet amt
+						betButton.setEnabled(true);
+					}
 				} else
 					bet25Button.setEnabled(false);
 			}
@@ -888,7 +897,10 @@ public class MainFrame extends JFrame {
 				if (user.getStack() >= betAmount + 50) {
 					betAmount += 50;
 					betAmt.setText("$" + betAmount);
-					betButton.setEnabled(true);
+					if (betAmount >= highBet) {
+						// handles minimum bet amt
+						betButton.setEnabled(true);
+					}
 				} else
 					bet50Button.setEnabled(false);
 			}
@@ -900,7 +912,10 @@ public class MainFrame extends JFrame {
 				if (user.getStack() >= betAmount + 100) {
 					betAmount += 100;
 					betAmt.setText("$" + betAmount);
-					betButton.setEnabled(true);
+					if (betAmount >= highBet) {
+						// handles minimum bet amt
+						betButton.setEnabled(true);
+					}
 				} else
 					bet100Button.setEnabled(false);
 			}
@@ -926,7 +941,7 @@ public class MainFrame extends JFrame {
 
 				if (betAmount <= user.getStack() || betAmount > highBet) {
 
-					userMoved = true;
+					user.playerHasGone();
 					// TODO
 					// dealerID = nextIndex;
 
@@ -944,7 +959,7 @@ public class MainFrame extends JFrame {
 						user.allIn();
 					}
 					betAmount = 0; // reset the bet amount
-
+					betAmt.setText("$" + betAmount);
 					moneyInPotLabel.setText("Money in the pot: " + moneyInPot);
 					moneyInPotLabel.setFont(new Font("Optima", Font.BOLD, 23));
 					moneyInPotLabel.setForeground(Color.white);
@@ -956,6 +971,7 @@ public class MainFrame extends JFrame {
 
 					// TODO
 					try {
+						resetGone();
 						remainingBets();
 					} catch (InterruptedException e1) {
 						// TODO Auto-generated catch block
@@ -967,6 +983,7 @@ public class MainFrame extends JFrame {
 
 		smallBlind.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
+				user.playerHasGone();
 				user.setStack(user.getStack() - 10);
 				moneyInPot += 10;
 				moneyInPotLabel.setText("Money in the pot: " + moneyInPot);
@@ -986,6 +1003,7 @@ public class MainFrame extends JFrame {
 
 		bigBlind.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
+				user.playerHasGone();
 				user.setStack(user.getStack() - 20);
 				moneyInPot += 20;
 				moneyInPotLabel.setText("Money in the pot: " + moneyInPot);
@@ -1006,7 +1024,7 @@ public class MainFrame extends JFrame {
 
 		foldButton.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
-				userMoved = true;
+				user.playerHasGone();
 				logWriter.println(userName + " Has Folded.");
 				user.setFold();
 				try {
@@ -1020,7 +1038,7 @@ public class MainFrame extends JFrame {
 
 		callButton.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
-				userMoved = true;
+				user.playerHasGone();
 				moneyInPot += highBet;
 				user.setStack(user.getStack() - highBet);
 				logWriter.println(userName + " Has Called.");
@@ -1053,7 +1071,7 @@ public class MainFrame extends JFrame {
 		tempImg2 = tempImg.getScaledInstance(65, 80, java.awt.Image.SCALE_SMOOTH);
 		tempIcon = new ImageIcon(tempImg2);
 		JLabel stacks = new JLabel();
-		stacks.setBounds(135, 639, 65, 67);
+		stacks.setBounds(15, 639, 65, 67);
 		stacks.setIcon(tempIcon);
 		getContentPane().add(stacks);
 	}
@@ -1086,6 +1104,8 @@ public class MainFrame extends JFrame {
 	 */
 	private void initAI(JPanel panel, int num, int display) {
 		ImageIcon tempIcon = new ImageIcon(back);
+		if(theme == 1) 
+			tempIcon = new ImageIcon(nvback);
 		Image tempImg = tempIcon.getImage();
 		Image tempImg2 = tempImg.getScaledInstance(65, 80, java.awt.Image.SCALE_SMOOTH);
 		tempIcon = new ImageIcon(tempImg2);
@@ -1525,7 +1545,10 @@ public class MainFrame extends JFrame {
 
 			if (moves == 0) {
 				int betAmt = 20;
-				p.setStack(p.getStack() - 20);
+				if ((p.getStack() - betAmt) <= 0) {
+					betAmt = p.getStack();
+				}
+				p.setStack(p.getStack() - betAmt);
 				action = p.getName() + " Has Bet " + betAmt;
 				moneyInPot = betAmt + moneyInPot;
 				logWriter.println(action);
@@ -1754,8 +1777,8 @@ public class MainFrame extends JFrame {
 		// If user is not the big blind
 		else {
 			pot.revalidate();
-			action = ("You the big blind");
-			logWriter.println("You the big blind");
+			action = nextB.getName() + " is the big blind.";
+			logWriter.println("You are the big blind");
 			playerAction.setText("You are the big blind");
 			playerAction.setFont(new Font("Optima", Font.BOLD, 23));
 			playerAction.setForeground(Color.white);
@@ -1776,7 +1799,11 @@ public class MainFrame extends JFrame {
 	public void betting() throws InterruptedException {
 
 		// for players not folding
-
+		logWriter.println("Player's turn, Calling Bets" + highBet);
+		playerAction.setText("Player's turn, Calling Bets " + highBet);
+		playerAction.setFont(new Font("Optima", Font.BOLD, 23));
+		playerAction.setForeground(Color.white);
+		playerAction.revalidate();
 		moneyInPotLabel.setText("Money in the pot: " + moneyInPot);
 		moneyInPotLabel.setFont(new Font("Optima", Font.BOLD, 23));
 		moneyInPotLabel.setForeground(Color.white);
@@ -1792,24 +1819,30 @@ public class MainFrame extends JFrame {
 			bbIndex = getPlayerIndex(nextB);
 		}
 
+		else if (user.getFold() && nextB != null) {
+
+			bbIndex = getPlayerIndex(nextB);
+			nextB = findNext(bbIndex);
+			bbIndex = getPlayerIndex(nextB);
+		}
+
 		else {
 
-			if (isBlind == true) {
+			if (isBlind == true && !user.hasGone()) {
 
 				logWriter.println("Player's turn, Calling Bets 20");
 				playerAction.setText("Player's turn, Calling Bets 20");
 				disableButtons(2);
-			} else {
+			} else if (!user.hasGone()) {
 
-				logWriter.println("Player's turn, Calling Bets 0");
-				playerAction.setText("Player's turn, Calling Bets 0");
+				logWriter.println("Player's turn, Calling Bets " + highBet);
+				playerAction.setText("Player's turn, Calling Bets " + highBet);
 				enableButtons();
 			}
 
-			playerAction.setFont(new Font("Optima", Font.BOLD, 23));
-			playerAction.setForeground(Color.white);
-			playerAction.revalidate();
-			return;
+			bbIndex = getPlayerIndex(nextB);
+			nextB = findNext(bbIndex);
+			bbIndex = getPlayerIndex(nextB);
 
 		}
 
@@ -1837,12 +1870,12 @@ public class MainFrame extends JFrame {
 					next = findNext(bbIndex);
 				} else if (!user.getFold() || !user.isAllIn()) {
 
-					if (isBlind == true) {
+					if (isBlind == true && !user.hasGone()) {
 
 						logWriter.println("Player's turn, Calling Bets 20");
 						playerAction.setText("Player's turn, Calling Bets 20");
 						disableButtons(2);
-					} else {
+					} else if (!user.hasGone()) {
 						logWriter.println("Player's turn, Calling Bets " + highBet);
 						playerAction.setText("Player's turn, Calling Bets " + highBet);
 
@@ -1873,6 +1906,12 @@ public class MainFrame extends JFrame {
 		if (user.getFold()) {
 			remainingBets();
 
+		} else if (user.hasGone()) {
+			user.newRoundNotGone();
+			resetGone();
+			highBet = 0;
+			gameRound++;
+			transition();
 		}
 
 	}
@@ -1881,6 +1920,7 @@ public class MainFrame extends JFrame {
 
 		pot.revalidate();
 		int cur = getDealerID();
+		int callBet = highBet;
 		Player nextB = findNext(cur);
 		int bbIndex = -1;
 		if (nextB != user && nextB != null) {
@@ -1897,7 +1937,7 @@ public class MainFrame extends JFrame {
 		next = findNext(bbIndex);
 		for (int i = 0; i < players.size() + 1; i++) {
 
-			if (!next.getFold() && !next.hasGone() && nextB != user) {
+			if (!next.getFold() && !next.hasGone()) {
 				if (next != user) {
 					if (isBlind == true) {
 
@@ -1916,16 +1956,29 @@ public class MainFrame extends JFrame {
 				}
 
 			}
+			bbIndex = getPlayerIndex(next);
+			if (bbIndex == -1) {
+				bbIndex = players.size();
+			}
+			next = findNext(bbIndex);
 		}
 
-		logWriter.println("Player's turn, Calling Bets " + highBet);
-		playerAction.setText("Player's turn, Calling Bets " + highBet);
-		playerAction.setFont(new Font("Optima", Font.BOLD, 23));
-		playerAction.setForeground(Color.white);
-		playerAction.revalidate();
-		pot.revalidate();
+		if (highBet > callBet) {
+			if (!user.getFold()) {
+
+				logWriter.println("Player's turn, Calling Bets " + highBet);
+				playerAction.setText("Player's turn, Calling Bets " + highBet);
+				playerAction.setFont(new Font("Optima", Font.BOLD, 23));
+				playerAction.setForeground(Color.white);
+				playerAction.revalidate();
+				pot.revalidate();
+				user.newRoundNotGone();
+			}
+			betting();
+		}
 
 		resetGone();
+		user.newRoundNotGone();
 		highBet = 0;
 		gameRound++;
 		transition();
