@@ -453,6 +453,7 @@ public class MainFrame extends JFrame {
 		if (gameRound == -1) {
 
 			resetGone();
+			user.newRoundNotGone();
 			deal();
 		} else if (gameRound == 0) {
 			// go to the moves for the first round
@@ -795,7 +796,7 @@ public class MainFrame extends JFrame {
 				if (user.getStack() >= betAmount + 1) {
 					betAmount += 1;
 					betAmt.setText("$" + betAmount);
-					if (betAmount >= 10) {
+					if (betAmount >= 10 && betAmount >= highBet) {
 						// handles minimum bet amt
 						betButton.setEnabled(true);
 					}
@@ -809,7 +810,7 @@ public class MainFrame extends JFrame {
 				if (user.getStack() >= betAmount + 5) {
 					betAmount += 5;
 					betAmt.setText("$" + betAmount);
-					if (betAmount >= 10) {
+					if (betAmount >= 10  && betAmount >= highBet) {
 						// handles minimum bet amt
 						betButton.setEnabled(true);
 					}
@@ -823,7 +824,10 @@ public class MainFrame extends JFrame {
 				if (user.getStack() >= betAmount + 10) {
 					betAmount += 10;
 					betAmt.setText("$" + betAmount);
-					betButton.setEnabled(true);
+					if (betAmount >= highBet) {
+						// handles minimum bet amt
+						betButton.setEnabled(true);
+					}
 				} else
 					bet10Button.setEnabled(false);
 			}
@@ -833,7 +837,10 @@ public class MainFrame extends JFrame {
 				if (user.getStack() >= betAmount + 25) {
 					betAmount += 25;
 					betAmt.setText("$" + betAmount);
-					betButton.setEnabled(true);
+					if (betAmount >= highBet) {
+						// handles minimum bet amt
+						betButton.setEnabled(true);
+					}
 				} else
 					bet25Button.setEnabled(false);
 			}
@@ -843,7 +850,10 @@ public class MainFrame extends JFrame {
 				if (user.getStack() >= betAmount + 50) {
 					betAmount += 50;
 					betAmt.setText("$" + betAmount);
-					betButton.setEnabled(true);
+					if (betAmount >= highBet) {
+						// handles minimum bet amt
+						betButton.setEnabled(true);
+					}
 				} else
 					bet50Button.setEnabled(false);
 			}
@@ -855,7 +865,10 @@ public class MainFrame extends JFrame {
 				if (user.getStack() >= betAmount + 100) {
 					betAmount += 100;
 					betAmt.setText("$" + betAmount);
-					betButton.setEnabled(true);
+					if (betAmount >= highBet) {
+						// handles minimum bet amt
+						betButton.setEnabled(true);
+					}
 				} else
 					bet100Button.setEnabled(false);
 			}
@@ -899,7 +912,7 @@ public class MainFrame extends JFrame {
 						user.allIn();
 					}
 					betAmount = 0; // reset the bet amount
-
+					betAmt.setText("$" + betAmount);
 					moneyInPotLabel.setText("Money in the pot: " + moneyInPot);
 					moneyInPotLabel.setFont(new Font("Optima", Font.BOLD, 23));
 					moneyInPotLabel.setForeground(Color.white);
@@ -913,6 +926,7 @@ public class MainFrame extends JFrame {
 
 					// TODO
 					try {
+						resetGone();
 						remainingBets();
 					} catch (InterruptedException e1) {
 						// TODO Auto-generated catch block
@@ -1461,7 +1475,11 @@ public class MainFrame extends JFrame {
 
 			if (moves == 0) {
 				int betAmt = 20;
-				p.setStack(p.getStack() - 20);
+				if((p.getStack() - betAmt) <= 0) {
+					
+					betAmt = p.getStack();
+				}
+				p.setStack(p.getStack() - betAmt);
 				action = p.getName() + " Has Bet " + betAmt;
 				moneyInPot = betAmt + moneyInPot;
 				logWriter.println(action);
@@ -1713,7 +1731,11 @@ public class MainFrame extends JFrame {
 	public void betting() throws InterruptedException {
 
 		// for players not folding
-
+		logWriter.println("Player's turn, Calling Bets" + highBet);
+		playerAction.setText("Player's turn, Calling Bets " + highBet);
+		playerAction.setFont(new Font("Optima", Font.BOLD, 23));
+		playerAction.setForeground(Color.white);
+		playerAction.revalidate();
 		moneyInPotLabel.setText("Money in the pot: " + moneyInPot);
 		moneyInPotLabel.setFont(new Font("Optima", Font.BOLD, 23));
 		moneyInPotLabel.setForeground(Color.white);
@@ -1745,8 +1767,8 @@ public class MainFrame extends JFrame {
 				disableButtons(2);
 			} else if (!user.hasGone()) {
 
-				logWriter.println("Player's turn, Calling Bets 0");
-				playerAction.setText("Player's turn, Calling Bets 0");
+				logWriter.println("Player's turn, Calling Bets " + highBet);
+				playerAction.setText("Player's turn, Calling Bets " + highBet);
 				enableButtons();
 			}
 
@@ -1818,6 +1840,7 @@ public class MainFrame extends JFrame {
 
 		}
 		else if(user.hasGone()) {
+			user.newRoundNotGone();
 			resetGone();
 			highBet = 0;
 			gameRound++;
@@ -1830,6 +1853,7 @@ public class MainFrame extends JFrame {
 
 		pot.revalidate();
 		int cur = getDealerID();
+		int callBet = highBet;
 		Player nextB = findNext(cur);
 		int bbIndex = -1;
 		if (nextB != user && nextB != null) {
@@ -1846,7 +1870,7 @@ public class MainFrame extends JFrame {
 		next = findNext(bbIndex);
 		for (int i = 0; i < players.size() + 1; i++) {
 
-			if (!next.getFold() && !next.hasGone() && nextB != user) {
+			if (!next.getFold() && !next.hasGone()) {
 				if (next != user) {
 					if (isBlind == true) {
 
@@ -1871,15 +1895,27 @@ public class MainFrame extends JFrame {
 			}
 			next = findNext(bbIndex);
 		}
+		
+		if(highBet > callBet) {
+			if(!user.getFold()) {
+				
+				logWriter.println("Player's turn, Calling Bets " + highBet);
+				playerAction.setText("Player's turn, Calling Bets " + highBet);
+				playerAction.setFont(new Font("Optima", Font.BOLD, 23));
+				playerAction.setForeground(Color.white);
+				playerAction.revalidate();
+				pot.revalidate();
+				user.newRoundNotGone();
+			}
+			
+			betting();
+			
+		}
 
-		logWriter.println("Player's turn, Calling Bets " + highBet);
-		playerAction.setText("Player's turn, Calling Bets " + highBet);
-		playerAction.setFont(new Font("Optima", Font.BOLD, 23));
-		playerAction.setForeground(Color.white);
-		playerAction.revalidate();
-		pot.revalidate();
+		
 
 		resetGone();
+		user.newRoundNotGone();
 		highBet = 0;
 		gameRound++;
 		transition();
@@ -1887,7 +1923,7 @@ public class MainFrame extends JFrame {
 
 	public void resetGone() throws InterruptedException {
 
-		user.newRoundNotGone();
+
 		pot.revalidate();
 		int cur = getDealerID();
 		Player nextB = findNext(cur);
