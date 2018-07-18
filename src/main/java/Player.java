@@ -97,7 +97,10 @@ public class Player {
 	}
 
 	public void call(int highBet) throws InterruptedException{
-		
+		if((stack - highBet) <= 0) {
+			
+			highBet = stack;
+		}
 		stack -= highBet; 	
 	}
 
