@@ -1,37 +1,78 @@
        * * * Game Log * * *
-- Game started 18 July 2018  -  15 : 02
-- Username: 23
-- Players: 2
-  Leopold Bloom, Stephen Dedalus
+- Game started 18 July 2018  -  15 : 28
+- Username: 45
+- Players: 7
+  Leopold Bloom, Stephen Dedalus, Yelverton Barry, Buck Mulligan, Martin Cunningham, Molly Bloom, Josie Breen
 
 - Hand 1
 
 Preflop:
 Cards Dealt:
-Leopold Bloom: diamonds ten, spades four
-Stephen Dedalus: hearts seven, diamonds six
-23: spades eight, hearts ten
-Leopold Bloom Has Dealt.
-You the big blind
-23 is the big blind.
+Leopold Bloom: clubs ace, hearts ten
+Stephen Dedalus: hearts deuce, diamonds deuce
+Yelverton Barry: clubs six, clubs eight
+Buck Mulligan: spades king, clubs king
+Martin Cunningham: clubs five, diamonds king
+Molly Bloom: hearts queen, diamonds jack
+Josie Breen: clubs seven, diamonds five
+45: clubs three, spades four
+Yelverton Barry Has Dealt.
+Josie Breen is the big blind.
+Josie Breen Has Bet 20
 Player's turn, Calling Bets 20
-23 Has Folded.
+45 Has Called.
 Player's turn, Calling Bets 0
 
 Flop:
 Player's turn, Calling Bets 0
+45 Has Called.
+Player's turn, Calling Bets 0
 
 Turn:
 Player's turn, Calling Bets 0
+45 Has Called.
+Player's turn, Calling Bets 0
 
 River:
-23 folded
-Leopold Bloom calls
-Stephen Dedalus calls
-Player's turn, Calling Bets 0
+Josie Breen Has Bet 27
+Player's turn, Calling Bets 27
+Josie Breen Has Bet 181
+Player's turn, Calling Bets 181
+Josie Breen Has Bet 223
+Player's turn, Calling Bets 223
+Josie Breen Has Bet 405
+Player's turn, Calling Bets 405
+Player's turn, Calling Bets 405
+Player's turn, Calling Bets 405
+Player's turn, Calling Bets 405
+Player's turn, Calling Bets 405
+Player's turn, Calling Bets 405
+Player's turn, Calling Bets 405
+Player's turn, Calling Bets 405
+Player's turn, Calling Bets 405
+Player's turn, Calling Bets 405
+Player's turn, Calling Bets 405
+Player's turn, Calling Bets 405
+Player's turn, Calling Bets 405
+Player's turn, Calling Bets 405
+Player's turn, Calling Bets 405
+Player's turn, Calling Bets 405
+Player's turn, Calling Bets 405
+Player's turn, Calling Bets 405
+Player's turn, Calling Bets 405
+Player's turn, Calling Bets 405
+Player's turn, Calling Bets 405
+Player's turn, Calling Bets 405
+Player's turn, Calling Bets 405
+Player's turn, Calling Bets 405
+Player's turn, Calling Bets 405
+Player's turn, Calling Bets 405
+Player's turn, Calling Bets 405
+45 Has Called.
+Player's turn, Calling Bets 405
 
 Final:
-Player's turn, Calling Bets 0
-The winner is Stephen Dedalus with A Three of a Kind with Sevens, and Stephen Dedalus wins $30
 
-- Game ends 18 July 2018  -  15 : 02
+You win with A Five High Straight, and you win $1271
+
+- Game ends 18 July 2018  -  15 : 28

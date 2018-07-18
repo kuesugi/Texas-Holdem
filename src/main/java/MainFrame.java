@@ -101,10 +101,10 @@ public class MainFrame extends JFrame {
 		user = newUser;
 		userName = user.getName();
 		players = (ArrayList<Player>) newPlayers.clone();
-		for(int i = 0; i < players.size(); i++) {
-			
-			if(players.get(i).getStack() <= 0) {
-				
+		for (int i = 0; i < players.size(); i++) {
+
+			if (players.get(i).getStack() <= 0) {
+
 				players.remove(i);
 			}
 		}
@@ -880,7 +880,7 @@ public class MainFrame extends JFrame {
 
 				if (betAmount <= user.getStack() || betAmount > highBet) {
 
-					userMoved = true;
+					user.playerHasGone();
 					// TODO
 					// dealerID = nextIndex;
 
@@ -893,8 +893,8 @@ public class MainFrame extends JFrame {
 					userStack.setForeground(Color.white);
 					player.revalidate();
 					highBet = betAmount;
-					if(user.getStack() <= 0) {
-						
+					if (user.getStack() <= 0) {
+
 						user.allIn();
 					}
 					betAmount = 0; // reset the bet amount
@@ -906,8 +906,6 @@ public class MainFrame extends JFrame {
 					pot.revalidate();
 
 					// TODO
-
-
 
 					// bet button is disabled before the next round
 					betButton.setEnabled(false);
@@ -926,6 +924,7 @@ public class MainFrame extends JFrame {
 		smallBlind.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
 
+				user.playerHasGone();
 				user.setStack(user.getStack() - 10);
 				moneyInPot += 10;
 				moneyInPotLabel.setText("Money in the pot: " + moneyInPot);
@@ -946,6 +945,7 @@ public class MainFrame extends JFrame {
 		bigBlind.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
 
+				user.playerHasGone();
 				user.setStack(user.getStack() - 20);
 				moneyInPot += 20;
 				moneyInPotLabel.setText("Money in the pot: " + moneyInPot);
@@ -967,7 +967,7 @@ public class MainFrame extends JFrame {
 
 		foldButton.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
-				userMoved = true;
+				user.playerHasGone();
 				logWriter.println(userName + " Has Folded.");
 				user.setFold();
 				try {
@@ -982,7 +982,7 @@ public class MainFrame extends JFrame {
 
 		callButton.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
-				userMoved = true;
+				user.playerHasGone();
 				moneyInPot += highBet;
 				user.setStack(user.getStack() - highBet);
 
@@ -996,7 +996,6 @@ public class MainFrame extends JFrame {
 			}
 		});
 	}
-
 
 	/**
 	 * Add the poker chips images
@@ -1442,8 +1441,6 @@ public class MainFrame extends JFrame {
 				index = i;
 			}
 
-
-
 		return index;
 	}
 
@@ -1518,8 +1515,8 @@ public class MainFrame extends JFrame {
 		// if in the first round
 		else {
 			moves = rand.nextInt(3);
-			if(moves == 0 && p.getStack() <=0) {
-				moves ++;
+			if (moves == 0 && p.getStack() <= 0) {
+				moves++;
 			}
 			if (moves == 0) {
 				int betAmt = p.bet(highBet);
@@ -1581,8 +1578,6 @@ public class MainFrame extends JFrame {
 			callButton.setEnabled(true);
 		}
 
-
-
 		clearButton.setEnabled(false);
 	}
 
@@ -1609,7 +1604,6 @@ public class MainFrame extends JFrame {
 
 			players.get(i).newRoundUnFold();
 			players.get(i).newRoundNotGone();
-			
 
 		}
 
@@ -1667,7 +1661,6 @@ public class MainFrame extends JFrame {
 		nextS = findNext(cur);
 		playerHasRaised();
 
-
 		int sbIndex = -1;
 		if (nextS != user && nextS != null)
 			sbIndex = getPlayerIndex(nextS);
@@ -1718,7 +1711,6 @@ public class MainFrame extends JFrame {
 
 	public void betting() throws InterruptedException {
 
-
 		// for players not folding
 
 		moneyInPotLabel.setText("Money in the pot: " + moneyInPot);
@@ -1735,9 +1727,9 @@ public class MainFrame extends JFrame {
 
 			bbIndex = getPlayerIndex(nextB);
 		}
-		
-		else if(user.getFold() && nextB != null) {
-			
+
+		else if (user.getFold() && nextB != null) {
+
 			bbIndex = getPlayerIndex(nextB);
 			nextB = findNext(bbIndex);
 			bbIndex = getPlayerIndex(nextB);
@@ -1745,23 +1737,21 @@ public class MainFrame extends JFrame {
 
 		else {
 
-			if (isBlind == true) {
+			if (isBlind == true && !user.hasGone()) {
 
 				logWriter.println("Player's turn, Calling Bets 20");
 				playerAction.setText("Player's turn, Calling Bets 20");
 				disableButtons(2);
-			} else {
+			} else if (!user.hasGone()) {
 
 				logWriter.println("Player's turn, Calling Bets 0");
 				playerAction.setText("Player's turn, Calling Bets 0");
 				enableButtons();
 			}
 
-			playerAction.setFont(new Font("Optima", Font.BOLD, 23));
-			playerAction.setForeground(Color.white);
-			playerAction.revalidate();
-			return;
-
+			bbIndex = getPlayerIndex(nextB);
+			nextB = findNext(bbIndex);
+			bbIndex = getPlayerIndex(nextB);
 
 		}
 
@@ -1787,15 +1777,14 @@ public class MainFrame extends JFrame {
 					if (bbIndex == -1)
 						bbIndex = players.size();
 					next = findNext(bbIndex);
-				}
-				else if (!user.getFold() || !user.isAllIn()) {
+				} else if (!user.getFold() || !user.isAllIn()) {
 
-					if (isBlind == true) {
+					if (isBlind == true && !user.hasGone()) {
 
 						logWriter.println("Player's turn, Calling Bets 20");
 						playerAction.setText("Player's turn, Calling Bets 20");
 						disableButtons(2);
-					} else {
+					} else if(!user.hasGone()) {
 						logWriter.println("Player's turn, Calling Bets " + highBet);
 						playerAction.setText("Player's turn, Calling Bets " + highBet);
 
@@ -1810,14 +1799,13 @@ public class MainFrame extends JFrame {
 					if (bbIndex == -1)
 						bbIndex = players.size();
 					next = findNext(bbIndex);
-					
-					if(scoreCheck == highBet ||  isBlind == true) {
+
+					if (scoreCheck == highBet || isBlind == true) {
 						return;
-					}
-					else if(isBlind == false) {
+					} else if (isBlind == false) {
 						playerHasRaised();
 						betting();
-						
+
 					}
 
 				}
@@ -1827,6 +1815,12 @@ public class MainFrame extends JFrame {
 		if (user.getFold()) {
 			remainingBets();
 
+		}
+		else if(user.hasGone()) {
+			resetGone();
+			highBet = 0;
+			gameRound++;
+			transition();
 		}
 
 	}
@@ -1845,7 +1839,6 @@ public class MainFrame extends JFrame {
 		else {
 			bbIndex = players.size();
 
-
 		}
 
 		Player next = null;
@@ -1862,7 +1855,6 @@ public class MainFrame extends JFrame {
 						aiRandomAction(1, getPlayerIndex(next), next);
 					}
 
-
 					pot.revalidate();
 					next.playerHasGone();
 					bbIndex = getPlayerIndex(next);
@@ -1872,6 +1864,11 @@ public class MainFrame extends JFrame {
 				}
 
 			}
+			bbIndex = getPlayerIndex(next);
+			if (bbIndex == -1) {
+				bbIndex = players.size();
+			}
+			next = findNext(bbIndex);
 		}
 
 		logWriter.println("Player's turn, Calling Bets " + highBet);
@@ -1889,6 +1886,7 @@ public class MainFrame extends JFrame {
 
 	public void resetGone() throws InterruptedException {
 
+		user.newRoundNotGone();
 		pot.revalidate();
 		int cur = getDealerID();
 		Player nextB = findNext(cur);
@@ -1900,7 +1898,6 @@ public class MainFrame extends JFrame {
 
 		else {
 			bbIndex = players.size();
-
 
 		}
 
@@ -1952,17 +1949,15 @@ public class MainFrame extends JFrame {
 			return eastAI2;
 		return null;
 	}
-	
+
 	private void playerHasRaised() {
-		
+
 		user.newRoundNotAllIn();
 		for (int i = 0; i < players.size(); i++) {
 
 			players.get(i).newRoundNotGone();
-			
 
 		}
 	}
-
 
 }
