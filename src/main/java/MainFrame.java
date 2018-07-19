@@ -494,13 +494,13 @@ public class MainFrame extends JFrame {
 	 * Show the round number
 	 */
 	private void showRoundAndHand() {
-		if (gameRound == 0)
+		if (gameRound == -1)
 			roundLabel.setText("Round: Preflop");
-		else if (gameRound == 1)
+		else if (gameRound == 0)
 			roundLabel.setText("Round: Flop");
-		else if (gameRound == 2)
+		else if (gameRound == 1)
 			roundLabel.setText("Round: Turn");
-		else if (gameRound == 3)
+		else if (gameRound == 2)
 			roundLabel.setText("Round: River");
 		roundLabel.setFont(new Font("Optima", Font.BOLD, 23));
 		roundLabel.setForeground(Color.yellow);
@@ -713,10 +713,12 @@ public class MainFrame extends JFrame {
 
 	private void deal() throws InterruptedException {
 
-		if (dealerID != players.size())
+		if (dealerID < players.size()) {
 			dealerIDLabel.setText(players.get(dealerID).getName());
-		else
+		}		
+		else {
 			dealerIDLabel.setText(user.getName());
+		}	
 		dealerIDLabel.setFont(new Font("Optima", Font.BOLD, 18));
 		dealerIDLabel.setForeground(Color.white);
 		dealerIDLabel.revalidate();
@@ -989,6 +991,9 @@ public class MainFrame extends JFrame {
 			public void actionPerformed(ActionEvent e) {
 				user.playerHasGone();
 				user.setStack(user.getStack() - 10);
+				userStack.setText("Balance:" + user.getStack());
+				userStack.setForeground(Color.white);
+				player.revalidate();
 				moneyInPot += 10;
 				moneyInPotLabel.setText("Money in the pot: " + moneyInPot);
 				moneyInPotLabel.setFont(new Font("Optima", Font.BOLD, 23));
@@ -1010,6 +1015,9 @@ public class MainFrame extends JFrame {
 				user.playerHasGone();
 				user.setStack(user.getStack() - 20);
 				moneyInPot += 20;
+				userStack.setText("Balance:" + user.getStack());
+				userStack.setForeground(Color.white);
+				player.revalidate();
 				moneyInPotLabel.setText("Money in the pot: " + moneyInPot);
 				moneyInPotLabel.setFont(new Font("Optima", Font.BOLD, 23));
 				moneyInPotLabel.setForeground(Color.white);
@@ -1045,6 +1053,9 @@ public class MainFrame extends JFrame {
 				user.playerHasGone();
 				moneyInPot += highBet;
 				user.setStack(user.getStack() - highBet);
+				userStack.setText("Balance:" + user.getStack());
+				userStack.setForeground(Color.white);
+				player.revalidate();
 				logWriter.println(userName + " Has Called.");
 				try {
 					remainingBets();
@@ -1596,6 +1607,7 @@ public class MainFrame extends JFrame {
 				removeAICards(panel, getPlayerIndex(p));
 			}
 			if (moves == 0) {
+				
 				int betAmt = p.bet(highBet);
 				action = p.getName() + " Has Bet " + betAmt;
 				moneyInPot = betAmt + moneyInPot;
@@ -1894,7 +1906,13 @@ public class MainFrame extends JFrame {
 
 				}
 			}
-			next = findNext(bbIndex);
+			if(next == user && user.hasGone()) {
+				next = findNext(bbIndex + 1);
+			}
+			else {
+				next = findNext(bbIndex);
+			}
+			
 		}
 		if (user.getFold()) {
 			remainingBets();
@@ -1953,7 +1971,12 @@ public class MainFrame extends JFrame {
 			if (bbIndex == -1) {
 				bbIndex = players.size();
 			}
-			next = findNext(bbIndex);
+			if(next == user) {
+				next = findNext(bbIndex + 1);
+			}
+			else {
+				next = findNext(bbIndex);
+			}
 		}
 
 		if (highBet > callBet) {
