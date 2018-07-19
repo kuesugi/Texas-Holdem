@@ -119,7 +119,7 @@ public class Player {
 		if (highBet == 0) {
 			highBet = 10;
 		}
-		int betAmt = rand.nextInt(201) + highBet;
+		int betAmt = rand.nextInt(stack + 1) + highBet;
 		stack = stack - betAmt;
 		if (stack == 0)
 			allIn = true;
