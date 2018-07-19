@@ -206,6 +206,7 @@ public class MainMenu extends JFrame implements ActionListener {
 		greenTheme.addActionListener(new ActionListener() {
 
 			public void actionPerformed(ActionEvent e) {
+				contentPane.setBackground(new Color(0, 128, 0));
 
 				whichTheme = 0;
 			}
@@ -215,6 +216,8 @@ public class MainMenu extends JFrame implements ActionListener {
 
 			public void actionPerformed(ActionEvent e) {
 
+				contentPane.setBackground(new Color(0,0,255));
+				
 				whichTheme = 1;
 			}
 		});
