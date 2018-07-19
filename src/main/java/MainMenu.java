@@ -22,6 +22,7 @@ import javax.swing.JTextField;
 import javax.swing.LayoutStyle.ComponentPlacement;
 import javax.swing.JFormattedTextField;
 import javax.swing.JButton;
+import javax.swing.JCheckBox;
 import javax.swing.JFileChooser;
 
 public class MainMenu extends JFrame implements ActionListener {
@@ -35,6 +36,7 @@ public class MainMenu extends JFrame implements ActionListener {
 	JLabel avatar;
 	Player user;
 	static int whichTheme = 0;
+	boolean limit = false;
 
 	/**
 	 * Sets size of the frame
@@ -89,15 +91,24 @@ public class MainMenu extends JFrame implements ActionListener {
 		theme.setForeground(new Color(255, 255, 255));
 		theme.setFont(new Font("Gill Sans MT Condensed", Font.PLAIN, 15));
 
-		JButton greenTheme = new JButton("Traditional");
+		JButton greenTheme = new JButton("Traditional (Default)");
 		greenTheme.setForeground(new Color(43, 151, 0));
-		greenTheme.setFont(new Font("Futura", Font.ITALIC, 17));
+		greenTheme.setFont(new Font("Futura", Font.ITALIC, 14));
 		greenTheme.addActionListener(this);
 		
 		JButton navyTheme = new JButton("Navy");
 		navyTheme.setForeground(new Color(31, 114, 205));
-		navyTheme.setFont(new Font("Futura", Font.ITALIC, 17));
+		navyTheme.setFont(new Font("Futura", Font.ITALIC, 14));
 		navyTheme.addActionListener(this);
+		
+		JLabel chosenTheme = new JLabel("Default");
+		chosenTheme.setForeground(new Color(255, 255, 255));
+		chosenTheme.setFont(new Font("Gill Sans MT Condensed", Font.PLAIN, 15));
+		
+		JCheckBox checkbox = new JCheckBox("Time Limit?");
+		checkbox.setSelected(false);
+		checkbox.setForeground(new Color(255, 255, 255));
+		checkbox.setFont(new Font("Gill Sans MT Condensed", Font.PLAIN, 15));
 
 		JButton btnStart = new JButton("Start");
 		btnStart.setFont(new Font("Gill Sans MT Ext Condensed Bold", Font.PLAIN, 13));
@@ -131,9 +142,14 @@ public class MainMenu extends JFrame implements ActionListener {
 						.addContainerGap(126, Short.MAX_VALUE))
 				.addGroup(Alignment.LEADING, gl_contentPane.createSequentialGroup().addGap(65)
 						.addComponent(theme, GroupLayout.PREFERRED_SIZE, 130, GroupLayout.PREFERRED_SIZE).addGap(18)
-						.addComponent(greenTheme, GroupLayout.PREFERRED_SIZE, 193, GroupLayout.PREFERRED_SIZE)
-						.addComponent(navyTheme, GroupLayout.PREFERRED_SIZE, 193, GroupLayout.PREFERRED_SIZE)
+						.addComponent(greenTheme, GroupLayout.PREFERRED_SIZE, 173, GroupLayout.PREFERRED_SIZE)
+						.addComponent(navyTheme, GroupLayout.PREFERRED_SIZE, 173, GroupLayout.PREFERRED_SIZE)
+						.addComponent(chosenTheme, GroupLayout.PREFERRED_SIZE, 60, GroupLayout.PREFERRED_SIZE)
 						.addContainerGap(126, Short.MAX_VALUE))
+				.addGroup(Alignment.LEADING,
+						gl_contentPane.createSequentialGroup().addGap(65)
+								.addComponent(checkbox, GroupLayout.DEFAULT_SIZE, 312, Short.MAX_VALUE)
+								.addContainerGap(181, Short.MAX_VALUE))
 				.addGroup(Alignment.LEADING,
 						gl_contentPane.createSequentialGroup().addGap(245)
 								.addComponent(startWarning, GroupLayout.DEFAULT_SIZE, 438, Short.MAX_VALUE).addGap(245))
@@ -171,8 +187,12 @@ public class MainMenu extends JFrame implements ActionListener {
 												GroupLayout.PREFERRED_SIZE)
 										.addComponent(navyTheme, GroupLayout.PREFERRED_SIZE, GroupLayout.DEFAULT_SIZE,
 												GroupLayout.PREFERRED_SIZE)
+										.addComponent(chosenTheme, GroupLayout.PREFERRED_SIZE, GroupLayout.DEFAULT_SIZE,
+												GroupLayout.PREFERRED_SIZE)
 										.addComponent(theme))
-								.addGap(28)
+								.addGap(15)
+								.addComponent(checkbox)
+								.addGap(15)
 								.addComponent(btnBrowse)
 								.addGap(15)
 								.addComponent(btnStart)
@@ -208,6 +228,7 @@ public class MainMenu extends JFrame implements ActionListener {
 			public void actionPerformed(ActionEvent e) {
 
 				whichTheme = 0;
+				chosenTheme.setText("Default");
 			}
 		});
 
@@ -216,6 +237,7 @@ public class MainMenu extends JFrame implements ActionListener {
 			public void actionPerformed(ActionEvent e) {
 
 				whichTheme = 1;
+				chosenTheme.setText("Navy");
 			}
 		});
 
@@ -228,6 +250,9 @@ public class MainMenu extends JFrame implements ActionListener {
 			public void actionPerformed(ActionEvent e) {					
 				playerName = nameField.getText();
 				num = Integer.parseInt(numberField.getText());
+				if (checkbox.isSelected()) {
+					limit = true;
+				}
 				//if player name is null a warning message will appear on screen
 				if(playerName == null || nameField.getText().isEmpty())
 					startWarning.setText("Player must enter name before starting");
@@ -254,7 +279,7 @@ public class MainMenu extends JFrame implements ActionListener {
 					e2.printStackTrace();
 				}
 				try {
-					new MainFrame(user, players, whichTheme, avatar);
+					new MainFrame(user, players, whichTheme, avatar, limit);
 				} catch (InterruptedException e1) {
 					// TODO Auto-generated catch block
 					e1.printStackTrace();

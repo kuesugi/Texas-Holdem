@@ -81,17 +81,19 @@ public class MainFrame extends JFrame {
 	int highBet = 0;
 	boolean ifUserFold = false;
 	boolean userMoved = false;
+	static private boolean timeLimit;
 
 	/**
 	 * Constructor
 	 * 
 	 * @throws InterruptedException
 	 */
-	public MainFrame(Player newUser, ArrayList<Player> newPlayers, int whichTheme, JLabel newAvatar)
+	public MainFrame(Player newUser, ArrayList<Player> newPlayers, int whichTheme, JLabel newAvatar, boolean limit)
 			throws InterruptedException {
 		super("Texas Hold'em");
 		user = newUser;
 		userName = user.getName();
+		timeLimit = limit;
 		players = (ArrayList<Player>) newPlayers.clone();
 		theme = whichTheme;
 		avatar = newAvatar;
@@ -119,16 +121,17 @@ public class MainFrame extends JFrame {
 		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		// Must be the last line of this constructor
 		setVisible(true);
+		System.out.println(timeLimit);
 	}
 
 	/**
 	 * @wbp.parser.constructor
 	 */
-	public MainFrame(Player user2, ArrayList<Player> players2, JFrame frame, int themeMode, JLabel newAvatar)
+	public MainFrame(Player user2, ArrayList<Player> players2, JFrame frame, int themeMode, JLabel newAvatar, boolean newLimit)
 			throws InterruptedException {
 		frame.setVisible(false);
 		frame.dispose();
-		new MainFrame(user2, players2, themeMode, newAvatar);
+		new MainFrame(user2, players2, themeMode, newAvatar, newLimit);
 	}
 
 	/**
@@ -310,22 +313,24 @@ public class MainFrame extends JFrame {
 		}
 
 		// SOUTH
-		timerTextLabel.setBounds(10, 500, 110, 30);
-		timerTextLabel.setText("Time Left:");
-		timerTextLabel.setFont(new Font("Optima", Font.BOLD, 20));
-		timerTextLabel.setForeground(Color.white);
+		if(timeLimit) {
+			timerTextLabel.setBounds(10, 500, 110, 30);
+			timerTextLabel.setText("Time Left:");
+			timerTextLabel.setFont(new Font("Optima", Font.BOLD, 20));
+			timerTextLabel.setForeground(Color.white);
+	
+			timerPanel.setBorder(BorderFactory.createLineBorder(Color.white, 2));
+			timerPanel.setBounds(10, 531, 110, 40);
+	
+			timerLabel.setText("-- s");
+			timerLabel.setFont(new Font("Optima", Font.BOLD, 20));
+			timerLabel.setForeground(Color.white);
+			timerPanel.add(timerLabel);
 
-		timerPanel.setBorder(BorderFactory.createLineBorder(Color.white, 2));
-		timerPanel.setBounds(10, 531, 110, 40);
-
-		timerLabel.setText("-- s");
-		timerLabel.setFont(new Font("Optima", Font.BOLD, 20));
-		timerLabel.setForeground(Color.white);
-		timerPanel.add(timerLabel);
-
-		add(timerTextLabel);
-		add(timerPanel);
-
+			add(timerTextLabel);
+			add(timerPanel);
+		}
+		
 		player.add(avatar);
 		player.setBorder(BorderFactory.createLineBorder(Color.white, 2));
 		player.setBounds(135, 506, 1050, 196);
@@ -700,8 +705,9 @@ public class MainFrame extends JFrame {
 			// centerHand = new Hand();
 
 			// pop-up window showing the result
-			timer.cancel();
-			new resultFrame(result, user, players, this, logWriter, theme, avatar);
+			if(timeLimit)
+				timer.cancel();
+			new resultFrame(result, user, players, this, logWriter, theme, avatar, timeLimit);
 		} else
 			return;
 	}
@@ -1804,12 +1810,14 @@ public class MainFrame extends JFrame {
 				logWriter.println("Player's turn, Calling Bets 20");
 				playerAction.setText("Player's turn, Calling Bets 20");
 				disableButtons(2);
-				counter();
+				if (timeLimit)
+					counter();
 			} else if (!user.hasGone()) {
 
 				logWriter.println("Player's turn, Calling Bets " + highBet);
 				playerAction.setText("Player's turn, Calling Bets " + highBet);
-				counter();
+				if (timeLimit)
+					counter();
 				enableButtons();
 			}
 
@@ -1847,12 +1855,14 @@ public class MainFrame extends JFrame {
 
 						logWriter.println("Player's turn, Calling Bets 20");
 						playerAction.setText("Player's turn, Calling Bets 20");
-						counter();
+						if (timeLimit)
+							counter();
 						disableButtons(2);
 					} else if (!user.hasGone()) {
 						logWriter.println("Player's turn, Calling Bets " + highBet);
 						playerAction.setText("Player's turn, Calling Bets " + highBet);
-						counter();
+						if (timeLimit)
+							counter();
 						enableButtons();
 					}
 					playerAction.setFont(new Font("Optima", Font.BOLD, 23));
