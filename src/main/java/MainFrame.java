@@ -121,7 +121,6 @@ public class MainFrame extends JFrame {
 		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		// Must be the last line of this constructor
 		setVisible(true);
-		System.out.println(timeLimit);
 	}
 
 	/**
