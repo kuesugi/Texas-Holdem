@@ -1585,6 +1585,16 @@ public class MainFrame extends JFrame {
 			if (moves == 0 && p.getStack() <= 0) {
 				moves++;
 			}
+			if(highBet >= p.getStack()) {
+				
+				p.fold();
+				JPanel panel = new JPanel();
+				panel = getPanelNum(getPlayerIndex(p));
+				removeAICards(panel, getPlayerIndex(p));
+				action = p.getName() + " Has Folded.";
+				panel = getPanelNum(getPlayerIndex(p));
+				removeAICards(panel, getPlayerIndex(p));
+			}
 			if (moves == 0) {
 				int betAmt = p.bet(highBet);
 				action = p.getName() + " Has Bet " + betAmt;
