@@ -408,10 +408,7 @@ public class MainFrame extends JFrame {
 				user.setFold();
 				try {
 					remainingBets();
-				} catch (InterruptedException e1) {
-					// TODO Auto-generated catch block
-					e1.printStackTrace();
-				}
+				} catch (InterruptedException e1) {}
 			}	
 		}
 	}
@@ -700,10 +697,6 @@ public class MainFrame extends JFrame {
 				players.get(j).clearHand();
 			}
 
-			// TODO
-			// centerHand = new Hand();
-
-			// pop-up window showing the result
 			if(timeLimit)
 				timer.cancel();
 			new resultFrame(result, user, players, this, logWriter, theme, avatar, timeLimit);
@@ -948,9 +941,6 @@ public class MainFrame extends JFrame {
 				if (betAmount <= user.getStack() || betAmount > highBet) {
 
 					user.playerHasGone();
-					// TODO
-					// dealerID = nextIndex;
-
 					logWriter.println(userName + " Has Bet " + betAmount);
 
 					// update the pot money
@@ -975,14 +965,10 @@ public class MainFrame extends JFrame {
 					// bet button is disabled before the next round
 					betButton.setEnabled(false);
 
-					// TODO
 					try {
 						resetGone();
 						remainingBets();
-					} catch (InterruptedException e1) {
-						// TODO Auto-generated catch block
-						e1.printStackTrace();
-					}
+					} catch (InterruptedException e1) {}
 				}
 			}
 		});
@@ -1003,10 +989,7 @@ public class MainFrame extends JFrame {
 				enableButtons();
 				try {
 					bigBlind();
-				} catch (InterruptedException e1) {
-					// TODO Auto-generated catch block
-					e1.printStackTrace();
-				}
+				} catch (InterruptedException e1) {}
 			}
 		});
 
@@ -1027,10 +1010,7 @@ public class MainFrame extends JFrame {
 				try {
 					betting();
 
-				} catch (InterruptedException e1) {
-					// TODO Auto-generated catch block
-					e1.printStackTrace();
-				}
+				} catch (InterruptedException e1) {}
 			}
 		});
 
@@ -1041,10 +1021,7 @@ public class MainFrame extends JFrame {
 				user.setFold();
 				try {
 					remainingBets();
-				} catch (InterruptedException e1) {
-					// TODO Auto-generated catch block
-					e1.printStackTrace();
-				}
+				} catch (InterruptedException e1) {}
 			}
 		});
 
@@ -1059,10 +1036,7 @@ public class MainFrame extends JFrame {
 				logWriter.println(userName + " Has Called.");
 				try {
 					remainingBets();
-				} catch (InterruptedException e1) {
-					// TODO Auto-generated catch block
-					e1.printStackTrace();
-				}
+				} catch (InterruptedException e1) {}
 			}
 		});
 	}
@@ -1164,7 +1138,6 @@ public class MainFrame extends JFrame {
 			stack = players.get(num).getStack();
 			players.get(num).setCard1(c1);
 			players.get(num).setCard2(c2);
-			// TODO
 			log(name, 0, c1, c2);
 			JLabel label = new JLabel();
 			label.setIcon(tempAvatar);
