@@ -1028,8 +1028,17 @@ public class MainFrame extends JFrame {
 		callButton.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
 				user.playerHasGone();
-				moneyInPot += highBet;
-				user.setStack(user.getStack() - highBet);
+				if(isBlind == true) {
+					
+					moneyInPot += 20;
+					user.setStack(user.getStack() - 20);
+				}
+				else {
+					
+					moneyInPot += highBet;
+					user.setStack(user.getStack() - highBet);
+				}
+				
 				userStack.setText("Balance:" + user.getStack());
 				userStack.setForeground(Color.white);
 				player.revalidate();
@@ -1536,8 +1545,8 @@ public class MainFrame extends JFrame {
 				if ((p.getStack() - betAmt) <= 0) {
 					betAmt = p.getStack();
 				}
-				p.setStack(p.getStack() - betAmt);
-				action = p.getName() + " Has Bet " + betAmt;
+				p.call(20);
+				action = p.getName() + " Has Called " + betAmt;
 				moneyInPot = betAmt + moneyInPot;
 				logWriter.println(action);
 				playerAction.setText(action);
@@ -1688,6 +1697,7 @@ public class MainFrame extends JFrame {
 			playerAction.setForeground(Color.white);
 			playerAction.revalidate();
 			pot.revalidate();
+			nextS.playerHasGone();
 			bigBlind();
 		}
 		// if user is the small blind
@@ -1736,16 +1746,18 @@ public class MainFrame extends JFrame {
 			action = nextB.getName() + " is the big blind.";
 			players.get(getPlayerIndex(nextB)).setStack(players.get(getPlayerIndex(nextB)).getStack() - 20);
 
+			moneyInPot += 20;
 			playerAction.setText(action);
 			playerAction.setFont(new Font("Optima", Font.BOLD, 23));
 			playerAction.setForeground(Color.white);
 			playerAction.revalidate();
 			logWriter.println(action);
 			pot.revalidate();
+			nextB.playerHasGone();
 			betting();
 
 		}
-		// If user is not the big blind
+		// If user is the big blind
 		else {
 			pot.revalidate();
 			action = nextB.getName() + " is the big blind.";
@@ -1760,7 +1772,6 @@ public class MainFrame extends JFrame {
 			playerAction.revalidate();
 			logWriter.println(action);
 			pot.revalidate();
-
 			disableButtons(1);
 			// update money in pot
 
@@ -1882,7 +1893,14 @@ public class MainFrame extends JFrame {
 			if(next == user && user.hasGone()) {
 				next = findNext(bbIndex + 1);
 			}
+			
+			else if(next.hasGone()) {
+				
+				bbIndex = getPlayerIndex(next);
+				next = findNext(bbIndex);
+			}
 			else {
+
 				next = findNext(bbIndex);
 			}
 			
