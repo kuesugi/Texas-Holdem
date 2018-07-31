@@ -1045,13 +1045,26 @@ public class MainFrame extends JFrame {
 				user.playerHasGone();
 				if(isBlind == true) {
 					
-					moneyInPot += 20;
-					user.setStack(user.getStack() - 20);
+					if(user.getStack() <= 20) {
+						moneyInPot += user.getStack();
+						user.setStack(0);
+					}
+					else {
+						moneyInPot += 20;
+						user.setStack(user.getStack() - 20);
+					}
+					
 				}
 				else {
 					
-					moneyInPot += highBet;
-					user.setStack(user.getStack() - highBet);
+					if(user.getStack() <= highBet) {
+						moneyInPot += user.getStack();
+						user.setStack(0);
+					}
+					else {
+						moneyInPot += highBet;
+						user.setStack(user.getStack() - highBet);
+					}
 				}
 				
 				userStack.setText("Balance:" + user.getStack());
@@ -1952,6 +1965,11 @@ public class MainFrame extends JFrame {
 			}
 			
 			else if(next.hasGone()) {
+				
+				bbIndex = getPlayerIndex(next);
+				next = findNext(bbIndex);
+			}
+			else if(!next.hasGone() && next.getFold()) {
 				
 				bbIndex = getPlayerIndex(next);
 				next = findNext(bbIndex);

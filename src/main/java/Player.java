@@ -121,7 +121,7 @@ public class Player {
 		if (highBet == 0) {
 			highBet = 10;
 		}
-		int aiBet = (int) ((handstrength/(4 * loop)) * stack);
+		int aiBet = (int) ((handstrength/(8 * loop)) * stack);
 		int betAmt = rand.nextInt(aiBet) + highBet;
 		
 		if(betAmt >= stack) {
