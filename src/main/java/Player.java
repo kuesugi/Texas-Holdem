@@ -131,6 +131,10 @@ public class Player {
 			highBet = 10;
 		}
 		int aiBet = (int) (aggression*(handstrength/(4 * loop)) * stack);
+		if(aiBet <= 0) {
+			
+			aiBet = 1;
+		}
 		int betAmt = rand.nextInt(aiBet) + highBet;
 		
 		if(betAmt >= stack) {

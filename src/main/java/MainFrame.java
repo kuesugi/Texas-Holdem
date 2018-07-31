@@ -65,8 +65,6 @@ public class MainFrame extends JFrame {
 	private boolean isBlind = true;
 	private Player user;
 	private String action;
-	private String[] opponents = { "Leopold Bloom", "Stephen Dedalus", "Yelverton Barry", "Buck Mulligan",
-			"Martin Cunningham", "Molly Bloom", "Josie Breen" };
 	private int moneyInPot = 0;
 
 	private ArrayList<Player> players;
@@ -166,8 +164,8 @@ public class MainFrame extends JFrame {
 		logWriter.println("       * * * Game Log * * *\n" + "- Game started " + startTime);
 		logWriter.print("- Username: " + name + "\n- Players: " + num + "\n  ");
 		for (int i = 0; i < num - 1; i++)
-			logWriter.print(opponents[i] + ", ");
-		logWriter.println(opponents[num - 1] + "\n\n- Hand 1\n\nPreflop:\nCards Dealt:");
+			logWriter.print(players.get(i).getName()+ ", ");
+		logWriter.println(players.get(num-1).getName() + "\n\n- Hand 1\n\nPreflop:\nCards Dealt:");
 		// cards dealt are recorded when initialize (AI)players
 	}
 
@@ -2116,7 +2114,7 @@ public class MainFrame extends JFrame {
 		stackL.setText("Balance: " + players.get(index).getStack());
 		stackL.setForeground(Color.white);
 		panel.removeAll();
-		nameL = new JLabel(opponents[index]);
+		nameL = new JLabel(players.get(index).getName());
 		panel.add(stackL);
 		panel.add(nameL);
 		panel.repaint();
