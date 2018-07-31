@@ -24,6 +24,17 @@ public class Hand {
 
 		return score;
 	}
+	
+	public ArrayList<Integer> getList(){
+		// TODO: I just randomly add cards. 
+		// fix this in those check hand type methods
+		winningCards.add(0);
+		winningCards.add(2);
+		winningCards.add(4);
+		winningCards.add(6);
+		winningCards.add(1);
+		return winningCards;
+	}
 
 	public ArrayList<Integer> getList() {
 		// TODO: I just randomly add cards.
@@ -38,7 +49,6 @@ public class Hand {
 
 	// implement FLOP transition
 	public Hand(Card card1, Card card2, Card card3) {
-
 		hand = new ArrayList<>();
 		hand.add(card1);
 		hand.add(card2);
@@ -47,17 +57,19 @@ public class Hand {
 	}
 
 	public void addCard(Card newCard) {
-
 		hand.add(newCard);
 	}
 
 	public void addCard(Card newCard, int number) {
+
 
 		hand.add(number, newCard);
 	}
 
 	public Card getCard(int card) {
 
+
+	public Card getCard(int card) {
 		return hand.get(card);
 	}
 
@@ -135,6 +147,7 @@ public class Hand {
 
 			score = checkPair(0, checkHand);
 			return score;
+
 		}
 
 		// score of 100 + high card
@@ -149,7 +162,9 @@ public class Hand {
 	// Main method for checking and returning scores
 	public int checkScore(Hand centerHand) {
 
+
 		combineHands(centerHand, hand);
+
 
 		// score of 1000
 		if (checkRoyalFlush(hand) != 0) {
@@ -159,65 +174,83 @@ public class Hand {
 		}
 
 		// score of 900 + high rank (accept ace, as that would be a royal flush)
+
 		else if (checkStraightFlush(hand) != 0) {
 
 			score = checkStraightFlush(hand);
+
 			return score;
 		}
 
 		// score of 800 + rank
+
 		else if (checkFourOfAKind(hand) != 0) {
 
 			score = checkFourOfAKind(hand);
+
 			return score;
 		}
 
 		// score of 700 + rank of three of a kind
+
 		else if (checkFullHouse(hand) != 0) {
 
 			score = checkFullHouse(hand);
+
 			return score;
 		}
 
 		// score of 600 + high rank
+
 		else if (checkFlush(hand) != 0) {
 
 			score = checkFlush(hand);
+
 			return score;
 		}
 
 		// score of 500 + high card
+
 		else if (checkStraight(hand) != 0) {
 
 			score = checkStraight(hand);
+
 			return score;
 		}
 
 		// score of 400 + rank
+
 		else if (checkThreeOfAKind(hand) != 0) {
 
 			score = checkThreeOfAKind(hand);
+
 			return score;
 		}
 
 		// score of 300 + highest rank of pair
+
 		else if (checkTwoPair(hand) != 0) {
 
 			score = checkTwoPair(hand);
+
 			return score;
 		}
 
 		// score of 200 + rank
+
 		else if (checkPair(0, hand) != 0) {
 
 			score = checkPair(0, hand);
+
 			return score;
 		}
 
 		// score of 100 + high card
 		else {
 
+
 			score = checkHighCard(hand);
+
 			return score;
 		}
 
@@ -229,6 +262,7 @@ public class Hand {
 		for (int i = 0; i < checkHand.size(); i++) {
 
 			// searches for an ace, than sets the royal flush rank accordingly
+
 			if (checkHand.get(i).getRank() == 1) {
 
 				winningCards.add(i);
@@ -239,9 +273,11 @@ public class Hand {
 					// we proceed to search the rest of thecheckHand for the cards needed in the
 					// suit needed
 					if (checkHand.get(j).getRank() == 10 && checkHand.get(j).getSuit() == suit) {
+
 						winningCards.add(j);
 
 						for (int k = 0; k < checkHand.size(); k++) {
+
 
 							if (checkHand.get(k).getRank() == 11 && checkHand.get(k).getSuit() == suit) {
 								
@@ -256,6 +292,7 @@ public class Hand {
 										for (int n = 0; n < checkHand.size(); n++) {
 
 											if (checkHand.get(n).getRank() == 13 && checkHand.get(n).getSuit() == suit) {
+
 
 												winningCards.add(n);
 												return 1000;
@@ -280,6 +317,7 @@ public class Hand {
 
 		for (int i = 0; i < checkHand.size(); i++) {
 
+
 			rank = checkHand.get(i).getRank();
 			suit = checkHand.get(i).getSuit();
 			// similar sorting to the royal flush, except the starting card is irrelevant
@@ -303,12 +341,16 @@ public class Hand {
 
 									for (int n = 0; n < checkHand.size(); n++) {
 
+
 										// if we were to happen to get a card ending on an ace, we would have a royal
 										// flush
 										// therefore, the straight flush cannot end with a 14 score
+
 										if (checkHand.get(n).getRank() == rank + 4 && checkHand.get(n).getSuit() == suit) {
+
 											
 											winningCards.add(n);
+
 
 											for (int o = 0; o < checkHand.size(); o++) {
 
@@ -322,6 +364,7 @@ public class Hand {
 																&& checkHand.get(p).getSuit() == suit) {
 															winningCards.add(p);
 															winningCards.remove(0);
+
 															return 900 + (rank + 6);
 														}
 													}
@@ -350,9 +393,11 @@ public class Hand {
 			rank = checkHand.get(i).getRank();
 			int count = 0;
 			// we check a card rank, and see if we can find four of them in the deck
+
 			for (int x = 0; x < checkHand.size(); x++) {
 
 				if (checkHand.get(x).getRank() == rank && x != i) {
+
 
 					winningCards.add(x);
 					count++;
@@ -408,6 +453,7 @@ public class Hand {
 
 		// we add in checking for a bad rank for looking
 		// at full houses and two pairs, to make sure we don't repeat
+
 		int badRank = bRank;
 		int rank = 0;
 
@@ -446,6 +492,7 @@ public class Hand {
 
 		// we add in checking for a bad rank for looking
 		// at full houses and two pairs, to make sure we don't repeat
+
 		int badRank = bRank;
 		int rank = 0;
 
@@ -459,7 +506,7 @@ public class Hand {
 				for (int x = 0; x < hand.size(); x++) {
 
 					if (hand.get(x).getRank() == rank && x != i) {
-
+						winningCards.add(x);
 						count++;
 					}
 
@@ -485,10 +532,12 @@ public class Hand {
 
 		for (int i = 1; i < checkHand.size(); i++) {
 
+
 			if (checkHand.get(i).getRank() > rank) {
 
 				winningCards.add(i);
 				rank = checkHand.get(i).getRank();
+
 
 				if (rank == 1) {
 
@@ -512,7 +561,9 @@ public class Hand {
 
 				threeKind = 1;
 			}
+
 			pair = checkPair(threeKind, checkHand);
+
 
 			if (pair != 0) {
 				if (threeKind == 1) {
@@ -531,7 +582,9 @@ public class Hand {
 		}
 	}
 
+
 	private int checkFlush(ArrayList<Card> checkHand) {
+
 
 		int suit = 0;
 		int rank = 0;
@@ -540,6 +593,8 @@ public class Hand {
 
 			suit = checkHand.get(i).getSuit();
 			if (checkHand.get(i).getRank() == 1) {
+
+
 
 				rank = 14;
 			}
@@ -551,10 +606,12 @@ public class Hand {
 
 					if (checkHand.get(x).getRank() > rank) {
 
+
 						rank = checkHand.get(x).getRank();
 					}
 
 					if (checkHand.get(x).getRank() == 1) {
+
 
 						rank = 14;
 					}
@@ -579,7 +636,9 @@ public class Hand {
 		return 0;
 	}
 
+
 	private int checkStraight(ArrayList<Card> checkHand) {
+
 
 		int rank = 0;
 
@@ -588,6 +647,7 @@ public class Hand {
 			rank = checkHand.get(i).getRank();
 
 			for (int j = 0; j < checkHand.size(); j++) {
+
 
 				if (checkHand.get(j).getRank() == rank + 1) {
 
@@ -615,6 +675,7 @@ public class Hand {
 													for (int p = 0; p < checkHand.size(); p++) {
 
 														if (checkHand.get(p).getRank() == rank + 6) {
+
 
 															return 500 + (rank + 6);
 														} else if ((rank + 6) == 14) {
@@ -654,16 +715,20 @@ public class Hand {
 		return 0;
 	}
 
+
 	private int checkTwoPair(ArrayList<Card> checkHand) {
 
 		int pair1 = checkPair(0, checkHand);
+
 		int pair2 = 0;
 		if (pair1 != 0) {
 
 			if (pair1 == 214)
+
 				pair2 = checkPair(1, checkHand);
 			else
 				pair2 = checkPair(pair1 - 200, checkHand);
+
 
 			if (pair2 != 0) {
 

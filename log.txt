@@ -1,6 +1,6 @@
        * * * Game Log * * *
-- Game started 18 July 2018  -  15 : 28
-- Username: 45
+- Game started 31 July 2018  -  13 : 39
+- Username: a
 - Players: 7
   Leopold Bloom, Stephen Dedalus, Yelverton Barry, Buck Mulligan, Martin Cunningham, Molly Bloom, Josie Breen
 
@@ -8,71 +8,51 @@
 
 Preflop:
 Cards Dealt:
-Leopold Bloom: clubs ace, hearts ten
-Stephen Dedalus: hearts deuce, diamonds deuce
-Yelverton Barry: clubs six, clubs eight
-Buck Mulligan: spades king, clubs king
-Martin Cunningham: clubs five, diamonds king
-Molly Bloom: hearts queen, diamonds jack
-Josie Breen: clubs seven, diamonds five
-45: clubs three, spades four
-Yelverton Barry Has Dealt.
-Josie Breen is the big blind.
-Josie Breen Has Bet 20
+Leopold Bloom: spades ten, diamonds ace
+Stephen Dedalus: clubs nine, diamonds five
+Yelverton Barry: clubs king, clubs deuce
+Buck Mulligan: clubs five, spades queen
+Martin Cunningham: hearts six, diamonds deuce
+Molly Bloom: spades six, clubs queen
+Josie Breen: hearts nine, hearts ace
+a: clubs four, diamonds queen
+Martin Cunningham Has Dealt.
+Leopold Bloom is the big blind.
+Player's turn, Calling Bets0
+Stephen Dedalus Has Called 20
+Yelverton Barry Has Called 20
+Molly Bloom Has Called 20
+Josie Breen Has Called 20
 Player's turn, Calling Bets 20
-45 Has Called.
-Player's turn, Calling Bets 0
+a Has Folded.
+Martin Cunningham Has Called 20
 
 Flop:
-Player's turn, Calling Bets 0
-45 Has Called.
-Player's turn, Calling Bets 0
+Player's turn, Calling Bets0
+Leopold Bloom Has Bet 23
+Yelverton Barry Has Bet 174
+Josie Breen Has Bet 212
+Buck Mulligan Has Bet 233
+Player's turn, Calling Bets233
 
 Turn:
-Player's turn, Calling Bets 0
-45 Has Called.
-Player's turn, Calling Bets 0
+Player's turn, Calling Bets0
+Yelverton Barry Has Bet 24
+Molly Bloom Has Bet 152
 
 River:
-Josie Breen Has Bet 27
-Player's turn, Calling Bets 27
-Josie Breen Has Bet 181
-Player's turn, Calling Bets 181
-Josie Breen Has Bet 223
-Player's turn, Calling Bets 223
-Josie Breen Has Bet 405
-Player's turn, Calling Bets 405
-Player's turn, Calling Bets 405
-Player's turn, Calling Bets 405
-Player's turn, Calling Bets 405
-Player's turn, Calling Bets 405
-Player's turn, Calling Bets 405
-Player's turn, Calling Bets 405
-Player's turn, Calling Bets 405
-Player's turn, Calling Bets 405
-Player's turn, Calling Bets 405
-Player's turn, Calling Bets 405
-Player's turn, Calling Bets 405
-Player's turn, Calling Bets 405
-Player's turn, Calling Bets 405
-Player's turn, Calling Bets 405
-Player's turn, Calling Bets 405
-Player's turn, Calling Bets 405
-Player's turn, Calling Bets 405
-Player's turn, Calling Bets 405
-Player's turn, Calling Bets 405
-Player's turn, Calling Bets 405
-Player's turn, Calling Bets 405
-Player's turn, Calling Bets 405
-Player's turn, Calling Bets 405
-Player's turn, Calling Bets 405
-Player's turn, Calling Bets 405
-Player's turn, Calling Bets 405
-45 Has Called.
-Player's turn, Calling Bets 405
+a folded
+Leopold Bloom calls
+Stephen Dedalus calls
+Yelverton Barry calls
+Buck Mulligan calls
+Martin Cunningham calls
+Molly Bloom calls
+Josie Breen calls
+Player's turn, Calling Bets0
 
 Final:
+Player's turn, Calling Bets0
+The winner is Molly Bloom with Kings High, and Molly Bloom wins $948
 
-You win with A Five High Straight, and you win $1271
-
-- Game ends 18 July 2018  -  15 : 28
+- Game ends 31 July 2018  -  13 : 39

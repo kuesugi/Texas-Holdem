@@ -130,6 +130,7 @@ public class MainMenu extends JFrame implements ActionListener {
 		JLabel lblUseTimer = new JLabel("Use Timer");
 		lblUseTimer.setForeground(Color.WHITE);
 		lblUseTimer.setFont(new Font("Gill Sans MT Ext Condensed Bold", Font.BOLD, 14));
+
 		
 		difficultyBox.setModel(new DefaultComboBoxModel(new String[] {"The Clones of James Buchanan (Easy)", "The Characters of Ulysses (Medium)", "Alcoholics of History (Hard)"}));
 		//difficultyBox.setSelectedIndex(3);
@@ -137,6 +138,7 @@ public class MainMenu extends JFrame implements ActionListener {
 		JLabel lblNewLabel = new JLabel("Opponents (Difficulty)");
 		lblNewLabel.setForeground(Color.WHITE);
 		lblNewLabel.setFont(new Font("Arial", Font.BOLD, 12));
+
 
 		GroupLayout gl_contentPane = new GroupLayout(contentPane);
 		gl_contentPane.setHorizontalGroup(
@@ -280,9 +282,6 @@ public class MainMenu extends JFrame implements ActionListener {
 		});
 
 		btnStart.addActionListener(new ActionListener() {
-			/**
-			 * activates when start button is pushed
-			 */
 			@Override
 
 			public void actionPerformed(ActionEvent e) {					
@@ -354,16 +353,15 @@ public class MainMenu extends JFrame implements ActionListener {
 					
 				try {
 					user = new Player(false, playerName, 1000, 1);
-				} catch (IOException e2) {
-					// TODO Auto-generated catch block
-					e2.printStackTrace();
-				}
+				} catch (IOException e2) {}
 				try {
 					new MainFrame(user, players, whichTheme, avatar, limit);
+
 				} catch (InterruptedException | IOException e1) {
 					// TODO Auto-generated catch block
 					e1.printStackTrace();
 				} //starts the game passing the player name parameter
+
 					setVisible(false);
 					dispose();
 				}
@@ -381,7 +379,5 @@ public class MainMenu extends JFrame implements ActionListener {
 	}
 
 	@Override
-	public void actionPerformed(ActionEvent e) {
-		// TODO Auto-generated method stub
-	}
+	public void actionPerformed(ActionEvent e) {}
 }
