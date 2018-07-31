@@ -50,32 +50,26 @@ public class Player {
 	}
 
 	public void playerHasGone() {
-
 		hasGone = true;
 	}
 
 	public void allIn() {
-
 		allIn = true;
 	}
 
 	public void newRoundUnFold() {
-
 		ifFold = false;
 	}
 
 	public boolean hasGone() {
-
 		return hasGone;
 	}
 
 	public void newRoundNotGone() {
-
 		hasGone = false;
 	}
 
 	public void newRoundNotAllIn() {
-
 		allIn = false;
 	}
 
@@ -119,7 +113,7 @@ public class Player {
 		if (highBet == 0) {
 			highBet = 10;
 		}
-		int betAmt = rand.nextInt(stack/4) + highBet;
+		int betAmt = rand.nextInt(stack / 4) + highBet;
 		stack = stack - betAmt;
 		if (stack == 0)
 			allIn = true;

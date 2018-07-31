@@ -1,5 +1,4 @@
 
-
 public class Card {
 	
 	private final int rank;
@@ -41,7 +40,7 @@ public class Card {
     public String getIndex(){
         return cardIndex;
     }
-    
+        
     public void setCardIndex(int j, int i){
         cardIndex = new String(suitToString(j)+i);
     }

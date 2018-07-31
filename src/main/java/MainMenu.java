@@ -124,7 +124,7 @@ public class MainMenu extends JFrame implements ActionListener {
 		
 		JLabel lblUseTimer = new JLabel("Use Timer");
 		lblUseTimer.setForeground(Color.WHITE);
-		lblUseTimer.setFont(new Font("Gill Sans MT Ext Condensed Bold", Font.BOLD, 12));
+		lblUseTimer.setFont(new Font("Gill Sans MT Ext Condensed Bold", Font.BOLD, 14));
 
 		GroupLayout gl_contentPane = new GroupLayout(contentPane);
 		gl_contentPane.setHorizontalGroup(
@@ -249,7 +249,7 @@ public class MainMenu extends JFrame implements ActionListener {
 
 			public void actionPerformed(ActionEvent e) {
 
-				contentPane.setBackground(new Color(0,0,255));
+				contentPane.setBackground(new Color(31, 114, 205));
 				
 				whichTheme = 1;
 				chosenTheme.setText("Navy");
@@ -257,9 +257,6 @@ public class MainMenu extends JFrame implements ActionListener {
 		});
 
 		btnStart.addActionListener(new ActionListener() {
-			/**
-			 * activates when start button is pushed
-			 */
 			@Override
 
 			public void actionPerformed(ActionEvent e) {					
@@ -289,16 +286,11 @@ public class MainMenu extends JFrame implements ActionListener {
 				}
 				try {
 					user = new Player(false, playerName, 1000, 1);
-				} catch (IOException e2) {
-					// TODO Auto-generated catch block
-					e2.printStackTrace();
-				}
+				} catch (IOException e2) {}
 				try {
 					new MainFrame(user, players, whichTheme, avatar, limit);
-				} catch (InterruptedException e1) {
-					// TODO Auto-generated catch block
-					e1.printStackTrace();
-				} //starts the game passing the player name parameter
+				} catch (InterruptedException | IOException e1) {} 
+					//starts the game passing the player name parameter
 					setVisible(false);
 					dispose();
 				}
@@ -316,7 +308,5 @@ public class MainMenu extends JFrame implements ActionListener {
 	}
 
 	@Override
-	public void actionPerformed(ActionEvent e) {
-		// TODO Auto-generated method stub
-	}
+	public void actionPerformed(ActionEvent e) {}
 }
