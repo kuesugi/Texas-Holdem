@@ -79,9 +79,11 @@ public class MainFrame extends JFrame {
 	int nextIndex = -1;
 	int gameRound = -1;
 	int highBet = 0;
+	int callBet = 0;
 	boolean ifUserFold = false;
 	boolean userMoved = false;
 	static private boolean timeLimit;
+	int loop = 1;
 
 	/**
 	 * Constructor
@@ -516,10 +518,14 @@ public class MainFrame extends JFrame {
 		if (gameRound == -1) {
 			resetGone();
 			user.newRoundNotGone();
+			loop = 1;
 			deal();
 		} else if (gameRound == 0) {
 			// go to the moves for the first round
 			highBet = 0;
+			callBet = 0;
+			loop = 1;
+			playerHasRaisedOrNewRound();
 			// log the round name
 			isBlind = false;
 			logWriter.println("\nFlop:");
@@ -531,6 +537,9 @@ public class MainFrame extends JFrame {
 		// to enter the turn round
 		else if (gameRound == 1) {
 			highBet = 0;
+			callBet = 0;
+			loop = 1;
+			playerHasRaisedOrNewRound();
 			logWriter.println("\nTurn:");
 			displayCenterCards(centerHand, 2);
 			centerHand.addCard(deck.get(cardCount--));
@@ -540,6 +549,9 @@ public class MainFrame extends JFrame {
 		// to enter the river round
 		else if (gameRound == 2) {
 			highBet = 0;
+			callBet = 0;
+			loop = 1;
+			playerHasRaisedOrNewRound();
 			logWriter.println("\nRiver:");
 			displayCenterCards(centerHand, 3);
 			if (user.getFold())
@@ -555,6 +567,9 @@ public class MainFrame extends JFrame {
 		// to get the result
 		else if (gameRound == 3) {
 			highBet = 0;
+			callBet = 0;
+			loop = 1;
+			playerHasRaisedOrNewRound();
 			logWriter.println("\nFinal:");
 			String result = new String();
 			gameRound++;
@@ -647,7 +662,7 @@ public class MainFrame extends JFrame {
 				initAI(eastAI2, 6, 1);
 			}
 
-			if (winnerIndex == -1 && tie == false) {
+			if (winnerIndex == -1 && tie == false && !user.getFold()) {
 				user.setStack(user.getStack() + moneyInPot);
 				result = "\nYou win with " + handType(user) + ", and you win $" + moneyInPot;
 				logWriter.println(result);
@@ -1533,12 +1548,11 @@ public class MainFrame extends JFrame {
 	// 0 - raise; 1 - fold; 2 - call;
 	public String aiRandomAction(int round, int aiIndex, Player p) throws InterruptedException {
 		String action = "";
-		Random rand = new Random();
-		int moves = -1;
+		int moves = -10;
 
 		if (round == 0) {
 
-			moves = rand.nextInt(1);
+			moves =  p.AIBehaviour(isBlind, centerHand, loop, highBet);
 
 			if (moves == 0) {
 				int betAmt = 20;
@@ -1563,10 +1577,33 @@ public class MainFrame extends JFrame {
 
 			} else {
 				p.fold();
-				action = p.getName() + " Has Folded.";
-				JPanel panel = new JPanel();
-				panel = getPanelNum(getPlayerIndex(p));
-				removeAICards(panel, getPlayerIndex(p));
+				if(playersStillInTheGame() == true) {
+					
+					action = p.getName() + " Has Folded.";
+					JPanel panel = new JPanel();
+					panel = getPanelNum(getPlayerIndex(p));
+					removeAICards(panel, getPlayerIndex(p));
+				}
+				else {
+					
+					p.newRoundUnFold();
+					p.call(20);
+					action = p.getName() + " Has Called " + 20;
+					moneyInPot = 20 + moneyInPot;
+					logWriter.println(action);
+					playerAction.setText(action);
+					playerAction.setFont(new Font("Optima", Font.BOLD, 23));
+					playerAction.setForeground(Color.white);
+					playerAction.revalidate();
+
+					// update money in pot
+					moneyInPotLabel.setText("Money in the pot: " + moneyInPot);
+					moneyInPotLabel.setFont(new Font("Optima", Font.BOLD, 23));
+					moneyInPotLabel.setForeground(Color.white);
+					pot.add(moneyInPotLabel);
+					pot.revalidate();
+				}
+				
 
 			}
 
@@ -1574,7 +1611,7 @@ public class MainFrame extends JFrame {
 
 		// if in the first round
 		else {
-			moves = rand.nextInt(3);
+			moves = p.AIBehaviour(isBlind, centerHand, loop, highBet);
 			if (moves == 0 && p.getStack() <= 0) {
 				moves++;
 			}
@@ -1588,9 +1625,9 @@ public class MainFrame extends JFrame {
 				panel = getPanelNum(getPlayerIndex(p));
 				removeAICards(panel, getPlayerIndex(p));
 			}
-			if (moves == 0) {
+			if (moves >= 0) {
 				
-				int betAmt = p.bet(highBet);
+				int betAmt = moves;
 				action = p.getName() + " Has Bet " + betAmt;
 				moneyInPot = betAmt + moneyInPot;
 				logWriter.println(action);
@@ -1605,17 +1642,36 @@ public class MainFrame extends JFrame {
 				moneyInPotLabel.setForeground(Color.white);
 				pot.add(moneyInPotLabel);
 				pot.revalidate();
-			} else if (moves == 1) {
+				resetGone();
+				user.playerHasGone();
+				p.playerHasGone();
+			} else if (moves == -1) {
 				p.fold();
-				JPanel panel = new JPanel();
-				panel = getPanelNum(getPlayerIndex(p));
-				removeAICards(panel, getPlayerIndex(p));
-				action = p.getName() + " Has Folded.";
-				panel = getPanelNum(getPlayerIndex(p));
-				removeAICards(panel, getPlayerIndex(p));
+				if(playersStillInTheGame() == true) {
+					
+					action = p.getName() + " Has Folded.";
+					JPanel panel = new JPanel();
+					panel = getPanelNum(getPlayerIndex(p));
+					removeAICards(panel, getPlayerIndex(p));
+				}
+				else {
+					
+					p.newRoundUnFold();
+					p.call(highBet);
+					action = p.getName() + " Has Called.";
+				}
+
 			} else {
 				p.call(highBet);
 				action = p.getName() + " Has Called.";
+				moneyInPot = highBet + moneyInPot;
+				logWriter.println(action);
+				playerAction.setText(action);
+				moneyInPotLabel.setText("Money in the pot: " + moneyInPot);
+				moneyInPotLabel.setFont(new Font("Optima", Font.BOLD, 23));
+				moneyInPotLabel.setForeground(Color.white);
+				pot.add(moneyInPotLabel);
+				pot.revalidate();
 			}
 		}
 		return action;
@@ -1728,7 +1784,7 @@ public class MainFrame extends JFrame {
 		Player nextS = null;
 		int cur = getDealerID();
 		nextS = findNext(cur);
-		playerHasRaised();
+		playerHasRaisedOrNewRound();
 
 		int sbIndex = -1;
 		if (nextS != user && nextS != null)
@@ -1792,6 +1848,7 @@ public class MainFrame extends JFrame {
 		pot.add(moneyInPotLabel);
 		pot.revalidate();
 		int cur = getDealerID();
+		callBet = highBet;
 		Player nextB = findNext(cur);
 		int bbIndex = -1;
 		int scoreCheck = highBet;
@@ -1883,7 +1940,7 @@ public class MainFrame extends JFrame {
 					if (scoreCheck == highBet || isBlind == true) {
 						return;
 					} else if (isBlind == false) {
-						playerHasRaised();
+						playerHasRaisedOrNewRound();
 						betting();
 
 					}
@@ -1912,6 +1969,7 @@ public class MainFrame extends JFrame {
 			user.newRoundNotGone();
 			resetGone();
 			highBet = 0;
+			callBet = 0;
 			gameRound++;
 			transition();
 		}
@@ -1922,7 +1980,6 @@ public class MainFrame extends JFrame {
 
 		pot.revalidate();
 		int cur = getDealerID();
-		int callBet = highBet;
 		Player nextB = findNext(cur);
 		int bbIndex = -1;
 		if (nextB != user && nextB != null) {
@@ -1979,16 +2036,20 @@ public class MainFrame extends JFrame {
 				playerAction.setForeground(Color.white);
 				playerAction.revalidate();
 				pot.revalidate();
-				user.newRoundNotGone();
 			}
+			loop ++;
 			betting();
 		}
 
-		resetGone();
-		user.newRoundNotGone();
-		highBet = 0;
-		gameRound++;
-		transition();
+		else {
+			resetGone();
+			user.newRoundNotGone();
+			highBet = 0;
+			callBet = 0;
+			gameRound++;
+			transition();
+		}
+
 	}
 
 	public void resetGone() throws InterruptedException {
@@ -2010,11 +2071,18 @@ public class MainFrame extends JFrame {
 		next = findNext(bbIndex);
 		for (int i = 0; i < players.size() + 1; i++) {
 
-			if (!next.getFold() && nextB != user) {
+			if (!next.getFold()) {
 				if (next != user) {
 					pot.revalidate();
 					next.newRoundNotGone();
 					bbIndex = getPlayerIndex(next);
+					if (bbIndex == -1)
+						bbIndex = players.size();
+					next = findNext(bbIndex);
+				}
+				else {
+					
+					bbIndex = getPlayerIndex(next) + 1;
 					if (bbIndex == -1)
 						bbIndex = players.size();
 					next = findNext(bbIndex);
@@ -2055,14 +2123,26 @@ public class MainFrame extends JFrame {
 		return null;
 	}
 
-	private void playerHasRaised() {
+	private void playerHasRaisedOrNewRound() {
 
-		user.newRoundNotAllIn();
+		user.newRoundNotGone();
 		for (int i = 0; i < players.size(); i++) {
 
 			players.get(i).newRoundNotGone();
 
 		}
+	}
+	
+	private boolean playersStillInTheGame() {
+		
+		for (int i = 0; i < players.size(); i++) {
+
+			if(players.get(i).getFold() == false) {
+				
+				return true;
+			}
+		}
+		return false;
 	}
 
 }

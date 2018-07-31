@@ -42,6 +42,18 @@ public class Card {
         return cardIndex;
     }
     
+    public boolean compare(Card card1) {
+    	
+    	if(card1.getRank() == rank && card1.getSuit() == suit) {
+    		
+    		return true;
+    	}
+    	else {
+    		
+    		return false;
+    	}
+    }
+    
     public void setCardIndex(int j, int i){
         cardIndex = new String(suitToString(j)+i);
     }
