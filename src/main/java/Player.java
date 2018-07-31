@@ -17,6 +17,7 @@ public class Player {
 	private boolean hasGone = false;
 	private Image avatar;
 	private double handstrength = 0;
+	private double aggression = 0;
 
 	public Player(boolean ai, String playerName, int playerMoney, int avatarNum) throws IOException {
 		isAI = ai;
@@ -33,6 +34,10 @@ public class Player {
 
 	public int getStack() {
 		return stack;
+	}
+	
+	public double getAggro() {
+		return aggression;
 	}
 
 	public boolean getFold() {
@@ -92,6 +97,10 @@ public class Player {
 	public void outOfGame() {
 		ifOut = true;
 	}
+	
+	public void setAggro(double agro) {
+		aggression = agro;
+	}
 
 	public void setCard1(Card card) {
 		playerHand.addCard(card, 0);
@@ -121,7 +130,7 @@ public class Player {
 		if (highBet == 0) {
 			highBet = 10;
 		}
-		int aiBet = (int) ((handstrength/(8 * loop)) * stack);
+		int aiBet = (int) (aggression*(handstrength/(4 * loop)) * stack);
 		int betAmt = rand.nextInt(aiBet) + highBet;
 		
 		if(betAmt >= stack) {
@@ -213,6 +222,7 @@ public class Player {
 		buildDeck(deck1);
 		buildDeck(deck2);
 		Hand checkHand = new Hand();
+		Random rand = new Random(System.currentTimeMillis());
 		int bench = checkHand.preFinishCheck(centerHand, getCard1(), getCard2());
 		
 		for(int i = 0; i < deck1.size(); i++) {
@@ -254,6 +264,10 @@ public class Player {
 				return -2;
 			}
 			
+			else if(rand.nextDouble() *aggression >0.45) {
+				
+				return -2;
+			}
 			else {
 				
 				return -1;
@@ -269,6 +283,11 @@ public class Player {
 			}
 			
 			else if(handstrength > 0.25 /handModifier ) {
+				
+				return -2;
+			}
+			
+			else if(rand.nextDouble() *aggression >0.45) {
 				
 				return -2;
 			}
