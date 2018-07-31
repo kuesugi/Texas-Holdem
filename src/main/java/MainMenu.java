@@ -327,7 +327,7 @@ public class MainMenu extends JFrame implements ActionListener {
 								"Martin Cunningham", "Molly Bloom", "Josie Breen" };
 						for (int j = 0; j < num; j++) {
 							try {
-								players.add(new Player(true, opponents[j], 1000, j + 1));
+								players.add(new Player(true, opponents[j], 1000, j + 11));
 								players.get(j).setAggro(rand.nextDouble()/2);
 							} catch (IOException e1) {
 								// TODO Auto-generated catch block
@@ -342,7 +342,7 @@ public class MainMenu extends JFrame implements ActionListener {
 								"Vincent van Gogh", "Ernest Hemingway", "Benjamin Franklin" };
 						for (int j = 0; j < num; j++) {
 							try {
-								players.add(new Player(true, opponents[j], 1000, j + 1));
+								players.add(new Player(true, opponents[j], 1000, j + 21));
 								players.get(j).setAggro(rand.nextDouble());
 							} catch (IOException e1) {
 								// TODO Auto-generated catch block
