@@ -36,17 +36,6 @@ public class Hand {
 		return winningCards;
 	}
 
-	public ArrayList<Integer> getList() {
-		// TODO: I just randomly add cards.
-		// fix this in those check hand type methods
-		winningCards.add(0);
-		winningCards.add(2);
-		winningCards.add(4);
-		winningCards.add(6);
-		winningCards.add(1);
-		return winningCards;
-	}
-
 	// implement FLOP transition
 	public Hand(Card card1, Card card2, Card card3) {
 		hand = new ArrayList<>();
@@ -65,8 +54,6 @@ public class Hand {
 
 		hand.add(number, newCard);
 	}
-
-	public Card getCard(int card) {
 
 
 	public Card getCard(int card) {

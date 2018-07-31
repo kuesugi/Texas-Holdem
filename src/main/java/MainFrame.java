@@ -67,11 +67,7 @@ public class MainFrame extends JFrame {
 	private ImageIcon winningC4Icon;
 	private ImageIcon winningC5Icon;
 
-	private ImageIcon winningC1Icon;
-	private ImageIcon winningC2Icon;
-	private ImageIcon winningC3Icon;
-	private ImageIcon winningC4Icon;
-	private ImageIcon winningC5Icon;
+
 
 	private String userName = new String();
 	private boolean isBlind = true;
