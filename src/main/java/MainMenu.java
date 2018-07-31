@@ -17,6 +17,7 @@ import java.awt.event.WindowEvent;
 import java.io.File;
 import java.io.IOException;
 import java.util.ArrayList;
+import java.util.Random;
 import java.awt.Color;
 import javax.swing.JTextField;
 import javax.swing.LayoutStyle.ComponentPlacement;
@@ -24,6 +25,9 @@ import javax.swing.JFormattedTextField;
 import javax.swing.JButton;
 import javax.swing.JCheckBox;
 import javax.swing.JFileChooser;
+import java.awt.Choice;
+import javax.swing.JComboBox;
+import javax.swing.DefaultComboBoxModel;
 
 public class MainMenu extends JFrame implements ActionListener {
 
@@ -33,6 +37,7 @@ public class MainMenu extends JFrame implements ActionListener {
 	private JTextField nameField = new JTextField();
 	private JTextField numberField = new JTextField();
 	private JLabel startWarning = new JLabel("");// Give a base from which to write any error messages
+	private JComboBox difficultyBox = new JComboBox();
 	JLabel avatar;
 	Player user;
 	static int whichTheme = 0;
@@ -126,6 +131,15 @@ public class MainMenu extends JFrame implements ActionListener {
 		lblUseTimer.setForeground(Color.WHITE);
 		lblUseTimer.setFont(new Font("Gill Sans MT Ext Condensed Bold", Font.BOLD, 14));
 
+		
+		difficultyBox.setModel(new DefaultComboBoxModel(new String[] {"The Clones of James Buchanan (Easy)", "The Characters of Ulysses (Medium)", "Alcoholics of History (Hard)"}));
+		//difficultyBox.setSelectedIndex(3);
+		
+		JLabel lblNewLabel = new JLabel("Opponents (Difficulty)");
+		lblNewLabel.setForeground(Color.WHITE);
+		lblNewLabel.setFont(new Font("Arial", Font.BOLD, 12));
+
+
 		GroupLayout gl_contentPane = new GroupLayout(contentPane);
 		gl_contentPane.setHorizontalGroup(
 			gl_contentPane.createParallelGroup(Alignment.LEADING)
@@ -150,30 +164,39 @@ public class MainMenu extends JFrame implements ActionListener {
 					.addComponent(numberField, GroupLayout.PREFERRED_SIZE, 395, GroupLayout.PREFERRED_SIZE)
 					.addContainerGap(66, Short.MAX_VALUE))
 				.addGroup(gl_contentPane.createSequentialGroup()
-					.addGap(65)
-					.addComponent(theme, GroupLayout.PREFERRED_SIZE, 130, GroupLayout.PREFERRED_SIZE)
-					.addGap(18)
-					.addComponent(greenTheme, GroupLayout.PREFERRED_SIZE, 173, GroupLayout.PREFERRED_SIZE)
-					.addComponent(navyTheme, GroupLayout.PREFERRED_SIZE, 173, GroupLayout.PREFERRED_SIZE)
-					.addComponent(chosenTheme, GroupLayout.PREFERRED_SIZE, 60, GroupLayout.PREFERRED_SIZE)
-					.addContainerGap(55, Short.MAX_VALUE))
-				.addGroup(gl_contentPane.createSequentialGroup()
 					.addGap(245)
-					.addComponent(startWarning, GroupLayout.DEFAULT_SIZE, 188, Short.MAX_VALUE)
+					.addComponent(startWarning, GroupLayout.DEFAULT_SIZE, 206, Short.MAX_VALUE)
 					.addGap(245))
 				.addGroup(gl_contentPane.createSequentialGroup()
 					.addGap(181)
 					.addComponent(btnStart, GroupLayout.PREFERRED_SIZE, 312, GroupLayout.PREFERRED_SIZE)
-					.addContainerGap(185, Short.MAX_VALUE))
+					.addContainerGap(203, Short.MAX_VALUE))
 				.addGroup(gl_contentPane.createSequentialGroup()
-					.addGap(181)
-					.addGroup(gl_contentPane.createParallelGroup(Alignment.LEADING)
+					.addGroup(gl_contentPane.createParallelGroup(Alignment.LEADING, false)
 						.addGroup(gl_contentPane.createSequentialGroup()
+							.addGap(181)
+							.addComponent(btnBrowse, GroupLayout.PREFERRED_SIZE, 312, GroupLayout.PREFERRED_SIZE))
+						.addGroup(gl_contentPane.createSequentialGroup()
+							.addGap(65)
+							.addGroup(gl_contentPane.createParallelGroup(Alignment.TRAILING)
+								.addComponent(theme, GroupLayout.PREFERRED_SIZE, 130, GroupLayout.PREFERRED_SIZE)
+								.addComponent(lblNewLabel))
+							.addGap(18)
+							.addGroup(gl_contentPane.createParallelGroup(Alignment.LEADING)
+								.addComponent(difficultyBox, GroupLayout.PREFERRED_SIZE, 321, GroupLayout.PREFERRED_SIZE)
+								.addGroup(gl_contentPane.createSequentialGroup()
+									.addComponent(greenTheme, GroupLayout.PREFERRED_SIZE, 173, GroupLayout.PREFERRED_SIZE)
+									.addComponent(navyTheme, GroupLayout.PREFERRED_SIZE, 173, GroupLayout.PREFERRED_SIZE)))))
+					.addGroup(gl_contentPane.createParallelGroup(Alignment.TRAILING)
+						.addGroup(gl_contentPane.createSequentialGroup()
+							.addComponent(chosenTheme, GroupLayout.PREFERRED_SIZE, 60, GroupLayout.PREFERRED_SIZE)
+							.addContainerGap(77, Short.MAX_VALUE))
+						.addGroup(gl_contentPane.createSequentialGroup()
+							.addPreferredGap(ComponentPlacement.RELATED)
 							.addComponent(checkbox, GroupLayout.PREFERRED_SIZE, 20, GroupLayout.PREFERRED_SIZE)
-							.addPreferredGap(ComponentPlacement.UNRELATED)
-							.addComponent(lblUseTimer))
-						.addComponent(btnBrowse, GroupLayout.PREFERRED_SIZE, 312, GroupLayout.PREFERRED_SIZE))
-					.addContainerGap(181, Short.MAX_VALUE))
+							.addGap(18)
+							.addComponent(lblUseTimer)
+							.addGap(61))))
 		);
 		gl_contentPane.setVerticalGroup(
 			gl_contentPane.createParallelGroup(Alignment.TRAILING)
@@ -195,10 +218,12 @@ public class MainMenu extends JFrame implements ActionListener {
 						.addComponent(navyTheme)
 						.addComponent(chosenTheme)
 						.addComponent(theme))
-					.addGap(15)
+					.addGap(18)
 					.addGroup(gl_contentPane.createParallelGroup(Alignment.BASELINE)
+						.addComponent(difficultyBox, GroupLayout.PREFERRED_SIZE, GroupLayout.DEFAULT_SIZE, GroupLayout.PREFERRED_SIZE)
 						.addComponent(checkbox, GroupLayout.PREFERRED_SIZE, 20, GroupLayout.PREFERRED_SIZE)
-						.addComponent(lblUseTimer))
+						.addComponent(lblUseTimer)
+						.addComponent(lblNewLabel))
 					.addGap(18)
 					.addComponent(btnBrowse)
 					.addGap(15)
@@ -261,7 +286,11 @@ public class MainMenu extends JFrame implements ActionListener {
 
 			public void actionPerformed(ActionEvent e) {					
 				playerName = nameField.getText();
-				num = Integer.parseInt(numberField.getText());
+				if (!numberField.getText().isEmpty()) {
+					
+					num = Integer.parseInt(numberField.getText());
+				}
+
 				if (checkbox.isSelected()) {
 					limit = true;
 				}
@@ -273,24 +302,66 @@ public class MainMenu extends JFrame implements ActionListener {
 					startWarning.setText("Not a valid number!");
 								
 				else {
-					String[] opponents = { "Leopold Bloom", "Stephen Dedalus", "Yelverton Barry", "Buck Mulligan",
-						"Martin Cunningham", "Molly Bloom", "Josie Breen" };
+					Random rand = new Random(System.currentTimeMillis());
+					int diff = difficultyBox.getSelectedIndex();
 					ArrayList<Player> players = new ArrayList<>();
-					for (int j = 0; j < num; j++) {
-					try {
-						players.add(new Player(true, opponents[j], 1000, j+1));
-					} catch (IOException e1) {
-						// TODO Auto-generated catch block
-						e1.printStackTrace();
+					
+					if(diff == 0) {
+						
+						String[] opponents = { "Doc James Buchanan", "Dopey James Buchanan", "Bashful James Buchanan", "Grumpy James Buchanan",
+								"Sneezy James Buchanan", "Sleepy James Buchanan", "Happy James Buchanan" };
+						for (int j = 0; j < num; j++) {
+							try {
+								players.add(new Player(true, opponents[j], 1000, j + 1));
+								players.get(j).setAggro(rand.nextDouble()/4);
+							} catch (IOException e1) {
+								// TODO Auto-generated catch block
+								e1.printStackTrace();
+							}
+						}
 					}
-				}
+					else if(diff == 1) {
+						
+						String[] opponents = { "Leopold Bloom", "Stephen Dedalus", "Yelverton Barry", "Buck Mulligan",
+								"Martin Cunningham", "Molly Bloom", "Josie Breen" };
+						for (int j = 0; j < num; j++) {
+							try {
+								players.add(new Player(true, opponents[j], 1000, j + 11));
+								players.get(j).setAggro(rand.nextDouble()/2);
+							} catch (IOException e1) {
+								// TODO Auto-generated catch block
+								e1.printStackTrace();
+							}
+						}
+						
+					}
+					else {
+						
+						String[] opponents = { "Winston Churchill", "Ulysses S. Grant", "Alexander the Great", "Elizabeth Taylor",
+								"Vincent van Gogh", "Ernest Hemingway", "Benjamin Franklin" };
+						for (int j = 0; j < num; j++) {
+							try {
+								players.add(new Player(true, opponents[j], 1000, j + 21));
+								players.get(j).setAggro(rand.nextDouble());
+							} catch (IOException e1) {
+								// TODO Auto-generated catch block
+								e1.printStackTrace();
+							}
+						}
+						
+					}
+					
 				try {
 					user = new Player(false, playerName, 1000, 1);
 				} catch (IOException e2) {}
 				try {
 					new MainFrame(user, players, whichTheme, avatar, limit);
-				} catch (InterruptedException | IOException e1) {} 
-					//starts the game passing the player name parameter
+
+				} catch (InterruptedException | IOException e1) {
+					// TODO Auto-generated catch block
+					e1.printStackTrace();
+				} //starts the game passing the player name parameter
+
 					setVisible(false);
 					dispose();
 				}
