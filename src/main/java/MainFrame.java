@@ -727,10 +727,7 @@ public class MainFrame extends JFrame {
 		else {
 			dealerIDLabel.setText(user.getName());
 		}	
-		dealerIDLabel.setFont(new Font("Optima", Font.BOLD, 18));
-		dealerIDLabel.setForeground(Color.white);
-		dealerIDLabel.revalidate();
-		if (dealerID != players.size()) {
+		if (dealerID != players.size() && dealerID < players.size()) {
 			action = players.get(dealerID).getName() + " Has Dealt.";
 		}
 
@@ -738,6 +735,9 @@ public class MainFrame extends JFrame {
 			action = userName + " Has Dealt.";
 		}
 
+		dealerIDLabel.setFont(new Font("Optima", Font.BOLD, 18));
+		dealerIDLabel.setForeground(Color.white);
+		dealerIDLabel.revalidate();
 		logWriter.println(action);
 		playerAction.setText(action);
 		playerAction.setFont(new Font("Optima", Font.BOLD, 23));
@@ -1643,7 +1643,7 @@ public class MainFrame extends JFrame {
 				pot.add(moneyInPotLabel);
 				pot.revalidate();
 				resetGone();
-				user.playerHasGone();
+				user.newRoundNotGone();
 				p.playerHasGone();
 			} else if (moves == -1) {
 				p.fold();

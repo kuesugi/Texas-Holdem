@@ -191,6 +191,11 @@ public class Player {
 			return 0;
 		}
 		
+		else if(getCard1().getRank() == 1|| getCard2().getRank() == 1) {
+			
+			return 0;
+		}
+		
 		else {
 			
 			return 1;
