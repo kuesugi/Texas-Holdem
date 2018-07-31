@@ -2,6 +2,7 @@ import java.awt.EventQueue;
 import java.awt.FlowLayout;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.io.IOException;
 import java.io.PrintWriter;
 import java.util.ArrayList;
 
@@ -20,6 +21,7 @@ import javax.swing.BorderFactory;
 import javax.swing.BoxLayout;
 import javax.swing.GroupLayout;
 import javax.swing.GroupLayout.Alignment;
+import javax.swing.ImageIcon;
 import javax.swing.LayoutStyle.ComponentPlacement;
 
 public class resultFrame extends JFrame {
@@ -34,8 +36,9 @@ public class resultFrame extends JFrame {
 	 * @param user
 	 */
 	public resultFrame(String result, Player user, ArrayList<Player> players, MainFrame mainFrame,
-			PrintWriter logWriter, int theme, JLabel avatar, boolean limit) {
-		initialize(result, user, players, mainFrame, logWriter, theme, avatar, limit);
+			PrintWriter logWriter, int theme, JLabel avatar, boolean limit, ImageIcon c1Icon, ImageIcon c2Icon, ImageIcon c3Icon,
+			ImageIcon c4Icon, ImageIcon c5Icon) {
+		initialize(result, user, players, mainFrame, logWriter, theme, avatar, limit, c1Icon, c2Icon, c3Icon, c4Icon, c5Icon);
 	}
 
 	/**
@@ -46,19 +49,45 @@ public class resultFrame extends JFrame {
 	 * @param user
 	 */
 	private void initialize(String result, Player user, ArrayList<Player> players, MainFrame mainFrame,
-			PrintWriter logWriter, int theme, JLabel avatar, boolean limit) {
+			PrintWriter logWriter, int theme, JLabel avatar, boolean limit, ImageIcon c1Icon, ImageIcon c2Icon, ImageIcon c3Icon,
+			ImageIcon c4Icon, ImageIcon c5Icon) {
 		frame = new JFrame();
 		JPanel btnPnl = new JPanel(new FlowLayout(FlowLayout.CENTER));
 		JPanel mainPanel = new JPanel(new BorderLayout());
-		if (theme == 1)
+		JPanel cards = new JPanel(new FlowLayout(FlowLayout.CENTER));
+		if (theme == 1) {
 			frame.getContentPane().setBackground(new Color(31, 114, 205));
-		else
-			frame.getContentPane().setBackground(new Color(0, 128, 0));
-
+			cards.setBackground(new Color(31, 114, 205));
+		}
+		if (theme == 1) {
+			frame.getContentPane().setBackground(new Color(31, 114, 205));
+			cards.setBackground(new Color(31, 114, 205));
+		}
 		JLabel label = new JLabel(result);
-		label.setFont(new Font("Gill Sans MT Ext Condensed Bold", Font.BOLD, 15));
+		label.setFont(new Font("Gill Sans MT Ext Condensed Bold", Font.BOLD, 17));
 		label.setForeground(new Color(255, 255, 255));
 		label.setHorizontalAlignment(SwingConstants.CENTER);
+		
+		JLabel winningHand = new JLabel("Winning Hand	");
+		winningHand.setFont(new Font("Gill Sans MT Ext Condensed Bold", Font.BOLD, 17));
+		winningHand.setForeground(new Color(255, 255, 255));
+		
+		JLabel c1 = new JLabel();
+		c1.setIcon(c1Icon);
+		JLabel c2 = new JLabel();
+		c2.setIcon(c2Icon);
+		JLabel c3 = new JLabel();
+		c3.setIcon(c3Icon);
+		JLabel c4 = new JLabel();
+		c4.setIcon(c4Icon);
+		JLabel c5 = new JLabel();
+		c5.setIcon(c5Icon);
+		cards.add(winningHand);
+		cards.add(c1);
+		cards.add(c2);
+		cards.add(c3);
+		cards.add(c4);
+		cards.add(c5);
 
 		JLabel bustedOrWin = new JLabel();
 		JButton quitButton = new JButton("Quit");
@@ -82,6 +111,7 @@ public class resultFrame extends JFrame {
 		else
 			mainPanel.setBackground(new Color(0, 128, 0));
 
+		mainPanel.add(cards, BorderLayout.NORTH);
 		mainPanel.add(label, BorderLayout.CENTER);
 		mainPanel.add(btnPnl, BorderLayout.SOUTH);
 
@@ -124,7 +154,7 @@ public class resultFrame extends JFrame {
 				// System.out.println(mainFrame.getHandNumber());
 				try {
 					new MainFrame(user, players, frame, theme, avatar, limit);
-				} catch (InterruptedException e1) {
+				} catch (InterruptedException | IOException e1) {
 				}
 			}
 		});

@@ -4,23 +4,36 @@ public class Hand {
 
 	private ArrayList<Card> hand;
 	private int score;
+	private ArrayList<Integer> winningCards;
 
 	public Hand() {
-		
+
 		hand = new ArrayList<>();
+		winningCards = new ArrayList<>(5);
 	}
 
-	public boolean isEmpty(){
+	public boolean isEmpty() {
 		return hand.size() == 0;
 	}
 
-	public int getSize(){
+	public int getSize() {
 		return hand.size();
 	}
-	
+
 	public int getScore() {
-		
+
 		return score;
+	}
+
+	public ArrayList<Integer> getList() {
+		// TODO: I just randomly add cards.
+		// fix this in those check hand type methods
+		winningCards.add(0);
+		winningCards.add(2);
+		winningCards.add(4);
+		winningCards.add(6);
+		winningCards.add(1);
+		return winningCards;
 	}
 
 	// implement FLOP transition
@@ -37,205 +50,214 @@ public class Hand {
 
 		hand.add(newCard);
 	}
-	
+
 	public void addCard(Card newCard, int number) {
-		
+
 		hand.add(number, newCard);
 	}
-	
+
 	public Card getCard(int card) {
 
 		return hand.get(card);
 	}
 
-	private void combineHands(Hand centerHand,ArrayList<Card> checkHand) {
-		for(int i = 0; i<centerHand.getSize(); i++) {
+	private void combineHands(Hand centerHand, ArrayList<Card> checkHand) {
+		for (int i = 0; i < centerHand.getSize(); i++) {
 			checkHand.add(centerHand.getCard(i));
 		}
 	}
-	
+
 	public int preFinishCheck(Hand centerHand, Card card1, Card card2) {
-		
-		ArrayList<Card>checkHand = new ArrayList<>();
+
+		ArrayList<Card> checkHand = new ArrayList<>();
 		checkHand.add(card1);
 		checkHand.add(card2);
 		combineHands(centerHand, checkHand);
 
-		//score of 1000
+		// score of 1000
 		if (checkRoyalFlush(checkHand) != 0) {
 
 			score = checkRoyalFlush(checkHand);
 			return score;
 		}
-		
-		//score of 900 + high rank (accept ace, as that would be a royal flush)
-		else if(checkStraightFlush(checkHand) != 0) {
-			
+
+		// score of 900 + high rank (accept ace, as that would be a royal flush)
+		else if (checkStraightFlush(checkHand) != 0) {
+
 			score = checkStraightFlush(checkHand);
 			return score;
 		}
-		
-		//score of 800 + rank
-		else if(checkFourOfAKind(checkHand) != 0) {
-			
+
+		// score of 800 + rank
+		else if (checkFourOfAKind(checkHand) != 0) {
+
 			score = checkFourOfAKind(checkHand);
 			return score;
 		}
-		
-		//score of 700 + rank of three of a kind
-		else if(checkFullHouse(checkHand) != 0) {
-			
+
+		// score of 700 + rank of three of a kind
+		else if (checkFullHouse(checkHand) != 0) {
+
 			score = checkFullHouse(checkHand);
 			return score;
 		}
-		
-		//score of 600 + high rank
-		else if(checkFlush(checkHand) != 0) {
-			
-			score = checkFlush(checkHand) ;
+
+		// score of 600 + high rank
+		else if (checkFlush(checkHand) != 0) {
+
+			score = checkFlush(checkHand);
 			return score;
 		}
-		
-		//score of 500 + high card
-		else if(checkStraight(checkHand) != 0) {
-			
-			score = checkStraight(checkHand) ;
+
+		// score of 500 + high card
+		else if (checkStraight(checkHand) != 0) {
+
+			score = checkStraight(checkHand);
 			return score;
 		}
-		
-		//score of 400 + rank
-		else if(checkThreeOfAKind(checkHand) != 0) {
-			
-			score = checkThreeOfAKind(checkHand) ;
+
+		// score of 400 + rank
+		else if (checkThreeOfAKind(checkHand) != 0) {
+
+			score = checkThreeOfAKind(checkHand);
 			return score;
 		}
-		
-		//score of 300 + highest rank of pair
-		else if(checkTwoPair(checkHand) != 0) {
-			
-			score = checkTwoPair(checkHand) ;
+
+		// score of 300 + highest rank of pair
+		else if (checkTwoPair(checkHand) != 0) {
+
+			score = checkTwoPair(checkHand);
 			return score;
 		}
-		
-		//score of 200 + rank
-		else if(checkPair(0,checkHand) != 0) {
-			
-			score = checkPair(0,checkHand) ;
+
+		// score of 200 + rank
+		else if (checkPair(0, checkHand) != 0) {
+
+			score = checkPair(0, checkHand);
 			return score;
 		}
-		
-		//score of 100 + high card
+
+		// score of 100 + high card
 		else {
-			
+
 			score = checkHighCard(checkHand);
 			return score;
 		}
-		
+
 	}
 
-	//Main method for checking and returning scores
+	// Main method for checking and returning scores
 	public int checkScore(Hand centerHand) {
-		
+
 		combineHands(centerHand, hand);
 
-		//score of 1000
+		// score of 1000
 		if (checkRoyalFlush(hand) != 0) {
 
 			score = checkRoyalFlush(hand);
 			return score;
 		}
-		
-		//score of 900 + high rank (accept ace, as that would be a royal flush)
-		else if(checkStraightFlush(hand) != 0) {
-			
+
+		// score of 900 + high rank (accept ace, as that would be a royal flush)
+		else if (checkStraightFlush(hand) != 0) {
+
 			score = checkStraightFlush(hand);
 			return score;
 		}
-		
-		//score of 800 + rank
-		else if(checkFourOfAKind(hand) != 0) {
-			
+
+		// score of 800 + rank
+		else if (checkFourOfAKind(hand) != 0) {
+
 			score = checkFourOfAKind(hand);
 			return score;
 		}
-		
-		//score of 700 + rank of three of a kind
-		else if(checkFullHouse(hand) != 0) {
-			
+
+		// score of 700 + rank of three of a kind
+		else if (checkFullHouse(hand) != 0) {
+
 			score = checkFullHouse(hand);
 			return score;
 		}
-		
-		//score of 600 + high rank
-		else if(checkFlush(hand) != 0) {
-			
-			score = checkFlush(hand) ;
+
+		// score of 600 + high rank
+		else if (checkFlush(hand) != 0) {
+
+			score = checkFlush(hand);
 			return score;
 		}
-		
-		//score of 500 + high card
-		else if(checkStraight(hand) != 0) {
-			
-			score = checkStraight(hand) ;
+
+		// score of 500 + high card
+		else if (checkStraight(hand) != 0) {
+
+			score = checkStraight(hand);
 			return score;
 		}
-		
-		//score of 400 + rank
-		else if(checkThreeOfAKind(hand) != 0) {
-			
-			score = checkThreeOfAKind(hand) ;
+
+		// score of 400 + rank
+		else if (checkThreeOfAKind(hand) != 0) {
+
+			score = checkThreeOfAKind(hand);
 			return score;
 		}
-		
-		//score of 300 + highest rank of pair
-		else if(checkTwoPair(hand) != 0) {
-			
-			score = checkTwoPair(hand) ;
+
+		// score of 300 + highest rank of pair
+		else if (checkTwoPair(hand) != 0) {
+
+			score = checkTwoPair(hand);
 			return score;
 		}
-		
-		//score of 200 + rank
-		else if(checkPair(0,hand) != 0) {
-			
-			score = checkPair(0,hand) ;
+
+		// score of 200 + rank
+		else if (checkPair(0, hand) != 0) {
+
+			score = checkPair(0, hand);
 			return score;
 		}
-		
-		//score of 100 + high card
+
+		// score of 100 + high card
 		else {
-			
+
 			score = checkHighCard(hand);
 			return score;
 		}
-		
+
 	}
 
 	private int checkRoyalFlush(ArrayList<Card> checkHand) {
 
 		int suit = 0;
-		for (int i = 0; i <checkHand.size(); i++) {
+		for (int i = 0; i < checkHand.size(); i++) {
 
-			//searches for an ace, than sets the royal flush rank accordingly
+			// searches for an ace, than sets the royal flush rank accordingly
 			if (checkHand.get(i).getRank() == 1) {
 
-				suit =checkHand.get(i).getSuit();
-				for (int j = 0; j <checkHand.size(); j++) {
-					
-					//we proceed to search the rest of thecheckHand for the cards needed in the suit needed
-					if (checkHand.get(j).getRank() == 10 &&checkHand.get(j).getSuit() == suit) {
+				winningCards.add(i);
+				
+				suit = checkHand.get(i).getSuit();
+				for (int j = 0; j < checkHand.size(); j++) {
 
-						for (int k = 0; k <checkHand.size(); k++) {
+					// we proceed to search the rest of thecheckHand for the cards needed in the
+					// suit needed
+					if (checkHand.get(j).getRank() == 10 && checkHand.get(j).getSuit() == suit) {
+						winningCards.add(j);
 
-							if (checkHand.get(k).getRank() == 11 &&checkHand.get(k).getSuit() == suit) {
+						for (int k = 0; k < checkHand.size(); k++) {
 
-								for (int m = 0; m <checkHand.size(); m++) {
+							if (checkHand.get(k).getRank() == 11 && checkHand.get(k).getSuit() == suit) {
+								
+								winningCards.add(k);
 
-									if (checkHand.get(m).getRank() == 12 &&checkHand.get(m).getSuit() == suit) {
+								for (int m = 0; m < checkHand.size(); m++) {
 
-										for (int n = 0; n <checkHand.size(); n++) {
+									if (checkHand.get(m).getRank() == 12 && checkHand.get(m).getSuit() == suit) {
+										
+										winningCards.add(m);
 
-											if (checkHand.get(n).getRank() == 13 &&checkHand.get(n).getSuit() == suit) {
+										for (int n = 0; n < checkHand.size(); n++) {
 
+											if (checkHand.get(n).getRank() == 13 && checkHand.get(n).getSuit() == suit) {
+
+												winningCards.add(n);
 												return 1000;
 											}
 										}
@@ -256,45 +278,58 @@ public class Hand {
 		int suit = 0;
 		int rank = 0;
 
-		for (int i = 0; i <checkHand.size(); i++) {
+		for (int i = 0; i < checkHand.size(); i++) {
 
-			rank =checkHand.get(i).getRank();
-			suit =checkHand.get(i).getSuit();
-			//similar sorting to the royal flush, except the starting card is irrelevant
-			for (int j = 0; j <checkHand.size(); j++) {
+			rank = checkHand.get(i).getRank();
+			suit = checkHand.get(i).getSuit();
+			// similar sorting to the royal flush, except the starting card is irrelevant
+			for (int j = 0; j < checkHand.size(); j++) {
 
-				if (checkHand.get(j).getRank() == rank + 1 &&checkHand.get(j).getSuit() == suit) {
+				if (checkHand.get(j).getRank() == rank + 1 && checkHand.get(j).getSuit() == suit) {
+					
+					winningCards.add(j);
 
-					for (int k = 0; k <checkHand.size(); k++) {
+					for (int k = 0; k < checkHand.size(); k++) {
 
-						if (checkHand.get(k).getRank() == rank + 2 &&checkHand.get(k).getSuit() == suit) {
+						if (checkHand.get(k).getRank() == rank + 2 && checkHand.get(k).getSuit() == suit) {
+							
+							winningCards.add(k);
 
-							for (int m = 0; m <checkHand.size(); m++) {
+							for (int m = 0; m < checkHand.size(); m++) {
 
-								if (checkHand.get(m).getRank() == rank + 3 &&checkHand.get(m).getSuit() == suit) {
+								if (checkHand.get(m).getRank() == rank + 3 && checkHand.get(m).getSuit() == suit) {
+									
+									winningCards.add(m);
 
-									for (int n = 0; n <checkHand.size(); n++) {
+									for (int n = 0; n < checkHand.size(); n++) {
 
-										//if we were to happen to get a card ending on an ace, we would have a royal flush
-										//therefore, the straight flush cannot end with a 14 score
-										if (checkHand.get(n).getRank() == rank + 4 &&checkHand.get(n).getSuit() == suit) {
+										// if we were to happen to get a card ending on an ace, we would have a royal
+										// flush
+										// therefore, the straight flush cannot end with a 14 score
+										if (checkHand.get(n).getRank() == rank + 4 && checkHand.get(n).getSuit() == suit) {
 											
-											for (int o = 0; o <checkHand.size(); o++) {
+											winningCards.add(n);
 
-												if (checkHand.get(o).getRank() == rank + 5 &&checkHand.get(o).getSuit() == suit) {
-													
-													for (int p = 0; o <checkHand.size(); p++) {
+											for (int o = 0; o < checkHand.size(); o++) {
 
-														if (checkHand.get(p).getRank() == rank + 6 &&checkHand.get(p).getSuit() == suit) {
+												if (checkHand.get(o).getRank() == rank + 5
+														&& checkHand.get(o).getSuit() == suit) {
+													winningCards.add(o);
 
+													for (int p = 0; o < checkHand.size(); p++) {
+
+														if (checkHand.get(p).getRank() == rank + 6
+																&& checkHand.get(p).getSuit() == suit) {
+															winningCards.add(p);
+															winningCards.remove(0);
 															return 900 + (rank + 6);
-														} 
+														}
 													}
 													return 900 + (rank + 5);
-												} 
+												}
 											}
 											return 900 + (rank + 4);
-										} 
+										}
 									}
 								}
 							}
@@ -310,15 +345,16 @@ public class Hand {
 
 		int rank = 0;
 
-		for (int i = 0; i <checkHand.size(); i++) {
+		for (int i = 0; i < checkHand.size(); i++) {
 
-			rank =checkHand.get(i).getRank();
+			rank = checkHand.get(i).getRank();
 			int count = 0;
-			//we check a card rank, and see if we can find four of them in the deck
-			for (int x = 0; x <checkHand.size(); x++) {
+			// we check a card rank, and see if we can find four of them in the deck
+			for (int x = 0; x < checkHand.size(); x++) {
 
 				if (checkHand.get(x).getRank() == rank && x != i) {
 
+					winningCards.add(x);
 					count++;
 				}
 
@@ -341,14 +377,15 @@ public class Hand {
 
 		int rank = 0;
 
-		for (int i = 0; i <checkHand.size(); i++) {
+		for (int i = 0; i < checkHand.size(); i++) {
 
-			rank =checkHand.get(i).getRank();
+			rank = checkHand.get(i).getRank();
 			int count = 0;
-			for (int x = 0; x <checkHand.size(); x++) {
+			for (int x = 0; x < checkHand.size(); x++) {
 
 				if (checkHand.get(x).getRank() == rank && x != i) {
 
+					winningCards.add(x);
 					count++;
 				}
 
@@ -369,22 +406,23 @@ public class Hand {
 
 	private int checkPair(int bRank, ArrayList<Card> checkHand) {
 
-		//we add in checking for a bad rank for looking
-		//at full houses and two pairs, to make sure we don't repeat
+		// we add in checking for a bad rank for looking
+		// at full houses and two pairs, to make sure we don't repeat
 		int badRank = bRank;
 		int rank = 0;
 
-		for (int i = 0; i <checkHand.size(); i++) {
+		for (int i = 0; i < checkHand.size(); i++) {
 
-			rank =checkHand.get(i).getRank();
+			rank = checkHand.get(i).getRank();
 
 			if (rank != badRank) {
 
 				int count = 0;
-				for (int x = 0; x <checkHand.size(); x++) {
+				for (int x = 0; x < checkHand.size(); x++) {
 
 					if (checkHand.get(x).getRank() == rank && x != i) {
 
+						winningCards.add(x);
 						count++;
 					}
 
@@ -403,22 +441,22 @@ public class Hand {
 		}
 		return 0;
 	}
-	
+
 	public int checkPairRaw(int bRank) {
 
-		//we add in checking for a bad rank for looking
-		//at full houses and two pairs, to make sure we don't repeat
+		// we add in checking for a bad rank for looking
+		// at full houses and two pairs, to make sure we don't repeat
 		int badRank = bRank;
 		int rank = 0;
 
-		for (int i = 0; i <hand.size(); i++) {
+		for (int i = 0; i < hand.size(); i++) {
 
-			rank =hand.get(i).getRank();
+			rank = hand.get(i).getRank();
 
 			if (rank != badRank) {
 
 				int count = 0;
-				for (int x = 0; x <hand.size(); x++) {
+				for (int x = 0; x < hand.size(); x++) {
 
 					if (hand.get(x).getRank() == rank && x != i) {
 
@@ -443,22 +481,23 @@ public class Hand {
 
 	private int checkHighCard(ArrayList<Card> checkHand) {
 
-		int rank =checkHand.get(0).getRank();
+		int rank = checkHand.get(0).getRank();
 
-		for (int i = 1; i <checkHand.size(); i++) {
+		for (int i = 1; i < checkHand.size(); i++) {
 
 			if (checkHand.get(i).getRank() > rank) {
 
-				rank =checkHand.get(i).getRank();
-				
+				winningCards.add(i);
+				rank = checkHand.get(i).getRank();
+
 				if (rank == 1) {
 
 					return 114;
 				}
-				
+
 			}
 		}
-		
+
 		return rank + 100;
 	}
 
@@ -466,73 +505,71 @@ public class Hand {
 
 		int threeKind = checkThreeOfAKind(checkHand);
 		int pair = 0;
-		if(threeKind != 0) {
-			
-			threeKind = threeKind -400;
-			if(threeKind == 14) {
-				
+		if (threeKind != 0) {
+
+			threeKind = threeKind - 400;
+			if (threeKind == 14) {
+
 				threeKind = 1;
 			}
 			pair = checkPair(threeKind, checkHand);
-			
-			if(pair != 0) {
+
+			if (pair != 0) {
 				if (threeKind == 1) {
-					
+
 					threeKind = 14;
 				}
-				return (threeKind)+ 700;
-			}
-			else {
-				
+				return (threeKind) + 700;
+			} else {
+
 				return 0;
 			}
 
-		}
-		else {
-			
+		} else {
+
 			return 0;
 		}
 	}
-	
+
 	private int checkFlush(ArrayList<Card> checkHand) {
 
 		int suit = 0;
 		int rank = 0;
 
-		for (int i = 0; i <checkHand.size(); i++) {
+		for (int i = 0; i < checkHand.size(); i++) {
 
-			suit =checkHand.get(i).getSuit();
-			if(checkHand.get(i).getRank() == 1) {
-				
+			suit = checkHand.get(i).getSuit();
+			if (checkHand.get(i).getRank() == 1) {
+
 				rank = 14;
 			}
-			rank =checkHand.get(i).getRank();
+			rank = checkHand.get(i).getRank();
 			int count = 0;
-			for (int x = 0; x <checkHand.size(); x++) {
+			for (int x = 0; x < checkHand.size(); x++) {
 
 				if (checkHand.get(x).getSuit() == suit && x != i) {
 
-					if(checkHand.get(x).getRank() > rank) {
-						
-						rank =checkHand.get(x).getRank();
+					if (checkHand.get(x).getRank() > rank) {
+
+						rank = checkHand.get(x).getRank();
 					}
-					
-					if(checkHand.get(x).getRank() == 1) {
-						
+
+					if (checkHand.get(x).getRank() == 1) {
+
 						rank = 14;
 					}
 					count++;
 				}
 
 				if (count == 4) {
-					
-					if(rank == 1) {
-						
+
+					if (rank == 1) {
+
 						return 614;
 					}
-					
+
 					else {
-						
+
 						return 600 + rank;
 					}
 
@@ -541,42 +578,46 @@ public class Hand {
 		}
 		return 0;
 	}
-	
+
 	private int checkStraight(ArrayList<Card> checkHand) {
 
 		int rank = 0;
 
-		for (int i = 0; i <checkHand.size(); i++) {
+		for (int i = 0; i < checkHand.size(); i++) {
 
-			rank =checkHand.get(i).getRank();
+			rank = checkHand.get(i).getRank();
 
-			for (int j = 0; j <checkHand.size(); j++) {
+			for (int j = 0; j < checkHand.size(); j++) {
 
 				if (checkHand.get(j).getRank() == rank + 1) {
 
-					for (int k = 0; k <checkHand.size(); k++) {
+					winningCards.add(j);
+					for (int k = 0; k < checkHand.size(); k++) {
 
 						if (checkHand.get(k).getRank() == rank + 2) {
 
-							for (int m = 0; m <checkHand.size(); m++) {
+							winningCards.add(k);
+							for (int m = 0; m < checkHand.size(); m++) {
 
 								if (checkHand.get(m).getRank() == rank + 3) {
 
-									for (int n = 0; n <checkHand.size(); n++) {
+									winningCards.add(m);
+									for (int n = 0; n < checkHand.size(); n++) {
 
 										if (checkHand.get(n).getRank() == rank + 4) {
 
-											for (int o = 0; o <checkHand.size(); o++) {
+											winningCards.add(n);
+											for (int o = 0; o < checkHand.size(); o++) {
 
 												if (checkHand.get(o).getRank() == rank + 5) {
 
-													for (int p = 0; p <checkHand.size(); p++) {
+													winningCards.add(o);
+													for (int p = 0; p < checkHand.size(); p++) {
 
 														if (checkHand.get(p).getRank() == rank + 6) {
 
 															return 500 + (rank + 6);
-														} 
-														else if ((rank + 6) == 14) {
+														} else if ((rank + 6) == 14) {
 
 															if (checkHand.get(n).getRank() == 1) {
 
@@ -585,8 +626,7 @@ public class Hand {
 														}
 													}
 													return 500 + (rank + 5);
-												} 
-												else if ((rank + 5) == 14) {
+												} else if ((rank + 5) == 14) {
 
 													if (checkHand.get(n).getRank() == 1) {
 
@@ -595,8 +635,7 @@ public class Hand {
 												}
 											}
 											return 500 + (rank + 4);
-										} 
-										else if ((rank + 4) == 14) {
+										} else if ((rank + 4) == 14) {
 
 											if (checkHand.get(n).getRank() == 1) {
 
@@ -614,42 +653,39 @@ public class Hand {
 
 		return 0;
 	}
-	
+
 	private int checkTwoPair(ArrayList<Card> checkHand) {
-		
+
 		int pair1 = checkPair(0, checkHand);
 		int pair2 = 0;
-		if(pair1 != 0) {
-			
-			if(pair1 == 214)
+		if (pair1 != 0) {
+
+			if (pair1 == 214)
 				pair2 = checkPair(1, checkHand);
 			else
-				pair2 = checkPair(pair1-200, checkHand);
-			
-			if(pair2 != 0) {
-				
-				if(pair1-200 == 1 || pair2-200 ==1) {
-					
+				pair2 = checkPair(pair1 - 200, checkHand);
+
+			if (pair2 != 0) {
+
+				if (pair1 - 200 == 1 || pair2 - 200 == 1) {
+
 					return 314;
 				}
-				
-				else if(pair1 > pair2) {
-					
-					return (pair1-200)+ 300;
+
+				else if (pair1 > pair2) {
+
+					return (pair1 - 200) + 300;
+				} else {
+
+					return (pair2 - 200) + 300;
 				}
-				else {
-					
-					return (pair2-200)+ 300;
-				}
-			}
-			else {
-				
+			} else {
+
 				return 0;
 			}
 
-		}
-		else {
-			
+		} else {
+
 			return 0;
 		}
 	}

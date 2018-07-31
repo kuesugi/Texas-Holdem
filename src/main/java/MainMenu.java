@@ -129,7 +129,7 @@ public class MainMenu extends JFrame implements ActionListener {
 		
 		JLabel lblUseTimer = new JLabel("Use Timer");
 		lblUseTimer.setForeground(Color.WHITE);
-		lblUseTimer.setFont(new Font("Gill Sans MT Ext Condensed Bold", Font.BOLD, 12));
+		lblUseTimer.setFont(new Font("Gill Sans MT Ext Condensed Bold", Font.BOLD, 14));
 		
 		difficultyBox.setModel(new DefaultComboBoxModel(new String[] {"The Clones of James Buchanan (Easy)", "The Characters of Ulysses (Medium)", "Alcoholics of History (Hard)"}));
 		//difficultyBox.setSelectedIndex(3);
@@ -272,7 +272,7 @@ public class MainMenu extends JFrame implements ActionListener {
 
 			public void actionPerformed(ActionEvent e) {
 
-				contentPane.setBackground(new Color(0,0,255));
+				contentPane.setBackground(new Color(31, 114, 205));
 				
 				whichTheme = 1;
 				chosenTheme.setText("Navy");
@@ -360,7 +360,7 @@ public class MainMenu extends JFrame implements ActionListener {
 				}
 				try {
 					new MainFrame(user, players, whichTheme, avatar, limit);
-				} catch (InterruptedException e1) {
+				} catch (InterruptedException | IOException e1) {
 					// TODO Auto-generated catch block
 					e1.printStackTrace();
 				} //starts the game passing the player name parameter

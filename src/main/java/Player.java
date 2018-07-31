@@ -258,12 +258,12 @@ public class Player {
 		
 		if(loop == 1) {
 			
-			if(handstrength > 0.45) {
+			if(handstrength*aggression > 0.40) {
 				
 				return bet(highBet, loop);
 			}
 			
-			else if(handstrength > 0.25 ) {
+			else if(handstrength*aggression  > 0.20 ) {
 				
 				return -2;
 			}
@@ -281,12 +281,12 @@ public class Player {
 		else {
 			double handModifier = (double) (loop * 0.6);
 			
-			if(handstrength > 0.45 * handModifier) {
+			if(handstrength*aggression  > 0.45 * handModifier) {
 				
 				return bet(highBet, loop);
 			}
 			
-			else if(handstrength > 0.25 /handModifier ) {
+			else if(handstrength*aggression  > 0.15 /handModifier ) {
 				
 				return -2;
 			}
