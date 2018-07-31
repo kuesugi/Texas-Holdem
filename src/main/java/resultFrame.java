@@ -63,7 +63,7 @@ public class resultFrame extends JFrame {
 			frame.getContentPane().setBackground(new Color(0, 128, 0));
 			cards.setBackground(new Color(0, 128, 0));
 		}
-		
+
 		JLabel label = new JLabel(result);
 		label.setFont(new Font("Gill Sans MT Ext Condensed Bold", Font.BOLD, 17));
 		label.setForeground(new Color(255, 255, 255));
@@ -89,7 +89,7 @@ public class resultFrame extends JFrame {
 		cards.add(c3);
 		cards.add(c4);
 		cards.add(c5);
-		
+
 		JLabel bustedOrWin = new JLabel();
 		JButton quitButton = new JButton("Quit");
 		JButton restart = new JButton("Restart");
@@ -111,7 +111,6 @@ public class resultFrame extends JFrame {
 			mainPanel.setBackground(new Color(31, 114, 205));
 		else
 			mainPanel.setBackground(new Color(0, 128, 0));
-		
 		mainPanel.add(cards, BorderLayout.NORTH);
 		mainPanel.add(label, BorderLayout.CENTER);
 		mainPanel.add(btnPnl, BorderLayout.SOUTH);

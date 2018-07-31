@@ -1,58 +1,50 @@
        * * * Game Log * * *
-- Game started 31 July 2018  -  13 : 39
+- Game started 31 July 2018  -  18 : 17
 - Username: a
 - Players: 7
-  Leopold Bloom, Stephen Dedalus, Yelverton Barry, Buck Mulligan, Martin Cunningham, Molly Bloom, Josie Breen
+  Doc James Buchanan, Dopey James Buchanan, Bashful James Buchanan, Grumpy James Buchanan, Sneezy James Buchanan, Sleepy James Buchanan, Happy James Buchanan
 
 - Hand 1
 
 Preflop:
 Cards Dealt:
-Leopold Bloom: spades ten, diamonds ace
-Stephen Dedalus: clubs nine, diamonds five
-Yelverton Barry: clubs king, clubs deuce
-Buck Mulligan: clubs five, spades queen
-Martin Cunningham: hearts six, diamonds deuce
-Molly Bloom: spades six, clubs queen
-Josie Breen: hearts nine, hearts ace
-a: clubs four, diamonds queen
-Martin Cunningham Has Dealt.
-Leopold Bloom is the big blind.
+Doc James Buchanan: clubs eight, clubs seven
+Dopey James Buchanan: spades four, clubs queen
+Bashful James Buchanan: diamonds jack, diamonds eight
+Grumpy James Buchanan: diamonds six, clubs three
+Sneezy James Buchanan: hearts five, hearts deuce
+Sleepy James Buchanan: diamonds deuce, hearts eight
+Happy James Buchanan: spades jack, diamonds four
+a: spades ten, spades ace
+Happy James Buchanan Has Dealt.
+You are the small blind
+Sneezy James Buchanan is the big blind.
 Player's turn, Calling Bets0
-Stephen Dedalus Has Called 20
-Yelverton Barry Has Called 20
-Molly Bloom Has Called 20
-Josie Breen Has Called 20
+Player's turn, Calling Bets 20
 Player's turn, Calling Bets 20
 a Has Folded.
-Martin Cunningham Has Called 20
+Dopey James Buchanan Has Called 20
+Doc James Buchanan Has Called 20
 
 Flop:
 Player's turn, Calling Bets0
-Leopold Bloom Has Bet 23
-Yelverton Barry Has Bet 174
-Josie Breen Has Bet 212
-Buck Mulligan Has Bet 233
-Player's turn, Calling Bets233
 
 Turn:
 Player's turn, Calling Bets0
-Yelverton Barry Has Bet 24
-Molly Bloom Has Bet 152
 
 River:
 a folded
-Leopold Bloom calls
-Stephen Dedalus calls
-Yelverton Barry calls
-Buck Mulligan calls
-Martin Cunningham calls
-Molly Bloom calls
-Josie Breen calls
+Doc James Buchanan calls
+Dopey James Buchanan calls
+Bashful James Buchanan calls
+Grumpy James Buchanan calls
+Sneezy James Buchanan calls
+Sleepy James Buchanan calls
+Happy James Buchanan calls
 Player's turn, Calling Bets0
 
 Final:
 Player's turn, Calling Bets0
-The winner is Molly Bloom with Kings High, and Molly Bloom wins $948
+The winner is Dopey James Buchanan with A King High Straight, and Dopey James Buchanan wins $70
 
-- Game ends 31 July 2018  -  13 : 39
+- Game ends 31 July 2018  -  18 : 17

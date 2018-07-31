@@ -4,14 +4,14 @@ public class TestWin {
 
 	public static void main(String[] args) throws InterruptedException {
 		
-		Card card1 = new Card(6,1);
+		Card card1 = new Card(7,3);
 		Card card2 = new Card(7,1);
 		
 		Card card3 = new Card(5,2);
-		Card card4 = new Card(8,2);
+		Card card4 = new Card(8,4);
 		Card card5 = new Card(9,2);
-		Card card6 = new Card(4,2);
-		Card card7 = new Card(10,4);
+		Card card6 = new Card(4,1);
+		Card card7 = new Card(7,2);
 		Hand user = new Hand();
 		Hand hand1 = new Hand();
 		
@@ -26,8 +26,6 @@ public class TestWin {
 		System.out.println(user.checkScore(hand1));
 		System.out.println(1000 % 100);
 		System.out.println(bet(10));
-		
-		
 
 	}
 	public static int bet(int highBet) throws InterruptedException{
