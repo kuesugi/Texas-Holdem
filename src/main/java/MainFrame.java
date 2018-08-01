@@ -540,7 +540,7 @@ public class MainFrame extends JFrame {
 			highBet = 0;
 			callBet = 0;
 			loop = 1;
-			playerHasRaisedOrNewRound();
+			resetGone();
 			// log the round name
 			isBlind = false;
 			logWriter.println("\nFlop:");
@@ -554,7 +554,7 @@ public class MainFrame extends JFrame {
 			highBet = 0;
 			callBet = 0;
 			loop = 1;
-			playerHasRaisedOrNewRound();
+			resetGone();
 			logWriter.println("\nTurn:");
 			displayCenterCards(centerHand, 2);
 			centerHand.addCard(deck.get(cardCount--));
@@ -566,7 +566,7 @@ public class MainFrame extends JFrame {
 			highBet = 0;
 			callBet = 0;
 			loop = 1;
-			playerHasRaisedOrNewRound();
+			resetGone();
 			logWriter.println("\nRiver:");
 			displayCenterCards(centerHand, 3);
 			if (user.getFold())
@@ -584,7 +584,7 @@ public class MainFrame extends JFrame {
 			highBet = 0;
 			callBet = 0;
 			loop = 1;
-			playerHasRaisedOrNewRound();
+			resetGone();
 			logWriter.println("\nFinal:");
 			String result = new String();
 			gameRound++;
@@ -2033,7 +2033,6 @@ public class MainFrame extends JFrame {
 		callBet = highBet;
 		Player nextB = findNext(cur);
 		int bbIndex = -1;
-		int scoreCheck = highBet;
 
 		if (playersStillInTheGame() && !user.getFold()) {
 
@@ -2268,16 +2267,14 @@ public class MainFrame extends JFrame {
 				pot.revalidate();
 			}
 			resetGone();
-			betOwner.hasGone();
+			betOwner.playerHasGone();
 			loop++;
 			betting();
 		}
 
 		else {
 			resetGone();
-			user.newRoundNotGone();
 			highBet = 0;
-			callBet = 0;
 			gameRound++;
 			transition();
 		}
@@ -2322,16 +2319,6 @@ public class MainFrame extends JFrame {
 		else if (index == 6)
 			return eastAI2;
 		return null;
-	}
-
-	private void playerHasRaisedOrNewRound() {
-
-		user.newRoundNotGone();
-		for (int i = 0; i < players.size(); i++) {
-
-			players.get(i).newRoundNotGone();
-
-		}
 	}
 
 	private boolean playersStillInTheGame() {
