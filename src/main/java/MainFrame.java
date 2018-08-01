@@ -302,10 +302,6 @@ public class MainFrame extends JFrame {
 		pot.add(moneyInPotLabel);
 		playerAction.setBounds(336, 363, 430, 132);
 		getContentPane().add(playerAction);
-
-		JTextPane textPane = new JTextPane();
-		textPane.setBounds(0, 0, 6, 20);
-		contentPane.add(textPane);
 		// "Dealer: "
 		dealerLabel.setText("Dealer:");
 		dealerLabel.setFont(new Font("Optima", Font.BOLD, 23));
