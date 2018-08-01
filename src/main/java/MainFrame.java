@@ -540,7 +540,7 @@ public class MainFrame extends JFrame {
 			highBet = 0;
 			callBet = 0;
 			loop = 1;
-			resetGone();
+			playerHasRaisedOrNewRound();
 			// log the round name
 			isBlind = false;
 			logWriter.println("\nFlop:");
@@ -554,7 +554,7 @@ public class MainFrame extends JFrame {
 			highBet = 0;
 			callBet = 0;
 			loop = 1;
-			resetGone();
+			playerHasRaisedOrNewRound();
 			logWriter.println("\nTurn:");
 			displayCenterCards(centerHand, 2);
 			centerHand.addCard(deck.get(cardCount--));
@@ -566,7 +566,7 @@ public class MainFrame extends JFrame {
 			highBet = 0;
 			callBet = 0;
 			loop = 1;
-			resetGone();
+			playerHasRaisedOrNewRound();
 			logWriter.println("\nRiver:");
 			displayCenterCards(centerHand, 3);
 			if (user.getFold())
@@ -584,7 +584,7 @@ public class MainFrame extends JFrame {
 			highBet = 0;
 			callBet = 0;
 			loop = 1;
-			resetGone();
+			playerHasRaisedOrNewRound();
 			logWriter.println("\nFinal:");
 			String result = new String();
 			gameRound++;
@@ -1792,6 +1792,8 @@ public class MainFrame extends JFrame {
 				moneyInPotLabel.setForeground(Color.white);
 				pot.add(moneyInPotLabel);
 				pot.revalidate();
+				playerHasRaisedOrNewRound();
+				user.newRoundNotGone();
 				JLabel tempLabel = ((JLabel) getPanelNum(getPlayerIndex(p)).getComponent(2));
 				tempLabel.setText("Balance: " + p.getStack());
 				tempLabel.setForeground(Color.white);
@@ -2033,6 +2035,7 @@ public class MainFrame extends JFrame {
 		callBet = highBet;
 		Player nextB = findNext(cur);
 		int bbIndex = -1;
+		int scoreCheck = highBet;
 
 		if (playersStillInTheGame() && !user.getFold()) {
 
@@ -2266,15 +2269,15 @@ public class MainFrame extends JFrame {
 				playerAction.revalidate();
 				pot.revalidate();
 			}
-			resetGone();
-			betOwner.playerHasGone();
 			loop++;
 			betting();
 		}
 
 		else {
 			resetGone();
+			user.newRoundNotGone();
 			highBet = 0;
+			callBet = 0;
 			gameRound++;
 			transition();
 		}
@@ -2283,11 +2286,41 @@ public class MainFrame extends JFrame {
 
 	public void resetGone() throws InterruptedException {
 
-		for(int i = 0; i< players.size(); i++) {
-			
-			players.get(i).newRoundNotGone();
+		pot.revalidate();
+		int cur = getDealerID();
+		Player nextB = findNext(cur);
+		int bbIndex = -1;
+		if (nextB != user && nextB != null) {
+			bbIndex = getPlayerIndex(nextB);
 		}
-		user.newRoundNotGone();
+
+		else {
+			bbIndex = players.size();
+
+		}
+
+		Player next = null;
+		next = findNext(bbIndex);
+		for (int i = 0; i < players.size() + 1; i++) {
+
+			if (!next.getFold()) {
+				if (next != user) {
+					pot.revalidate();
+					next.newRoundNotGone();
+					bbIndex = getPlayerIndex(next);
+					if (bbIndex == -1)
+						bbIndex = players.size();
+					next = findNext(bbIndex);
+				} else {
+
+					bbIndex = getPlayerIndex(next) + 1;
+					if (bbIndex == -1)
+						bbIndex = players.size();
+					next = findNext(bbIndex);
+				}
+
+			}
+		}
 	}
 
 	private void removeAICards(JPanel panel, int index) {
@@ -2319,6 +2352,16 @@ public class MainFrame extends JFrame {
 		else if (index == 6)
 			return eastAI2;
 		return null;
+	}
+
+	private void playerHasRaisedOrNewRound() {
+
+		user.newRoundNotGone();
+		for (int i = 0; i < players.size(); i++) {
+
+			players.get(i).newRoundNotGone();
+
+		}
 	}
 
 	private boolean playersStillInTheGame() {
