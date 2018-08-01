@@ -59,10 +59,9 @@ public class resultFrame extends JFrame {
 			frame.getContentPane().setBackground(new Color(31, 114, 205));
 			cards.setBackground(new Color(31, 114, 205));
 		}
-
-		if (theme == 1) {
-			frame.getContentPane().setBackground(new Color(31, 114, 205));
-			cards.setBackground(new Color(31, 114, 205));
+		else {
+			frame.getContentPane().setBackground(new Color(0, 128, 0));
+			cards.setBackground(new Color(0, 128, 0));
 		}
 
 		JLabel label = new JLabel(result);

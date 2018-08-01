@@ -800,30 +800,40 @@ public class MainFrame extends JFrame {
 			ImageIcon tempIcon = new ImageIcon(cardImg);
 			Image tempImg = tempIcon.getImage();
 			tempIcon = new ImageIcon(tempImg);
+			Image tempImg2 = tempImg.getScaledInstance(65, 80, java.awt.Image.SCALE_SMOOTH);
+			tempIcon = new ImageIcon(tempImg2);
 			winningC1Icon = tempIcon;
 			
 			cardImg = ImageIO.read(getClass().getResource(winningCard2.getIndex() + ".png"));
 			tempIcon = new ImageIcon(cardImg);
 			tempImg = tempIcon.getImage();
 			tempIcon = new ImageIcon(tempImg);
+			tempImg2 = tempImg.getScaledInstance(65, 80, java.awt.Image.SCALE_SMOOTH);
+			tempIcon = new ImageIcon(tempImg2);
 			winningC2Icon = tempIcon;
 			
 			cardImg = ImageIO.read(getClass().getResource(winningCard3.getIndex() + ".png"));
 			tempIcon = new ImageIcon(cardImg);
 			tempImg = tempIcon.getImage();
 			tempIcon = new ImageIcon(tempImg);
+			tempImg2 = tempImg.getScaledInstance(65, 80, java.awt.Image.SCALE_SMOOTH);
+			tempIcon = new ImageIcon(tempImg2);
 			winningC3Icon = tempIcon;
 			
 			cardImg = ImageIO.read(getClass().getResource(winningCard4.getIndex() + ".png"));
 			tempIcon = new ImageIcon(cardImg);
 			tempImg = tempIcon.getImage();
 			tempIcon = new ImageIcon(tempImg);
+			tempImg2 = tempImg.getScaledInstance(65, 80, java.awt.Image.SCALE_SMOOTH);
+			tempIcon = new ImageIcon(tempImg2);
 			winningC4Icon = tempIcon;
 			
 			cardImg = ImageIO.read(getClass().getResource(winningCard5.getIndex() + ".png"));
 			tempIcon = new ImageIcon(cardImg);
 			tempImg = tempIcon.getImage();
 			tempIcon = new ImageIcon(tempImg);
+			tempImg2 = tempImg.getScaledInstance(65, 80, java.awt.Image.SCALE_SMOOTH);
+			tempIcon = new ImageIcon(tempImg2);
 			winningC5Icon = tempIcon;
 		}
 
@@ -852,7 +862,7 @@ public class MainFrame extends JFrame {
 		dealerIDLabel.revalidate();
 		logWriter.println(action);
 		playerAction.setText(action);
-		playerAction.setFont(new Font("Optima", Font.BOLD, 23));
+		playerAction.setFont(new Font("Optima", Font.BOLD, 20));
 		playerAction.setForeground(Color.white);
 		playerAction.revalidate();
 		// disableButtons();
@@ -1697,7 +1707,7 @@ public class MainFrame extends JFrame {
 
 				logWriter.println(action);
 				playerAction.setText(action);
-				playerAction.setFont(new Font("Optima", Font.BOLD, 23));
+				playerAction.setFont(new Font("Optima", Font.BOLD, 20));
 				playerAction.setForeground(Color.white);
 				playerAction.revalidate();
 
@@ -1719,15 +1729,15 @@ public class MainFrame extends JFrame {
 				} else {
 
 					p.newRoundUnFold();
-					p.call(20);
-					action = p.getName() + " Has Called " + 20;
-					moneyInPot = 20 + moneyInPot;
+					int call = p.call(20);
+					action = p.getName() + " Has Called.";
+					moneyInPot = call + moneyInPot;
 					JLabel tempLabel = ((JLabel) getPanelNum(getPlayerIndex(p)).getComponent(2));
 					tempLabel.setText("Balance: " + p.getStack());
 					tempLabel.setForeground(Color.white);
 					logWriter.println(action);
 					playerAction.setText(action);
-					playerAction.setFont(new Font("Optima", Font.BOLD, 23));
+					playerAction.setFont(new Font("Optima", Font.BOLD, 20));
 					playerAction.setForeground(Color.white);
 					playerAction.revalidate();
 
@@ -1749,16 +1759,6 @@ public class MainFrame extends JFrame {
 			if (moves == 0 && p.getStack() <= 0) {
 				moves++;
 			}
-			if (highBet >= p.getStack()) {
-
-				p.fold();
-				JPanel panel = new JPanel();
-				panel = getPanelNum(getPlayerIndex(p));
-				removeAICards(panel, getPlayerIndex(p));
-				action = p.getName() + " Has Folded.";
-				panel = getPanelNum(getPlayerIndex(p));
-				removeAICards(panel, getPlayerIndex(p));
-			}
 
 			if (moves >= 0) {
 
@@ -1768,13 +1768,10 @@ public class MainFrame extends JFrame {
 				moneyInPot = betAmt + moneyInPot;
 				logWriter.println(action);
 				playerAction.setText(action);
-				playerAction.setFont(new Font("Optima", Font.BOLD, 23));
+				playerAction.setFont(new Font("Optima", Font.BOLD, 20));
 				playerAction.setForeground(Color.white);
 				playerAction.revalidate();
 				highBet = betAmt;
-				JLabel tempLabel = ((JLabel) getPanelNum(getPlayerIndex(p)).getComponent(2));
-				tempLabel.setText("Balance: " + p.getStack());
-				tempLabel.setForeground(Color.white);
 				// update money in pot
 				moneyInPotLabel.setText("Money in the pot: " + moneyInPot);
 				moneyInPotLabel.setFont(new Font("Optima", Font.BOLD, 23));
@@ -1784,9 +1781,12 @@ public class MainFrame extends JFrame {
 				resetGone();
 				user.newRoundNotGone();
 				p.playerHasGone();
+				JLabel tempLabel = ((JLabel) getPanelNum(getPlayerIndex(p)).getComponent(2));
+				tempLabel.setText("Balance: " + p.getStack());
+				tempLabel.setForeground(Color.white);
 			} else if (moves == -1) {
 				p.fold();
-				if (playersStillInTheGame() == true) {
+				if (playersStillInTheGame() == true || user.getFold() == false) {
 
 					action = p.getName() + " Has Folded.";
 					JPanel panel = new JPanel();
@@ -1795,23 +1795,24 @@ public class MainFrame extends JFrame {
 				} else {
 
 					p.newRoundUnFold();
-					p.call(highBet);
+					int call =p.call(highBet);
+					moneyInPot = call + moneyInPot;
 					action = p.getName() + " Has Called.";
-					JLabel tempLabel = ((JLabel) getPanelNum(getPlayerIndex(p)).getComponent(2));
-					tempLabel.setText("Balance: " + p.getStack());
-					tempLabel.setForeground(Color.white);
 					// update money in pot
 					moneyInPotLabel.setText("Money in the pot: " + moneyInPot);
 					moneyInPotLabel.setFont(new Font("Optima", Font.BOLD, 23));
 					moneyInPotLabel.setForeground(Color.white);
 					pot.add(moneyInPotLabel);
 					pot.revalidate();
+					JLabel tempLabel = ((JLabel) getPanelNum(getPlayerIndex(p)).getComponent(2));
+					tempLabel.setText("Balance: " + p.getStack());
+					tempLabel.setForeground(Color.white);
 				}
 
 			} else {
-				p.call(highBet);
+				int call = p.call(highBet);
 				action = p.getName() + " Has Called.";
-				moneyInPot = highBet + moneyInPot;
+				moneyInPot = call + moneyInPot;
 				logWriter.println(action);
 				playerAction.setText(action);
 				moneyInPotLabel.setText("Money in the pot: " + moneyInPot);
@@ -1860,6 +1861,16 @@ public class MainFrame extends JFrame {
 	public void enableButtons() {
 		betButton.setEnabled(false);
 		foldButton.setEnabled(true);
+		
+		if(highBet == 0) {
+			
+			callButton.setText("Check");
+		}
+		
+		else {
+			
+			callButton.setText("Call");
+		}
 		callButton.setEnabled(true);
 		bet1Button.setEnabled(true);
 		bet5Button.setEnabled(true);
@@ -1900,7 +1911,7 @@ public class MainFrame extends JFrame {
 			tempLabel.revalidate();
 			moneyInPot += 10;
 			playerAction.setText(action);
-			playerAction.setFont(new Font("Optima", Font.BOLD, 23));
+			playerAction.setFont(new Font("Optima", Font.BOLD, 20));
 			playerAction.setForeground(Color.white);
 			playerAction.revalidate();
 			pot.revalidate();
@@ -1912,7 +1923,7 @@ public class MainFrame extends JFrame {
 			logWriter.println("You are the small blind");
 
 			playerAction.setText("You are the small blind");
-			playerAction.setFont(new Font("Optima", Font.BOLD, 23));
+			playerAction.setFont(new Font("Optima", Font.BOLD, 20));
 			playerAction.setForeground(Color.white);
 			playerAction.revalidate();
 			disableButtons(0);
@@ -1933,7 +1944,7 @@ public class MainFrame extends JFrame {
 		Player nextS = null;
 		int cur = getDealerID();
 		nextS = findNext(cur);
-		playerHasRaisedOrNewRound();
+		
 
 		int sbIndex = -1;
 		if (nextS != user && nextS != null)
@@ -1957,7 +1968,7 @@ public class MainFrame extends JFrame {
 			tempLabel.revalidate();
 			moneyInPot += 20;
 			playerAction.setText(action);
-			playerAction.setFont(new Font("Optima", Font.BOLD, 23));
+			playerAction.setFont(new Font("Optima", Font.BOLD, 20));
 			playerAction.setForeground(Color.white);
 			playerAction.revalidate();
 			logWriter.println(action);
@@ -1972,11 +1983,11 @@ public class MainFrame extends JFrame {
 			action = nextB.getName() + " is the big blind.";
 			logWriter.println("You are the big blind");
 			playerAction.setText("You are the big blind");
-			playerAction.setFont(new Font("Optima", Font.BOLD, 23));
+			playerAction.setFont(new Font("Optima", Font.BOLD, 20));
 			playerAction.setForeground(Color.white);
 			playerAction.revalidate();
 			playerAction.setText(action);
-			playerAction.setFont(new Font("Optima", Font.BOLD, 23));
+			playerAction.setFont(new Font("Optima", Font.BOLD, 20));
 			playerAction.setForeground(Color.white);
 			playerAction.revalidate();
 			logWriter.println(action);
@@ -1992,7 +2003,7 @@ public class MainFrame extends JFrame {
 		// for players not folding
 		logWriter.println("Player's turn, Calling Bets" + highBet);
 		playerAction.setText("Player's turn, Calling Bets " + highBet);
-		playerAction.setFont(new Font("Optima", Font.BOLD, 23));
+		playerAction.setFont(new Font("Optima", Font.BOLD, 20));
 		playerAction.setForeground(Color.white);
 		playerAction.revalidate();
 		moneyInPotLabel.setText("Money in the pot: " + moneyInPot);
@@ -2027,7 +2038,7 @@ public class MainFrame extends JFrame {
 				disableButtons(2);
 				if (timeLimit)
 					counter();
-			} else if (!user.hasGone()) {
+			} else if (!user.hasGone() && playersStillInTheGame()) {
 
 				logWriter.println("Player's turn, Calling Bets " + highBet);
 				playerAction.setText("Player's turn, Calling Bets " + highBet);
@@ -2064,7 +2075,7 @@ public class MainFrame extends JFrame {
 					if (bbIndex == -1)
 						bbIndex = players.size();
 					next = findNext(bbIndex);
-				} else if (!user.getFold() || !user.isAllIn()) {
+				} else if (!user.getFold() && playersStillInTheGame()) {
 
 					if (isBlind == true && !user.hasGone()) {
 
@@ -2080,7 +2091,7 @@ public class MainFrame extends JFrame {
 							counter();
 						enableButtons();
 					}
-					playerAction.setFont(new Font("Optima", Font.BOLD, 23));
+					playerAction.setFont(new Font("Optima", Font.BOLD, 20));
 					playerAction.setForeground(Color.white);
 					playerAction.revalidate();
 					pot.revalidate();
@@ -2189,7 +2200,7 @@ public class MainFrame extends JFrame {
 
 				logWriter.println("Player's turn, Calling Bets " + highBet);
 				playerAction.setText("Player's turn, Calling Bets " + highBet);
-				playerAction.setFont(new Font("Optima", Font.BOLD, 23));
+				playerAction.setFont(new Font("Optima", Font.BOLD, 20));
 				playerAction.setForeground(Color.white);
 				playerAction.revalidate();
 				pot.revalidate();

@@ -112,11 +112,13 @@ public class Player {
 		stack = newStack;
 	}
 
-	public void call(int highBet) throws InterruptedException {
+	public int call(int highBet) throws InterruptedException {
 		if ((stack - highBet) <= 0) {
 			highBet = stack;
 		}
 		stack -= highBet;
+		
+		return highBet;
 	}
 
 	public int bet(int highBet, int loop) throws InterruptedException {
@@ -254,17 +256,26 @@ public class Player {
 		
 		if(loop == 1) {
 			
-			if(handstrength*aggression > 0.40) {
+			if(handstrength*aggression > 0.20) {
 				
-				return bet(highBet, loop);
+				if(highBet >= stack) {
+					
+					return -2;
+				}
+				
+				else {
+					
+					return bet(highBet, loop);
+				}
+				
 			}
 			
-			else if(handstrength*aggression  > 0.20 ) {
+			else if(handstrength*aggression  > 0.10 ) {
 				
 				return -2;
 			}
 			
-			else if(rand.nextDouble() *aggression >0.45) {
+			else if(rand.nextDouble() *aggression >0.35) {
 				
 				return -2;
 			}
@@ -277,19 +288,36 @@ public class Player {
 		else {
 			double handModifier = (double) (loop * 0.6);
 			
-			if(handstrength*aggression  > 0.45 * handModifier) {
+			if(handstrength*aggression  > 0.40 * handModifier) {
 				
-				return bet(highBet, loop);
+				if(highBet >= stack) {
+					
+					return -2;
+				}
+				
+				else {
+					
+					return bet(highBet, loop);
+				}
 			}
 			
-			else if(handstrength*aggression  > 0.15 /handModifier ) {
+			else if(handstrength*aggression  > 0.10 /handModifier ) {
 				
 				return -2;
 			}
 			
 			else if(rand.nextDouble() *aggression >0.45) {
 				
-				return -2;
+				if(rand.nextDouble() *aggression > 0.5) {
+					
+					return bet(highBet, loop);
+				}
+				else {
+					
+					return -2;
+				}
+				
+				
 			}
 			
 			else {
