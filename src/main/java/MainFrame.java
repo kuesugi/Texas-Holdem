@@ -60,14 +60,12 @@ public class MainFrame extends JFrame {
 	private JButton smallBlind = new JButton("Small Blind");
 	private JButton bigBlind = new JButton("Big Blind");
 	private JTextField betAmt = new JTextField("$" + betAmount);
-	
+
 	private ImageIcon winningC1Icon;
 	private ImageIcon winningC2Icon;
 	private ImageIcon winningC3Icon;
 	private ImageIcon winningC4Icon;
 	private ImageIcon winningC5Icon;
-
-
 
 	private String userName = new String();
 	private boolean isBlind = true;
@@ -126,7 +124,7 @@ public class MainFrame extends JFrame {
 		}
 		initFrame();
 		// set the size of the frame
-		setSize(1190, 1250);
+		setSize(1190, 1650);
 		// click X to exit
 		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		// Must be the last line of this constructor
@@ -187,7 +185,7 @@ public class MainFrame extends JFrame {
 	 * @throws IOException
 	 */
 	private void initFrame() throws InterruptedException, IOException {
-		setBounds(100, 100, 450, 300);
+		setBounds(100, 100, 450, 450);
 		JPanel contentPane = new JPanel();
 
 		if (theme == 1) {
@@ -304,7 +302,7 @@ public class MainFrame extends JFrame {
 		pot.add(moneyInPotLabel);
 		playerAction.setBounds(336, 363, 430, 132);
 		getContentPane().add(playerAction);
-		
+
 		JTextPane textPane = new JTextPane();
 		textPane.setBounds(0, 0, 6, 20);
 		contentPane.add(textPane);
@@ -727,11 +725,9 @@ public class MainFrame extends JFrame {
 				logWriter.close();
 			}
 
-
 			if (tie != true) {
 				setPlayerWinningCardsIcon(winnerIndex);
 			}
-
 
 			user.clearHand();
 			for (int j = 0; j < players.size(); j++) {
@@ -741,8 +737,8 @@ public class MainFrame extends JFrame {
 			if (timeLimit)
 				timer.cancel();
 
-			new resultFrame(result, user, players, this, logWriter, theme, avatar, timeLimit, 
-					winningC1Icon, winningC2Icon, winningC3Icon, winningC4Icon, winningC5Icon);
+			new resultFrame(result, user, players, this, logWriter, theme, avatar, timeLimit, winningC1Icon,
+					winningC2Icon, winningC3Icon, winningC4Icon, winningC5Icon);
 		} else
 			return;
 	}
@@ -757,42 +753,42 @@ public class MainFrame extends JFrame {
 			Card winningCard3 = p.getHand().getCard(winningCards.get(2));
 			Card winningCard4 = p.getHand().getCard(winningCards.get(3));
 			Card winningCard5 = p.getHand().getCard(winningCards.get(4));
-			
+
 			Image cardImg = ImageIO.read(getClass().getResource(winningCard1.getIndex() + ".png"));
 			ImageIcon tempIcon = new ImageIcon(cardImg);
 			Image tempImg = tempIcon.getImage();
 			Image tempImg2 = tempImg.getScaledInstance(65, 80, java.awt.Image.SCALE_SMOOTH);
 			tempIcon = new ImageIcon(tempImg2);
 			winningC1Icon = tempIcon;
-			
+
 			cardImg = ImageIO.read(getClass().getResource(winningCard2.getIndex() + ".png"));
 			tempIcon = new ImageIcon(cardImg);
 			tempImg = tempIcon.getImage();
 			tempImg2 = tempImg.getScaledInstance(65, 80, java.awt.Image.SCALE_SMOOTH);
 			tempIcon = new ImageIcon(tempImg2);
 			winningC2Icon = tempIcon;
-			
+
 			cardImg = ImageIO.read(getClass().getResource(winningCard3.getIndex() + ".png"));
 			tempIcon = new ImageIcon(cardImg);
 			tempImg = tempIcon.getImage();
 			tempImg2 = tempImg.getScaledInstance(65, 80, java.awt.Image.SCALE_SMOOTH);
 			tempIcon = new ImageIcon(tempImg2);
 			winningC3Icon = tempIcon;
-			
+
 			cardImg = ImageIO.read(getClass().getResource(winningCard4.getIndex() + ".png"));
 			tempIcon = new ImageIcon(cardImg);
 			tempImg = tempIcon.getImage();
 			tempImg2 = tempImg.getScaledInstance(65, 80, java.awt.Image.SCALE_SMOOTH);
 			tempIcon = new ImageIcon(tempImg2);
 			winningC4Icon = tempIcon;
-			
+
 			cardImg = ImageIO.read(getClass().getResource(winningCard5.getIndex() + ".png"));
 			tempIcon = new ImageIcon(cardImg);
 			tempImg = tempIcon.getImage();
 			tempImg2 = tempImg.getScaledInstance(65, 80, java.awt.Image.SCALE_SMOOTH);
 			tempIcon = new ImageIcon(tempImg2);
 			winningC5Icon = tempIcon;
-			
+
 		} else {
 			winningCards = user.getHand().getList();
 			Card winningCard1 = user.getHand().getCard(winningCards.get(0));
@@ -800,7 +796,7 @@ public class MainFrame extends JFrame {
 			Card winningCard3 = user.getHand().getCard(winningCards.get(2));
 			Card winningCard4 = user.getHand().getCard(winningCards.get(3));
 			Card winningCard5 = user.getHand().getCard(winningCards.get(4));
-			
+
 			Image cardImg = ImageIO.read(getClass().getResource(winningCard1.getIndex() + ".png"));
 			ImageIcon tempIcon = new ImageIcon(cardImg);
 			Image tempImg = tempIcon.getImage();
@@ -808,7 +804,7 @@ public class MainFrame extends JFrame {
 			Image tempImg2 = tempImg.getScaledInstance(65, 80, java.awt.Image.SCALE_SMOOTH);
 			tempIcon = new ImageIcon(tempImg2);
 			winningC1Icon = tempIcon;
-			
+
 			cardImg = ImageIO.read(getClass().getResource(winningCard2.getIndex() + ".png"));
 			tempIcon = new ImageIcon(cardImg);
 			tempImg = tempIcon.getImage();
@@ -816,7 +812,7 @@ public class MainFrame extends JFrame {
 			tempImg2 = tempImg.getScaledInstance(65, 80, java.awt.Image.SCALE_SMOOTH);
 			tempIcon = new ImageIcon(tempImg2);
 			winningC2Icon = tempIcon;
-			
+
 			cardImg = ImageIO.read(getClass().getResource(winningCard3.getIndex() + ".png"));
 			tempIcon = new ImageIcon(cardImg);
 			tempImg = tempIcon.getImage();
@@ -824,7 +820,7 @@ public class MainFrame extends JFrame {
 			tempImg2 = tempImg.getScaledInstance(65, 80, java.awt.Image.SCALE_SMOOTH);
 			tempIcon = new ImageIcon(tempImg2);
 			winningC3Icon = tempIcon;
-			
+
 			cardImg = ImageIO.read(getClass().getResource(winningCard4.getIndex() + ".png"));
 			tempIcon = new ImageIcon(cardImg);
 			tempImg = tempIcon.getImage();
@@ -832,7 +828,7 @@ public class MainFrame extends JFrame {
 			tempImg2 = tempImg.getScaledInstance(65, 80, java.awt.Image.SCALE_SMOOTH);
 			tempIcon = new ImageIcon(tempImg2);
 			winningC4Icon = tempIcon;
-			
+
 			cardImg = ImageIO.read(getClass().getResource(winningCard5.getIndex() + ".png"));
 			tempIcon = new ImageIcon(cardImg);
 			tempImg = tempIcon.getImage();
@@ -842,8 +838,7 @@ public class MainFrame extends JFrame {
 			winningC5Icon = tempIcon;
 		}
 
- 	}
-	
+	}
 
 	private void deal() throws InterruptedException, IOException {
 
@@ -1171,7 +1166,6 @@ public class MainFrame extends JFrame {
 				user.playerHasGone();
 				if (isBlind == true) {
 
-
 					if (user.getStack() <= 20) {
 						moneyInPot += user.getStack();
 						user.setStack(0);
@@ -1277,11 +1271,28 @@ public class MainFrame extends JFrame {
 			card2Display.setIcon(tempIcon);
 			panel.add(card1Display);
 			panel.add(card2Display);
-			if (display == 1) {
+			if (display == 1 && !players.get(num).getFold()) {
 				panel.removeAll();
 				panel.revalidate();
 				panel.repaint();
 				displayAICards(num, panel, card1Display, card2Display);
+				aiAvatar = players.get(num).getAvatar();
+				tempAvatar = new ImageIcon(aiAvatar);
+				name = players.get(num).getName();
+				stack = players.get(num).getStack();
+				JLabel nameL = new JLabel(name);
+				JLabel label = new JLabel();
+				label.setIcon(tempAvatar);
+				label.setText("Balance: " + players.get(num).getStack());
+				label.setForeground(Color.white);
+				panel.add(label);
+				panel.add(nameL);
+				return;
+			}
+			else if(display == 1) {
+				panel.removeAll();
+				panel.revalidate();
+				panel.repaint();
 				aiAvatar = players.get(num).getAvatar();
 				tempAvatar = new ImageIcon(aiAvatar);
 				name = players.get(num).getName();
@@ -1695,9 +1706,7 @@ public class MainFrame extends JFrame {
 
 		if (round == 0) {
 
-
 			moves = p.AIBehaviour(isBlind, centerHand, loop, highBet);
-
 
 			if (moves == 0) {
 				int betAmt = 20;
@@ -1755,7 +1764,6 @@ public class MainFrame extends JFrame {
 					pot.revalidate();
 				}
 
-
 			}
 		}
 
@@ -1802,7 +1810,7 @@ public class MainFrame extends JFrame {
 				} else {
 
 					p.newRoundUnFold();
-					int call =p.call(highBet);
+					int call = p.call(highBet);
 					moneyInPot = call + moneyInPot;
 					action = p.getName() + " Has Called.";
 					// update money in pot
@@ -1868,14 +1876,14 @@ public class MainFrame extends JFrame {
 	public void enableButtons() {
 		betButton.setEnabled(false);
 		foldButton.setEnabled(true);
-		
-		if(highBet == 0) {
-			
+
+		if (highBet == 0) {
+
 			callButton.setText("Check");
 		}
-		
+
 		else {
-			
+
 			callButton.setText("Call");
 		}
 		callButton.setEnabled(true);
@@ -1951,7 +1959,6 @@ public class MainFrame extends JFrame {
 		Player nextS = null;
 		int cur = getDealerID();
 		nextS = findNext(cur);
-		
 
 		int sbIndex = -1;
 		if (nextS != user && nextS != null)
@@ -2008,13 +2015,12 @@ public class MainFrame extends JFrame {
 	public void betting() throws InterruptedException, IOException {
 
 		// for players not folding
-				if(highBet > 0) {
-			
+		if (highBet > 0) {
+
 			logWriter.println("Player's turn, Calling Bets " + highBet);
 			playerAction.setText(betOwner.getName() + " Has the High Bet \n Calling Bets " + highBet);
-		}
-		else {
-			
+		} else {
+
 			logWriter.println("Player's turn, Calling Bets " + highBet);
 			playerAction.setText("Player's turn, Calling Bets " + highBet);
 		}
@@ -2032,142 +2038,152 @@ public class MainFrame extends JFrame {
 		int bbIndex = -1;
 		int scoreCheck = highBet;
 
-		if (nextB != user && nextB != null) {
+		if (playersStillInTheGame() && !user.getFold()) {
 
-			bbIndex = getPlayerIndex(nextB);
-		}
+			if (nextB != user && nextB != null) {
 
-		else if (user.getFold() && nextB != null) {
-
-			bbIndex = getPlayerIndex(nextB);
-			nextB = findNext(bbIndex);
-			bbIndex = getPlayerIndex(nextB);
-		}
-
-		else {
-
-			if (isBlind == true && !user.hasGone()) {
-
-				logWriter.println("Player's turn, Calling Bets 20");
-				playerAction.setText("Player's turn, Calling Bets 20");
-				disableButtons(2);
-				if (timeLimit)
-					counter();
-			} else if (!user.hasGone() && playersStillInTheGame()) {
-
-				if(highBet > 0) {
-					
-					logWriter.println("Player's turn, Calling Bets " + highBet);
-					playerAction.setText(betOwner.getName() + " Has the High Bet\n Calling Bets " + highBet);
-				}
-				else {
-					
-					logWriter.println("Player's turn, Calling Bets " + highBet);
-					playerAction.setText("Player's turn, Calling Bets " + highBet);
-				}
-				if (timeLimit)
-					counter();
-				enableButtons();
+				bbIndex = getPlayerIndex(nextB);
 			}
 
-			bbIndex = getPlayerIndex(nextB);
-			nextB = findNext(bbIndex);
-			bbIndex = getPlayerIndex(nextB);
+			else if (user.getFold() && nextB != null) {
 
-		}
+				bbIndex = getPlayerIndex(nextB);
+				nextB = findNext(bbIndex);
+				bbIndex = getPlayerIndex(nextB);
+			}
 
-		Player next = nextB ;
-		for (int i = 0; i < players.size() + 1; i++) {
+			else {
 
-			if (!next.getFold() && !next.hasGone()) {
-				if (next != user) {
-					if (isBlind == true) {
-						aiRandomAction(0, getPlayerIndex(next), next);
+				if (isBlind == true && !user.hasGone()) {
+
+					logWriter.println("Player's turn, Calling Bets 20");
+					playerAction.setText("Player's turn, Calling Bets 20");
+					disableButtons(2);
+					if (timeLimit)
+						counter();
+				} else if (!user.hasGone() && playersStillInTheGame()) {
+
+					if (highBet > 0) {
+
+						logWriter.println("Player's turn, Calling Bets " + highBet);
+						playerAction.setText(betOwner.getName() + " Has the High Bet\n Calling Bets " + highBet);
 					} else {
-						aiRandomAction(1, getPlayerIndex(next), next);
+
+						logWriter.println("Player's turn, Calling Bets " + highBet);
+						playerAction.setText("Player's turn, Calling Bets " + highBet);
 					}
-
-					if(next.getFold() == false) {
-						
-						JLabel tempLabel = ((JLabel) getPanelNum(getPlayerIndex(next)).getComponent(2));
-						tempLabel.setText("Balance: " + next.getStack());
-						tempLabel.setForeground(Color.white);
-						tempLabel.revalidate();
-					}
-
-					moneyInPotLabel.setText("Money in the pot: " + moneyInPot);
-					moneyInPotLabel.setFont(new Font("Optima", Font.BOLD, 23));
-					moneyInPotLabel.setForeground(Color.white);
-					pot.add(moneyInPotLabel);
-					pot.revalidate();
-					next.playerHasGone();
-					bbIndex = getPlayerIndex(next);
-					if (bbIndex == -1)
-						bbIndex = players.size();
-					next = findNext(bbIndex);
-				} else if (!user.getFold() && playersStillInTheGame()) {
-
-					if (isBlind == true && !user.hasGone()) {
-
-						logWriter.println("Player's turn, Calling Bets 20");
-						playerAction.setText("Player's turn, Calling Bets 20");
-						if (timeLimit)
-							counter();
-						disableButtons(2);
-					} else if (!user.hasGone()) {
-						if(highBet > 0) {
-							
-							logWriter.println("Player's turn, Calling Bets " + highBet);
-							playerAction.setText(betOwner.getName() + " Has the High Bet\n Calling Bets " + highBet);
-						}
-						else {
-							
-							logWriter.println("Player's turn, Calling Bets " + highBet);
-							playerAction.setText("Player's turn, Calling Bets " + highBet);
-						}
-						if (timeLimit)
-							counter();
-						enableButtons();
-						break;
-						
-					}
-					playerAction.setFont(new Font("Optima", Font.BOLD, 20));
-					playerAction.setForeground(Color.white);
-					playerAction.revalidate();
-					pot.revalidate();
-
-					bbIndex = getPlayerIndex(next);
-					if (bbIndex == -1)
-						bbIndex = players.size();
-					next = findNext(bbIndex);
-
-
+					if (timeLimit)
+						counter();
+					enableButtons();
 				}
-			}
-			if (next == user && user.hasGone()) {
-				next = findNext(bbIndex + 1);
-			}
 
-			else if (next.hasGone()) {
+				bbIndex = getPlayerIndex(nextB);
+				nextB = findNext(bbIndex);
+				bbIndex = getPlayerIndex(nextB);
 
-				bbIndex = getPlayerIndex(next);
-				next = findNext(bbIndex);
-
-			} else if (!next.hasGone() && next.getFold()) {
-
-				bbIndex = getPlayerIndex(next);
-				next = findNext(bbIndex);
-
-			} else {
-
-				next = findNext(bbIndex);
 			}
 
+			Player next = nextB;
+			for (int i = 0; i < players.size() + 1; i++) {
+
+				if (!next.getFold() && !next.hasGone()) {
+					if (next != user) {
+						if (isBlind == true) {
+							aiRandomAction(0, getPlayerIndex(next), next);
+						} else {
+							aiRandomAction(1, getPlayerIndex(next), next);
+						}
+
+						if (next.getFold() == false) {
+
+							JLabel tempLabel = ((JLabel) getPanelNum(getPlayerIndex(next)).getComponent(2));
+							tempLabel.setText("Balance: " + next.getStack());
+							tempLabel.setForeground(Color.white);
+							tempLabel.revalidate();
+						}
+
+						moneyInPotLabel.setText("Money in the pot: " + moneyInPot);
+						moneyInPotLabel.setFont(new Font("Optima", Font.BOLD, 23));
+						moneyInPotLabel.setForeground(Color.white);
+						pot.add(moneyInPotLabel);
+						pot.revalidate();
+						next.playerHasGone();
+						bbIndex = getPlayerIndex(next);
+						if (bbIndex == -1)
+							bbIndex = players.size();
+						next = findNext(bbIndex);
+					} else if (!user.getFold() && playersStillInTheGame()) {
+
+						if (isBlind == true && !user.hasGone()) {
+
+							logWriter.println("Player's turn, Calling Bets 20");
+							playerAction.setText("Player's turn, Calling Bets 20");
+							if (timeLimit)
+								counter();
+							disableButtons(2);
+						} else if (!user.hasGone()) {
+							if (highBet > 0) {
+
+								logWriter.println("Player's turn, Calling Bets " + highBet);
+								playerAction
+										.setText(betOwner.getName() + " Has the High Bet\n Calling Bets " + highBet);
+							} else {
+
+								logWriter.println("Player's turn, Calling Bets " + highBet);
+								playerAction.setText("Player's turn, Calling Bets " + highBet);
+							}
+							if (timeLimit)
+								counter();
+							enableButtons();
+							break;
+
+						}
+						playerAction.setFont(new Font("Optima", Font.BOLD, 20));
+						playerAction.setForeground(Color.white);
+						playerAction.revalidate();
+						pot.revalidate();
+
+						bbIndex = getPlayerIndex(next);
+						if (bbIndex == -1)
+							bbIndex = players.size();
+						next = findNext(bbIndex);
+
+					}
+				}
+				if (next == user && user.hasGone()) {
+					next = findNext(bbIndex + 1);
+				}
+
+				else if (next.hasGone()) {
+
+					bbIndex = getPlayerIndex(next);
+					next = findNext(bbIndex);
+
+				} else if (!next.hasGone() && next.getFold()) {
+
+					bbIndex = getPlayerIndex(next);
+					next = findNext(bbIndex);
+
+				} else {
+
+					next = findNext(bbIndex);
+				}
+
+			}
+			if (user.getFold()) {
+				remainingBets();
+
+			} else if (user.hasGone()) {
+				user.newRoundNotGone();
+				resetGone();
+				highBet = 0;
+				callBet = 0;
+				gameRound++;
+				transition();
+			}
 		}
-		if (user.getFold()) {
-			remainingBets();
-
-		} else if (user.hasGone()) {
+		else {
+			
 			user.newRoundNotGone();
 			resetGone();
 			highBet = 0;
@@ -2195,7 +2211,7 @@ public class MainFrame extends JFrame {
 		}
 
 		Player next = nextB;
-		for (int i = 0; i < players.size() + 1; i++) {
+		for (int i = 0; i < players.size() + 2; i++) {
 
 			if (!next.getFold() && !next.hasGone()) {
 				if (next != user) {
@@ -2207,8 +2223,8 @@ public class MainFrame extends JFrame {
 						aiRandomAction(1, getPlayerIndex(next), next);
 					}
 
-					if(next.getFold() == false) {
-						
+					if (next.getFold() == false) {
+
 						JLabel tempLabel = ((JLabel) getPanelNum(getPlayerIndex(next)).getComponent(2));
 						tempLabel.setText("Balance: " + next.getStack());
 						tempLabel.setForeground(Color.white);
@@ -2222,7 +2238,7 @@ public class MainFrame extends JFrame {
 					next.playerHasGone();
 					bbIndex = getPlayerIndex(next);
 					if (bbIndex == -1) {
-						
+
 						bbIndex = players.size();
 					}
 				}
@@ -2240,13 +2256,12 @@ public class MainFrame extends JFrame {
 
 		if (highBet > callBet) {
 			if (!user.getFold()) {
-				if(highBet > 0) {
-					
+				if (highBet > 0) {
+
 					logWriter.println("Player's turn, Calling Bets " + highBet);
 					playerAction.setText(betOwner.getName() + " Has the High Bet\n Calling Bets " + highBet);
-				}
-				else {
-					
+				} else {
+
 					logWriter.println("Player's turn, Calling Bets " + highBet);
 					playerAction.setText("Player's turn, Calling Bets " + highBet);
 				}
