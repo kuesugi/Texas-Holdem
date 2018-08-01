@@ -29,7 +29,8 @@ import java.awt.Choice;
 import javax.swing.JComboBox;
 import javax.swing.DefaultComboBoxModel;
 
-@SuppressWarnings("rawtypes")
+@SuppressWarnings({"rawtypes", "unchecked"})
+
 public class MainMenu extends JFrame implements ActionListener {
 
 	private JPanel contentPane;
@@ -131,7 +132,7 @@ public class MainMenu extends JFrame implements ActionListener {
 		
 		JLabel lblUseTimer = new JLabel("Use Timer");
 		lblUseTimer.setForeground(Color.WHITE);
-		lblUseTimer.setFont(new Font("Gill Sans MT Ext Condensed Bold", Font.BOLD, 14));
+		lblUseTimer.setFont(new Font("Gill Sans MT Ext Condensed", Font.PLAIN, 14));
 
 		
 		difficultyBox.setModel(new DefaultComboBoxModel(new String[] {"The Clones of James Buchanan (Easy)", "The Characters of Ulysses (Medium)", "Alcoholics of History (Hard)"}));
@@ -139,7 +140,7 @@ public class MainMenu extends JFrame implements ActionListener {
 		
 		JLabel lblNewLabel = new JLabel("Opponents (Difficulty)");
 		lblNewLabel.setForeground(Color.WHITE);
-		lblNewLabel.setFont(new Font("Arial", Font.BOLD, 12));
+		lblNewLabel.setFont(new Font("Gill Sans MT Condensed", Font.PLAIN, 14));
 
 
 		GroupLayout gl_contentPane = new GroupLayout(contentPane);
@@ -194,7 +195,6 @@ public class MainMenu extends JFrame implements ActionListener {
 							.addComponent(chosenTheme, GroupLayout.PREFERRED_SIZE, 60, GroupLayout.PREFERRED_SIZE)
 							.addContainerGap(77, Short.MAX_VALUE))
 						.addGroup(gl_contentPane.createSequentialGroup()
-							.addPreferredGap(ComponentPlacement.RELATED)
 							.addComponent(checkbox, GroupLayout.PREFERRED_SIZE, 20, GroupLayout.PREFERRED_SIZE)
 							.addGap(18)
 							.addComponent(lblUseTimer)
