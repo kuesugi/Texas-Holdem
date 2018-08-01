@@ -122,15 +122,15 @@ public class Player {
 	}
 
 	public int bet(int highBet, int loop) throws InterruptedException {
-		Random rand = new Random();
+		Random rand = new Random(System.currentTimeMillis());
 		if (highBet == 0) {
 			highBet = 10;
 		}
 
-		double aiBet = (aggression*(handstrength/(8 * loop)) * (stack/8));
-		if((int)aiBet <= 0) {
+		double aiBet = (10*aggression*(handstrength/(loop)) * (stack/50));
+		if((int)aiBet <= 1) {
 			
-			aiBet = 1;
+			aiBet = 5;
 		}
 		int betAmt = rand.nextInt((int)aiBet) + highBet;
 		
@@ -149,14 +149,14 @@ public class Player {
 	}
 
 	public void blind(int betAmt) throws InterruptedException {
-		TimeUnit.MILLISECONDS.sleep(560);
+
 		stack -= betAmt;
 		if (stack == 0)
 			allIn = true;
 	}
 
 	public void fold() throws InterruptedException {
-		TimeUnit.MILLISECONDS.sleep(560);
+
 		setFold();
 	}
 

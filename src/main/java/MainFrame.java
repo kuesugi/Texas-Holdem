@@ -1792,9 +1792,6 @@ public class MainFrame extends JFrame {
 				moneyInPotLabel.setForeground(Color.white);
 				pot.add(moneyInPotLabel);
 				pot.revalidate();
-				resetGone();
-				user.newRoundNotGone();
-				p.playerHasGone();
 				JLabel tempLabel = ((JLabel) getPanelNum(getPlayerIndex(p)).getComponent(2));
 				tempLabel.setText("Balance: " + p.getStack());
 				tempLabel.setForeground(Color.white);
@@ -2211,7 +2208,7 @@ public class MainFrame extends JFrame {
 		}
 
 		Player next = nextB;
-		for (int i = 0; i < players.size() + 2; i++) {
+		for (int i = 0; i < players.size() + 1; i++) {
 
 			if (!next.getFold() && !next.hasGone()) {
 				if (next != user) {
@@ -2270,6 +2267,8 @@ public class MainFrame extends JFrame {
 				playerAction.revalidate();
 				pot.revalidate();
 			}
+			resetGone();
+			betOwner.hasGone();
 			loop++;
 			betting();
 		}
@@ -2287,41 +2286,11 @@ public class MainFrame extends JFrame {
 
 	public void resetGone() throws InterruptedException {
 
-		pot.revalidate();
-		int cur = getDealerID();
-		Player nextB = findNext(cur);
-		int bbIndex = -1;
-		if (nextB != user && nextB != null) {
-			bbIndex = getPlayerIndex(nextB);
+		for(int i = 0; i< players.size(); i++) {
+			
+			players.get(i).newRoundNotGone();
 		}
-
-		else {
-			bbIndex = players.size();
-
-		}
-
-		Player next = null;
-		next = findNext(bbIndex);
-		for (int i = 0; i < players.size() + 1; i++) {
-
-			if (!next.getFold()) {
-				if (next != user) {
-					pot.revalidate();
-					next.newRoundNotGone();
-					bbIndex = getPlayerIndex(next);
-					if (bbIndex == -1)
-						bbIndex = players.size();
-					next = findNext(bbIndex);
-				} else {
-
-					bbIndex = getPlayerIndex(next) + 1;
-					if (bbIndex == -1)
-						bbIndex = players.size();
-					next = findNext(bbIndex);
-				}
-
-			}
-		}
+		user.newRoundNotGone();
 	}
 
 	private void removeAICards(JPanel panel, int index) {
