@@ -127,12 +127,12 @@ public class Player {
 			highBet = 10;
 		}
 
-		int aiBet = (int) (aggression*(handstrength/(4 * loop)) * stack);
-		if(aiBet <= 0) {
+		double aiBet = (aggression*(handstrength/(8 * loop)) * (stack/8));
+		if((int)aiBet <= 0) {
 			
 			aiBet = 1;
 		}
-		int betAmt = rand.nextInt(aiBet) + highBet;
+		int betAmt = rand.nextInt((int)aiBet) + highBet;
 		
 		if(betAmt >= stack) {
 			
@@ -142,6 +142,7 @@ public class Player {
 			allIn = true;
 			
 		}
+		stack -= betAmt;
 	
 
 		return betAmt;
@@ -286,9 +287,9 @@ public class Player {
 		}
 		
 		else {
-			double handModifier = (double) (loop * 0.6);
+			double handModifier = (double) (loop * 0.9);
 			
-			if(handstrength*aggression  > 0.40 * handModifier) {
+			if(handstrength*(aggression/2)  > 0.40 * handModifier) {
 				
 				if(highBet >= stack) {
 					

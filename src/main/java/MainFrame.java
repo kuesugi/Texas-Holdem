@@ -1086,6 +1086,7 @@ public class MainFrame extends JFrame {
 					// update the pot money
 					user.setStack(user.getStack() - betAmount);
 					moneyInPot += betAmount;
+					betOwner = user;
 					userStack.setText("Balance:" + user.getStack());
 					userStack.setForeground(Color.white);
 					player.revalidate();
@@ -2007,8 +2008,7 @@ public class MainFrame extends JFrame {
 	public void betting() throws InterruptedException, IOException {
 
 		// for players not folding
-		
-		if(highBet > 0) {
+				if(highBet > 0) {
 			
 			logWriter.println("Player's turn, Calling Bets " + highBet);
 			playerAction.setText(betOwner.getName() + " Has the High Bet \n Calling Bets " + highBet);
@@ -2076,8 +2076,7 @@ public class MainFrame extends JFrame {
 
 		}
 
-		Player next = null;
-		next = findNext(bbIndex);
+		Player next = nextB ;
 		for (int i = 0; i < players.size() + 1; i++) {
 
 			if (!next.getFold() && !next.hasGone()) {
@@ -2129,6 +2128,8 @@ public class MainFrame extends JFrame {
 						if (timeLimit)
 							counter();
 						enableButtons();
+						break;
+						
 					}
 					playerAction.setFont(new Font("Optima", Font.BOLD, 20));
 					playerAction.setForeground(Color.white);
@@ -2140,13 +2141,6 @@ public class MainFrame extends JFrame {
 						bbIndex = players.size();
 					next = findNext(bbIndex);
 
-					if (scoreCheck == highBet || isBlind == true) {
-						return;
-					} else if (isBlind == false) {
-						playerHasRaisedOrNewRound();
-						betting();
-
-					}
 
 				}
 			}
@@ -2200,8 +2194,7 @@ public class MainFrame extends JFrame {
 
 		}
 
-		Player next = null;
-		next = findNext(bbIndex);
+		Player next = nextB;
 		for (int i = 0; i < players.size() + 1; i++) {
 
 			if (!next.getFold() && !next.hasGone()) {
@@ -2232,10 +2225,7 @@ public class MainFrame extends JFrame {
 						
 						bbIndex = players.size();
 					}
-						
-					next = findNext(bbIndex);
 				}
-
 			}
 			bbIndex = getPlayerIndex(next);
 			if (bbIndex == -1) {
