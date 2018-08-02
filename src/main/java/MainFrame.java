@@ -122,11 +122,26 @@ public class MainFrame extends JFrame {
 			} catch (Exception e) {
 			}
 		}
+		else {
+			logWriter.println("\n\n- Hand " + handNumber + "\n\nPreflop:\nCards Dealt:");
+		}
 		initFrame();
 		// set the size of the frame
 		setSize(1190, 1650);
 		// click X to exit
 		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+		
+		this.addWindowListener(new java.awt.event.WindowAdapter() {
+    	@Override
+    	public void windowClosing(java.awt.event.WindowEvent windowEvent) {
+        	String endTime = new SimpleDateFormat("dd MMMM yyyy  -  HH : mm")
+				.format(Calendar.getInstance().getTime());
+				logWriter.println("\n- Game ends " + endTime);
+				logWriter.close();
+            System.exit(0);
+    		}
+		});
+
 		// Must be the last line of this constructor
 		setVisible(true);
 	}
@@ -309,8 +324,7 @@ public class MainFrame extends JFrame {
 		dealerLabel.setBounds(772, 320, 100, 25);
 		getContentPane().add(dealerLabel);
 		// name of the dealer
-		dealerIDLabel.setBorder(BorderFactory.createLineBorder(Color.white, 2));
-		dealerIDLabel.setBounds(772, 363, 175, 132);
+		dealerIDLabel.setBounds(772, 293, 175, 132);
 		getContentPane().add(dealerIDLabel);
 		getContentPane().add(pot);
 
@@ -715,10 +729,7 @@ public class MainFrame extends JFrame {
 			// TODO: Check remaining player number and see if the writer
 			// should be closed or not
 			if (true) {
-				String endTime = new SimpleDateFormat("dd MMMM yyyy  -  HH : mm")
-						.format(Calendar.getInstance().getTime());
-				logWriter.println("\n- Game ends " + endTime);
-				logWriter.close();
+				
 			}
 
 			if (tie != true) {
@@ -853,7 +864,7 @@ public class MainFrame extends JFrame {
 			action = userName + " Has Dealt.";
 		}
 
-		dealerIDLabel.setFont(new Font("Optima", Font.BOLD, 18));
+		dealerIDLabel.setFont(new Font("Optima", Font.BOLD, 16));
 		dealerIDLabel.setForeground(Color.white);
 		dealerIDLabel.revalidate();
 		logWriter.println(action);

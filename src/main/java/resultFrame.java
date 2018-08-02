@@ -5,6 +5,8 @@ import java.awt.event.ActionListener;
 import java.io.IOException;
 import java.io.PrintWriter;
 import java.util.ArrayList;
+import java.util.Calendar;
+import java.text.SimpleDateFormat;
 
 import javax.swing.JFrame;
 import java.awt.Color;
@@ -133,6 +135,17 @@ public class resultFrame extends JFrame {
 			}
 		});
 
+		this.addWindowListener(new java.awt.event.WindowAdapter() {
+	    	@Override
+	    	public void windowClosing(java.awt.event.WindowEvent windowEvent) {
+	        	String endTime = new SimpleDateFormat("dd MMMM yyyy  -  HH : mm")
+					.format(Calendar.getInstance().getTime());
+					logWriter.println("\n- Game ends " + endTime);
+					logWriter.close();
+	            System.exit(0);
+	    	}
+		});
+		
 		frame.add(mainPanel);
 		frame.setBounds(100, 100, 1100, 300);
 		frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
@@ -161,6 +174,10 @@ public class resultFrame extends JFrame {
 
 		quitButton.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
+				String endTime = new SimpleDateFormat("dd MMMM yyyy  -  HH : mm")
+				.format(Calendar.getInstance().getTime());
+				logWriter.println("\n- Game ends " + endTime);
+				logWriter.close();
 				System.exit(0);
 			}
 		});
