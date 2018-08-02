@@ -271,7 +271,7 @@ public class Player {
 				
 			}
 			
-			else if(handstrength*aggression  > 0.10 ) {
+			else if(handstrength*aggression  > 0.5 ) {
 				
 				return -2;
 			}

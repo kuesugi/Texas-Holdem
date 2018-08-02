@@ -1624,9 +1624,13 @@ public class MainFrame extends JFrame {
 		} else if (player1Kicker < player2Kicker) {
 
 			return 2;
-		} else {
+		} else if(player1HighCard == player2HighCard && player1Kicker == player2Kicker) {
 
 			return 0;
+		}
+		else {
+			
+			return 1;
 		}
 	}
 
@@ -1928,10 +1932,7 @@ public class MainFrame extends JFrame {
 		pot.revalidate();
 		int cur = dealerID;
 		Player nextS = null;
-		do {
-			nextS = findNext(cur);
-		} while (nextS.ifOutOfGame());
-		// if the next one is not the user
+		nextS = findNext(cur);
 		if (nextS != user) {
 			action = nextS.getName() + " is the small blind.";
 			players.get(getPlayerIndex(nextS)).setStack(players.get(getPlayerIndex(nextS)).getStack() - 10);

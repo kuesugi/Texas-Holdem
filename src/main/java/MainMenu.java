@@ -315,7 +315,18 @@ public class MainMenu extends JFrame implements ActionListener {
 						for (int j = 0; j < num; j++) {
 							try {
 								players.add(new Player(true, opponents[j], 1000, j + 1));
-								players.get(j).setAggro(rand.nextDouble()/2);
+								double aggro = rand.nextDouble();
+								if(aggro >= .40) {
+									
+									aggro -= .15;
+								}
+								
+								else if(aggro <= .10) {
+									
+									aggro +=.15;
+								}
+								
+								players.get(j).setAggro(aggro);
 							} catch (IOException e1) {
 								// TODO Auto-generated catch block
 								e1.printStackTrace();
