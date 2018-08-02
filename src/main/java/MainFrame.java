@@ -743,6 +743,8 @@ public class MainFrame extends JFrame {
 
 			if (timeLimit)
 				timer.cancel();
+			
+			disableButtons(3);
 
 			new resultFrame(result, user, players, this, logWriter, theme, avatar, timeLimit, winningC1Icon,
 					winningC2Icon, winningC3Icon, winningC4Icon, winningC5Icon);
@@ -1874,6 +1876,13 @@ public class MainFrame extends JFrame {
 			bigBlind.setEnabled(false);
 			foldButton.setEnabled(true);
 			callButton.setEnabled(true);
+		}
+		if(bigOrSmall == 3) {
+			
+			smallBlind.setEnabled(false);
+			bigBlind.setEnabled(false);
+			foldButton.setEnabled(false);
+			callButton.setEnabled(false);
 		}
 
 		clearButton.setEnabled(false);

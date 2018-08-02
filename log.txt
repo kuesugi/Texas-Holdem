@@ -1,187 +1,65 @@
        * * * Game Log * * *
-- Game started 01 August 2018  -  20 : 36
-- Username: a
-- Players: 6
-  Winston Churchill, Ulysses S. Grant, Alexander the Great, Elizabeth Taylor, Vincent van Gogh, Ernest Hemingway
+- Game started 01 August 2018  -  20 : 49
+- Username: 23
+- Players: 7
+  Doc James Buchanan, Dopey James Buchanan, Bashful James Buchanan, Grumpy James Buchanan, Sneezy James Buchanan, Sleepy James Buchanan, Happy James Buchanan
 
 - Hand 1
 
 Preflop:
 Cards Dealt:
-Winston Churchill: diamonds deuce, spades deuce
-Ulysses S. Grant: diamonds king, clubs nine
-Alexander the Great: clubs three, clubs deuce
-Elizabeth Taylor: clubs ten, spades queen
-Vincent van Gogh: clubs four, hearts queen
-Ernest Hemingway: clubs queen, diamonds nine
-a: hearts ten, spades ten
-Alexander the Great Has Dealt.
-You are the big blind
-a is the big blind.
+Doc James Buchanan: spades king, clubs three
+Dopey James Buchanan: diamonds deuce, spades eight
+Bashful James Buchanan: spades nine, spades three
+Grumpy James Buchanan: hearts eight, spades ten
+Sneezy James Buchanan: clubs eight, hearts ten
+Sleepy James Buchanan: hearts six, diamonds queen
+Happy James Buchanan: hearts nine, clubs jack
+23: clubs nine, diamonds four
+Doc James Buchanan Has Dealt.
+Bashful James Buchanan is the big blind.
 Player's turn, Calling Bets 0
-Vincent van Gogh Has Called 20
-Elizabeth Taylor Has Called 20
-Winston Churchill Has Called 20
-Ulysses S. Grant Has Called 20
-Alexander the Great Has Called 20
-
-Flop:
-Player's turn, Calling Bets 0
-Ernest Hemingway Has Called.
-Player's turn, Calling Bets 0
-a Has Called.
-Vincent van Gogh Has Bet 41
-Winston Churchill Has Bet 64
-Alexander the Great Has Bet 100
-Player's turn, Calling Bets 100
-Player's turn, Calling Bets 100
-Ernest Hemingway Has Called.
-Player's turn, Calling Bets 100
-a Has Called.
-Vincent van Gogh Has Called.
-Winston Churchill Has Called.
-
-Turn:
-Player's turn, Calling Bets 0
-Player's turn, Calling Bets 0
-a Has Bet 10
-Vincent van Gogh Has Called.
-Winston Churchill Has Bet 32
-Alexander the Great Has Bet 70
-Player's turn, Calling Bets 70
-Player's turn, Calling Bets 70
-Player's turn, Calling Bets 70
-a Has Called.
-Vincent van Gogh Has Called.
-Winston Churchill Has Called.
-
-River:
-Player's turn, Calling Bets 0
-Player's turn, Calling Bets 0
-a Has Bet 100
-Vincent van Gogh Has Called.
-Winston Churchill Has Bet 102
-Alexander the Great Has Bet 135
-Player's turn, Calling Bets 135
-Player's turn, Calling Bets 135
-Player's turn, Calling Bets 135
-a Has Called.
-Vincent van Gogh Has Called.
-Winston Churchill Has Called.
-
-Final:
-Player's turn, Calling Bets 0
-Player's turn, Calling Bets 0
-The winner is Alexander the Great with A Five High Straight, and Alexander the Great wins $1909
-
-
-- Hand 2
-
-Preflop:
-Cards Dealt:
-Winston Churchill: clubs four, diamonds ten
-Ulysses S. Grant: spades five, spades queen
-Alexander the Great: hearts six, diamonds six
-Elizabeth Taylor: clubs queen, clubs ace
-Vincent van Gogh: spades ten, clubs three
-Ernest Hemingway: diamonds ace, spades four
-a: clubs nine, diamonds four
-Ernest Hemingway Has Dealt.
-You are the small blind
-Vincent van Gogh is the big blind.
-Player's turn, Calling Bets 0
-Elizabeth Taylor Has Called 20
-Winston Churchill Has Called 20
-Ulysses S. Grant Has Called 20
-Alexander the Great Has Called 20
-Ernest Hemingway Has Called 20
-
-Flop:
-Player's turn, Calling Bets 0
-Player's turn, Calling Bets 0
-Player's turn, Calling Bets 0
-a Has Called.
-Vincent van Gogh Has Bet 13
-Winston Churchill Has Bet 18
-Alexander the Great Has Called.
-Player's turn, Calling Bets 18
-Player's turn, Calling Bets 18
-Player's turn, Calling Bets 18
-Player's turn, Calling Bets 18
-a Has Bet 100
-Vincent van Gogh Has Called.
-Player's turn, Calling Bets 100
-Player's turn, Calling Bets 100
-
-Turn:
-Player's turn, Calling Bets 0
-Player's turn, Calling Bets 0
-Player's turn, Calling Bets 0
-a Has Called.
-Vincent van Gogh Has Bet 30
-Winston Churchill Has Bet 65
-Alexander the Great Has Called.
-Player's turn, Calling Bets 65
-Player's turn, Calling Bets 65
-Player's turn, Calling Bets 65
-Player's turn, Calling Bets 65
-a Has Folded.
-Vincent van Gogh Has Called.
-
-River:
-a folded
-Winston Churchill calls
-Ulysses S. Grant calls
-Alexander the Great calls
-Elizabeth Taylor calls
-Vincent van Gogh calls
-Ernest Hemingway calls
-Player's turn, Calling Bets 0
-
-Final:
-Player's turn, Calling Bets 0
-The winner is Winston Churchill with A Jack High Straight, and Winston Churchill wins $604
-
-
-- Hand 3
-
-Preflop:
-Cards Dealt:
-Winston Churchill: diamonds ace, hearts deuce
-Ulysses S. Grant: hearts jack, hearts five
-Alexander the Great: diamonds six, diamonds jack
-Elizabeth Taylor: clubs seven, diamonds seven
-Vincent van Gogh: clubs six, spades nine
-Ernest Hemingway: hearts king, clubs ace
-a: clubs five, clubs three
-a Has Dealt.
-Elizabeth Taylor is the big blind.
-Player's turn, Calling Bets 0
-Winston Churchill Has Called 20
-Ulysses S. Grant Has Called 20
-Alexander the Great Has Called 20
-Ernest Hemingway Has Called 20
+Sleepy James Buchanan Has Called 20
+Happy James Buchanan Has Called 20
 Player's turn, Calling Bets 20
-a Has Folded.
+Player's turn, Calling Bets 20
+Player's turn, Calling Bets 20
+Player's turn, Calling Bets 20
+23 Has Called.
+Sneezy James Buchanan Has Called 20
+Grumpy James Buchanan Has Called 20
+Doc James Buchanan Has Called 20
 
 Flop:
 Player's turn, Calling Bets 0
+Sleepy James Buchanan Has Bet 37
+Player's turn, Calling Bets 37
+23 Has Called.
+Grumpy James Buchanan Has Called.
+Doc James Buchanan Has Called.
+Player's turn, Calling Bets 37
+Player's turn, Calling Bets 37
 
 Turn:
 Player's turn, Calling Bets 0
+Sleepy James Buchanan Has Called.
+Player's turn, Calling Bets 0
+23 Has Called.
+Grumpy James Buchanan Has Called.
+Doc James Buchanan Has Called.
 
 River:
-a folded
-Winston Churchill calls
-Ulysses S. Grant calls
-Alexander the Great calls
-Elizabeth Taylor calls
-Vincent van Gogh calls
-Ernest Hemingway calls
 Player's turn, Calling Bets 0
+Sleepy James Buchanan Has Called.
+Player's turn, Calling Bets 0
+23 Has Called.
+Grumpy James Buchanan Has Called.
+Doc James Buchanan Has Called.
 
 Final:
 Player's turn, Calling Bets 0
-The winner is Ulysses S. Grant with Two Pair, Jacks High, and Ulysses S. Grant wins $110
+Sleepy James Buchanan Has Called.
+Player's turn, Calling Bets 0
+The winner is Sleepy James Buchanan with A Full House,  Sixes High, and Sleepy James Buchanan wins $298
 
-- Game ends 01 August 2018  -  20 : 36
+- Game ends 01 August 2018  -  20 : 49
