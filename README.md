@@ -10,5 +10,5 @@
 | Hailey Innocenzo | hinnocenzo |
 | Zhaoyi Ma | kuesugi |
 ---
-![alt text](https://github.com/kuesugi/Texas-Holdem/Login.png "Login interface")
-![alt text](https://github.com/kuesugi/Texas-Holdem/in-game.png "In the game")
+![Login](/Login.png)
+![In-game](/in-game.png)
