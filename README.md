@@ -10,5 +10,8 @@
 | Hailey Innocenzo | hinnocenzo |
 | Zhaoyi Ma | kuesugi |
 ---
-![Login](/Login.png)
-![In-game](/in-game.png)
+#### Login
+<img src="/Login.png" alt="Login" height="450" width="720"/>
+
+#### In-game
+<img src="/in-game.png" alt="Login" height="450" width="750"/>
