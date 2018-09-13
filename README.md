@@ -2,7 +2,7 @@
 ### A term project for Software Engineering
 
 
-## Contributor:
+## Contributors:
 | Name | Github Username |    
 | ------------- |:-------------:|
 | Jay Berdimuratov | terexberd |
@@ -10,8 +10,8 @@
 | Hailey Innocenzo | hinnocenzo |
 | Zhaoyi Ma | kuesugi |
 
-
-#### Login
+## Examples:
+#### Start window
 <img src="/Login.png" alt="Login" height="450" width="720"/>
 
 #### In-game (Using a timer, uploading user avatar, the navy theme)
