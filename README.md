@@ -2,7 +2,7 @@
 ##### Term project for Software Engineering
 ### A Texas Hold'em game based on Java Swing
 ---
-### Contributor:
+## Contributor:
 | Name | Username |    
 | ------------- |:-------------:|
 | Jay Berdimuratov | terexberd |
@@ -15,3 +15,7 @@
 
 #### In-game
 <img src="/in-game.png" alt="Login" height="450" width="750"/>
+
+---
+## Installation and Running
+Download the zip file and launch via `gradle run`
