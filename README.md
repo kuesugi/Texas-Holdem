@@ -3,7 +3,7 @@
 
 
 ## Contributor:
-| Name | Username |    
+| Name | Github Username |    
 | ------------- |:-------------:|
 | Jay Berdimuratov | terexberd |
 | Alex George | alexgeorge222 |
