@@ -1,4 +1,4 @@
-# ♦️♣️Texas Hold 'em Based on Java Swing ♠️❤️
+# ♦️♣️ Texas Hold 'em Based on Java Swing ♠️❤️
 ##### A Term project for Software Engineering
 
 
