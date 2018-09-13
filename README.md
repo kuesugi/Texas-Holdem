@@ -1,6 +1,5 @@
-# CS1530_Project
-##### Term project for Software Engineering
-### A Texas Hold'em game based on Java Swing
+# ♦️♣️Texas Hold 'em Based on Java Swing ♠️❤️
+##### A Term project for Software Engineering
 
 
 ## Contributor:
