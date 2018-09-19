@@ -10,7 +10,7 @@
 | Hailey Innocenzo | hinnocenzo |
 | Zhaoyi Ma | kuesugi |
 
-## Examples:
+## Demo:
 #### Start window
 <img src="/Login.png" alt="Login" height="450" width="720"/>
 
